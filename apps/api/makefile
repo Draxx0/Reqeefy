@@ -4,12 +4,16 @@ up:
 
 .PHONY: down
 down:
-	docker-compose down
+	docker-compose -f docker-compose.dev.yml down
 
 .PHONY: restart
 restart:
-	docker-compose restart
+	docker-compose -f docker-compose.dev.yml restart
 
 .PHONY: reset
 reset:
 	docker system prune -a -f 
+
+.PHONY: dev
+dev:
+	pnpm run dev
