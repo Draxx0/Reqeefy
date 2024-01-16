@@ -1,6 +1,6 @@
 # 🇫🇷 Reqeefy Backend 🇫🇷
 
-J'ai choisi d'utiliser NestJS pour le backend de mon application en raison de sa structure modulaire et de sa simplicité d'utilisation. J'ai opté pour TypeORM pour faciliter la gestion de ma base de données PostgreSQL. Zod a été intégré pour valider de manière robuste les variables d'environnement, garantissant une configuration fiable du système. J'utilise Redis en tant que cache des réponses serveur pour renforcer l'efficacité et la réactivité de mon application. De plus, j'ai décidé d'adopter Docker en environnement de développement pour monter rapidement des containers contenant Redis et PostgreSQL, simplifiant ainsi le processus de configuration de mon environnement de développement de manière harmonieuse et reproductible.
+J'ai choisi d'utiliser NestJS pour le backend de mon application en raison de sa structure modulaire et de sa simplicité d'utilisation. J'ai opté pour TypeORM pour faciliter la gestion de ma base de données PostgreSQL. Zod a été intégré pour valider de manière robuste les variables d'environnement, garantissant une configuration fiable du système. J'utilise Redis en tant que cache des réponses serveur pour renforcer l'efficacité et la réactivité de mon application. De plus, j'ai décidé d'adopter Docker en environnement de développement pour monter rapidement des containers contenant Redis et PostgreSQL, simplifiant ainsi le processus de configuration de mon environnement de développement.
 
 ## Installation
 
