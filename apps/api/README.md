@@ -19,7 +19,7 @@ pnpm i && docker-compose up -d && pnpm run dev:win
 
 # 🇬🇧 Reqeefy Backend 🇬🇧
 
-I chose to use NestJS for the backend of my application because of its modular structure and ease of use. I opted for TypeORM to facilitate the management of my PostgreSQL database. Zod has been integrated to robustly validate environment variables, guaranteeing reliable system configuration. I use Redis as a server response cache to enhance the efficiency and responsiveness of my application. In addition, I've decided to adopt Docker as a development environment to quickly assemble containers containing Redis and PostgreSQL, simplifying the process of configuring my development environment in a smooth and reproducible way.
+I chose to use NestJS for the backend of my application because of its modular structure and ease of use. I opted for TypeORM to facilitate the management of my PostgreSQL database. Zod has been integrated to robustly validate environment variables, guaranteeing reliable system configuration. I use Redis as a server response cache to enhance the efficiency and responsiveness of my application. In addition, I've decided to adopt Docker as a development environment to quickly assemble containers containing Redis and PostgreSQL, simplifying the process of configuring my development environment.
 
 ## Installation
 
