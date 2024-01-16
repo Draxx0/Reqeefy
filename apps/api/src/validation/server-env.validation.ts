@@ -28,5 +28,7 @@ export const validateEnvVariables = ({
     throw new Error('There is an error with the server environment variables');
   }
 
+  console.info('Server environment variables validated successfully');
+
   return envServer.data;
 };
