@@ -1,6 +1,8 @@
+import { AgentRole } from '@reqeefy/types';
 import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
 import { ProjectEntity } from 'src/models/projects/entities/project.entity';
+import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
@@ -24,7 +26,7 @@ export class AgentEntity extends TimestampEntity {
     enum: ['superadmin', 'distributor', 'agent'],
     default: 'agent',
   })
-  role: string;
+  role: AgentRole;
 
   // RELATIONS
 
@@ -32,7 +34,7 @@ export class AgentEntity extends TimestampEntity {
   user: UserEntity;
 
   @ManyToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agents, {
-    cascade: true,
+    cascade: ['insert', 'update'],
   })
   @JoinTable()
   agencyGroups: AgencyGroupEntity[];
@@ -42,4 +44,12 @@ export class AgentEntity extends TimestampEntity {
   })
   @JoinTable()
   projects_referents: ProjectEntity[];
+
+  @ManyToMany(() => TicketEntity, (ticket) => ticket.support_agents, {
+    eager: true,
+  })
+  tickets_support: TicketEntity[];
+
+  @ManyToMany(() => TicketEntity, (ticket) => ticket.agents_referents)
+  tickets_referents: TicketEntity[];
 }

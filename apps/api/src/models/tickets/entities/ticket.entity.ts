@@ -1,6 +1,14 @@
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { TicketPriority, TicketStatus } from '@reqeefy/types';
+import { AgentEntity } from 'src/models/agents/entities/agent.entity';
+import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 
 @Entity('ticket')
 export class TicketEntity extends TimestampEntity {
@@ -28,4 +36,25 @@ export class TicketEntity extends TimestampEntity {
     default: false,
   })
   distributed: boolean;
+
+  // RELATIONS
+
+  @ManyToMany(() => AgentEntity, (agent) => agent.tickets_support, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinTable()
+  support_agents: AgentEntity[];
+
+  @ManyToMany(() => AgentEntity, (agent) => agent.tickets_referents, {
+    cascade: ['insert', 'update'],
+    eager: true,
+  })
+  @JoinTable()
+  agents_referents: AgentEntity[];
+
+  @ManyToMany(() => CustomerEntity, (customer) => customer.tickets, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinTable()
+  customers: CustomerEntity[];
 }
