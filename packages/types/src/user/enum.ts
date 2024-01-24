@@ -1,1 +1,5 @@
-export type AgentRole = 'superadmin' | 'distributor' | 'agent';
+export enum AgentRole {
+  'agent' = 'agent',
+  'distributor' = 'distributor',
+  'superadmin' = 'superadmin',
+}
