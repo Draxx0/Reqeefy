@@ -37,7 +37,7 @@ export class AgencyEntity extends TimestampEntity {
     eager: true,
     cascade: ['insert', 'update'],
   })
-  agencyGroups: AgencyGroupEntity[];
+  agency_groups: AgencyGroupEntity[];
 
   @OneToMany(() => ProjectEntity, (project) => project.agency, {
     eager: true,

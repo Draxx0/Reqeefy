@@ -36,7 +36,7 @@ export class UploadFileEntity extends TimestampEntity {
   @JoinColumn()
   project: ProjectEntity;
 
-  @ManyToOne(() => MessageEntity, (message) => message.uploadFiles, {
+  @ManyToOne(() => MessageEntity, (message) => message.upload_files, {
     onDelete: 'CASCADE',
     nullable: true,
   })

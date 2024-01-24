@@ -34,7 +34,7 @@ export class MessageEntity extends TimestampEntity {
     cascade: ['insert', 'update'],
     eager: true,
   })
-  uploadFiles: UploadFileEntity[];
+  upload_files: UploadFileEntity[];
 
   @ManyToOne(() => TicketEntity, (ticket) => ticket.messages, {
     onDelete: 'CASCADE',

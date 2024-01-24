@@ -19,9 +19,6 @@ export class AgentEntity extends TimestampEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
-  group_name: string;
-
   @Column({
     type: 'enum',
     enum: ['superadmin', 'distributor', 'agent'],
@@ -39,7 +36,7 @@ export class AgentEntity extends TimestampEntity {
     cascade: ['insert', 'update'],
   })
   @JoinTable()
-  agencyGroups: AgencyGroupEntity[];
+  agency_groups: AgencyGroupEntity[];
 
   @ManyToMany(() => ProjectEntity, (project) => project.agents_referents, {
     nullable: true,

@@ -19,13 +19,13 @@ export class AgencyGroupEntity extends TimestampEntity {
 
   // RELATIONS
 
-  @ManyToMany(() => AgentEntity, (agent) => agent.agencyGroups, {
+  @ManyToMany(() => AgentEntity, (agent) => agent.agency_groups, {
     eager: true,
     onDelete: 'CASCADE',
   })
   agents: AgentEntity[];
 
-  @ManyToOne(() => AgencyEntity, (agency) => agency.agencyGroups, {
+  @ManyToOne(() => AgencyEntity, (agency) => agency.agency_groups, {
     onDelete: 'CASCADE',
   })
   agency: AgencyEntity;
