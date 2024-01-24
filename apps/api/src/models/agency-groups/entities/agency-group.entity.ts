@@ -1,11 +1,21 @@
+import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
 import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('agency_group')
 export class AgencyGroupEntity extends TimestampEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  name: string;
 
   // RELATIONS
 
@@ -14,4 +24,9 @@ export class AgencyGroupEntity extends TimestampEntity {
     onDelete: 'CASCADE',
   })
   agents: AgentEntity[];
+
+  @ManyToOne(() => AgencyEntity, (agency) => agency.agencyGroups, {
+    onDelete: 'CASCADE',
+  })
+  agency: AgencyEntity;
 }

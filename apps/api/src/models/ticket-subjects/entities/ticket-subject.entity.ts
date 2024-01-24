@@ -1,5 +1,6 @@
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { TicketSubjectCategoryEntity } from 'src/models/ticket-subject-categories/entities/ticket-subject-category.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('ticket_subject')
 export class TicketSubjectEntity extends TimestampEntity {
@@ -8,4 +9,12 @@ export class TicketSubjectEntity extends TimestampEntity {
 
   @Column()
   title: string;
+
+  // RELATIONS
+
+  @ManyToOne(
+    () => TicketSubjectCategoryEntity,
+    (category) => category.ticket_subjects,
+  )
+  ticket_subject_category: TicketSubjectCategoryEntity;
 }

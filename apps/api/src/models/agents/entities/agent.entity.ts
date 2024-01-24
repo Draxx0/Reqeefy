@@ -7,6 +7,7 @@ import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToOne,
@@ -31,6 +32,7 @@ export class AgentEntity extends TimestampEntity {
   // RELATIONS
 
   @OneToOne(() => UserEntity, (user) => user.agent)
+  @JoinColumn()
   user: UserEntity;
 
   @ManyToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agents, {
