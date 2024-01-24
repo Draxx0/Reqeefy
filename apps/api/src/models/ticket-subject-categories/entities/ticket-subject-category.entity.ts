@@ -31,6 +31,7 @@ export class TicketSubjectCategoryEntity extends TimestampEntity {
     (ticketSubject) => ticketSubject.ticket_subject_category,
     {
       eager: true,
+      onDelete: 'CASCADE',
       cascade: ['insert', 'update'],
     },
   )
