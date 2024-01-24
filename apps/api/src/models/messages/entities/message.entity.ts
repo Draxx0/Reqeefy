@@ -1,4 +1,5 @@
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
+import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
 import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
@@ -34,4 +35,9 @@ export class MessageEntity extends TimestampEntity {
     eager: true,
   })
   uploadFiles: UploadFileEntity[];
+
+  @ManyToOne(() => TicketEntity, (ticket) => ticket.messages, {
+    onDelete: 'CASCADE',
+  })
+  ticket: TicketEntity;
 }

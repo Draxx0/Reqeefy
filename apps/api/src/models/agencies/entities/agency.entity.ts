@@ -1,6 +1,7 @@
 import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
 import { ProjectEntity } from 'src/models/projects/entities/project.entity';
+import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
@@ -8,6 +9,7 @@ import {
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -20,6 +22,12 @@ export class AgencyEntity extends TimestampEntity {
   name: string;
 
   // RELATIONS
+
+  @OneToOne(() => UploadFileEntity, (uploadFile) => uploadFile.agency, {
+    nullable: true,
+    eager: true,
+  })
+  agency_photo: UploadFileEntity;
 
   @ManyToMany(() => UserEntity, (user) => user.agencies)
   @JoinTable()

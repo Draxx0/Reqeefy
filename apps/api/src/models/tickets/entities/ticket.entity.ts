@@ -5,12 +5,14 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TicketPriority, TicketStatus } from '@reqeefy/types';
 import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 import { ProjectEntity } from 'src/models/projects/entities/project.entity';
+import { MessageEntity } from 'src/models/messages/entities/message.entity';
 
 @Entity('ticket')
 export class TicketEntity extends TimestampEntity {
@@ -63,4 +65,10 @@ export class TicketEntity extends TimestampEntity {
   })
   @JoinTable()
   customers: CustomerEntity[];
+
+  @OneToMany(() => MessageEntity, (message) => message.ticket, {
+    eager: true,
+    cascade: ['insert', 'update'],
+  })
+  messages: MessageEntity[];
 }
