@@ -1,7 +1,14 @@
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
 import { ProjectEntity } from 'src/models/projects/entities/project.entity';
+import { MessageEntity } from 'src/models/messages/entities/message.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
-import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('upload_file')
 export class UploadFileEntity extends TimestampEntity {
@@ -19,4 +26,10 @@ export class UploadFileEntity extends TimestampEntity {
   })
   @JoinColumn()
   project: ProjectEntity;
+
+  @ManyToOne(() => MessageEntity, (message) => message.uploadFiles, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  message: MessageEntity;
 }
