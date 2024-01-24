@@ -26,6 +26,7 @@ export class AgencyEntity extends TimestampEntity {
   @OneToOne(() => UploadFileEntity, (uploadFile) => uploadFile.agency, {
     nullable: true,
     eager: true,
+    onDelete: 'CASCADE',
   })
   agency_photo: UploadFileEntity;
 

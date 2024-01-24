@@ -50,7 +50,9 @@ export class ProjectEntity extends TimestampEntity {
   @JoinTable()
   customers: CustomerEntity[];
 
-  @ManyToOne(() => AgencyEntity, (agency) => agency.projects)
+  @ManyToOne(() => AgencyEntity, (agency) => agency.projects, {
+    onDelete: 'CASCADE',
+  })
   agency: AgencyEntity;
 
   @OneToMany(
