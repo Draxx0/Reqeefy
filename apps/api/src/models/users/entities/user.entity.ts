@@ -19,10 +19,10 @@ export class UserEntity extends TimestampEntity {
   id: string;
 
   @Column()
-  firstName: string;
+  first_name: string;
 
   @Column()
-  lastName: string;
+  last_name: string;
 
   @Column({ unique: true })
   email: string;
@@ -31,7 +31,7 @@ export class UserEntity extends TimestampEntity {
   password: string;
 
   @Column({ default: false, type: 'boolean' })
-  isEmailConfirmed: boolean;
+  is_email_confirmed: boolean;
 
   // RELATIONS
 
