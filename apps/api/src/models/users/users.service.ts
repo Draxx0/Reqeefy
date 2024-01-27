@@ -31,43 +31,30 @@ export class UsersService {
       });
     }
 
-    try {
-      const [users, total] = await query
-        .skip((page - 1) * limit_per_page)
-        .orderBy(`user.${sort_by}`, sort_order)
-        .take(limit_per_page)
-        .getManyAndCount();
+    const [users, total] = await query
+      .skip((page - 1) * limit_per_page)
+      .orderBy(`user.${sort_by}`, sort_order)
+      .take(limit_per_page)
+      .getManyAndCount();
 
-      return this.paginationService.paginate<UserEntity>({
-        page,
-        total,
-        limit_per_page,
-        data: users,
-      });
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return this.paginationService.paginate<UserEntity>({
+      page,
+      total,
+      limit_per_page,
+      data: users,
+    });
   }
 
   async findOneByEmail(email: string): Promise<UserEntity | undefined> {
-    try {
-      const user = await this.userRepository.findOneBy({ email });
-
-      if (!user) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-      }
-
-      return user;
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    const user = await this.userRepository.findOneBy({ email });
+    if (!user) {
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
     }
+
+    return user;
   }
 
   async deleteOne(id: string): Promise<DeleteResult> {
-    try {
-      return await this.userRepository.softDelete(id);
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return await this.userRepository.softDelete(id);
   }
 }

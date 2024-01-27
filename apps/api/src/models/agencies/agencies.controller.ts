@@ -1,34 +1,26 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { AgenciesService } from './agencies.service';
 import { CreateAgencyDto } from './dto/create-agency.dto';
-import { UpdateAgencyDto } from './dto/update-agency.dto';
+import { AgencyQueries } from './queries/queries';
+import { AuthenticationService } from 'src/authentication/authentication.service';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('agencies')
 export class AgenciesController {
-  constructor(private readonly agenciesService: AgenciesService) {}
-
-  @Post()
-  create(@Body() createAgencyDto: CreateAgencyDto) {
-    return this.agenciesService.create(createAgencyDto);
-  }
+  constructor(
+    private readonly agenciesService: AgenciesService,
+    private readonly authenticationService: AuthenticationService,
+  ) {}
 
   @Get()
-  findAll() {
-    return this.agenciesService.findAll();
+  @UseGuards(JwtAuthGuard)
+  findAll(@Query() queries: AgencyQueries) {
+    return this.agenciesService.findAll(queries);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.agenciesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAgencyDto: UpdateAgencyDto) {
-    return this.agenciesService.update(+id, updateAgencyDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.agenciesService.remove(+id);
+  @Post()
+  // Guard jwt
+  create(@Body() createAgencyDto: CreateAgencyDto) {
+    return this.agenciesService.create(createAgencyDto);
   }
 }

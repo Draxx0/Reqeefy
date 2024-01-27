@@ -1,26 +1,67 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAgencyDto } from './dto/create-agency.dto';
-import { UpdateAgencyDto } from './dto/update-agency.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AgencyEntity } from './entities/agency.entity';
+import { UserEntity } from '../users/entities/user.entity';
+import { AgencyQueries } from './queries/queries';
+import { PaginationService } from '../common/models/pagination.service';
 
 @Injectable()
 export class AgenciesService {
-  create(createAgencyDto: CreateAgencyDto) {
-    return 'This action adds a new agency';
+  constructor(
+    @InjectRepository(AgencyEntity)
+    private readonly agencyRepository: Repository<AgencyEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+    private readonly paginationService: PaginationService,
+  ) {}
+
+  async create(body: CreateAgencyDto) {
+    const agency = this.agencyRepository.create(body);
+
+    console.log('agency', agency);
+
+    return await this.agencyRepository.save(agency);
+
+    // this.userRepository.create({
+    //   email,
+    //   password,
+    //   agencies: [agency],
+    // });
+
+    // // The cascade option will automatically save the user
+    // await this.userRepository.save(agency);
   }
 
-  findAll() {
-    return `This action returns all agencies`;
-  }
+  async findAll(queries: AgencyQueries) {
+    const {
+      page = 1,
+      limit_per_page = 10,
+      search,
+      sort_by = 'created_at',
+      sort_order = 'DESC',
+    } = queries;
 
-  findOne(id: number) {
-    return `This action returns a #${id} agency`;
-  }
+    const query = this.agencyRepository.createQueryBuilder('agency');
 
-  update(id: number, updateAgencyDto: UpdateAgencyDto) {
-    return `This action updates a #${id} agency`;
-  }
+    if (search) {
+      query.where('agency.name LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} agency`;
+    const [agencies, total] = await query
+      .skip((page - 1) * limit_per_page)
+      .orderBy(`agency.${sort_by}`, sort_order)
+      .take(limit_per_page)
+      .getManyAndCount();
+
+    return this.paginationService.paginate<AgencyEntity>({
+      page,
+      total,
+      limit_per_page,
+      data: agencies,
+    });
   }
 }

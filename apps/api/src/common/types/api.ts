@@ -1,5 +1,6 @@
-export interface ApiCommonResponse<T = unknown> {
-  status: number;
-  message?: string;
-  data?: T;
+import { UserEntity } from 'src/models/users/entities/user.entity';
+
+export interface TokenObject {
+  access_token: string;
+  user: UserEntity;
 }
