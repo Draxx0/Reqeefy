@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
@@ -11,7 +11,6 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    @Inject(PaginationService)
     private readonly paginationService: PaginationService,
   ) {}
 
@@ -32,21 +31,43 @@ export class UsersService {
       });
     }
 
-    const [users, total] = await query
-      .skip((page - 1) * limit_per_page)
-      .orderBy(`user.${sort_by}`, sort_order)
-      .take(limit_per_page)
-      .getManyAndCount();
+    try {
+      const [users, total] = await query
+        .skip((page - 1) * limit_per_page)
+        .orderBy(`user.${sort_by}`, sort_order)
+        .take(limit_per_page)
+        .getManyAndCount();
 
-    return this.paginationService.paginate<UserEntity>({
-      page,
-      total,
-      limit_per_page,
-      data: users,
-    });
+      return this.paginationService.paginate<UserEntity>({
+        page,
+        total,
+        limit_per_page,
+        data: users,
+      });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async findOneByEmail(email: string): Promise<UserEntity | undefined> {
+    try {
+      const user = await this.userRepository.findOneBy({ email });
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      return user;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async deleteOne(id: string): Promise<DeleteResult> {
-    return await this.userRepository.softDelete(id);
+    try {
+      return await this.userRepository.softDelete(id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

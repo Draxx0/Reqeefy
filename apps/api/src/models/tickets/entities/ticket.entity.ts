@@ -54,7 +54,6 @@ export class TicketEntity extends TimestampEntity {
 
   @ManyToMany(() => AgentEntity, (agent) => agent.tickets_referents, {
     cascade: ['insert', 'update'],
-    eager: true,
   })
   @JoinTable()
   agents_referents: AgentEntity[];
@@ -67,7 +66,6 @@ export class TicketEntity extends TimestampEntity {
   customers: CustomerEntity[];
 
   @OneToMany(() => MessageEntity, (message) => message.ticket, {
-    eager: true,
     cascade: ['insert', 'update'],
   })
   messages: MessageEntity[];

@@ -9,5 +9,6 @@ import { PaginationModule } from '../common/models/pagination.module';
   imports: [TypeOrmModule.forFeature([UserEntity]), PaginationModule],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

@@ -20,7 +20,6 @@ export class AgencyGroupEntity extends TimestampEntity {
   // RELATIONS
 
   @ManyToMany(() => AgentEntity, (agent) => agent.agency_groups, {
-    eager: true,
     onDelete: 'CASCADE',
   })
   agents: AgentEntity[];

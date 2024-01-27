@@ -43,13 +43,13 @@ export class UserEntity extends TimestampEntity {
 
   @OneToOne(() => AgentEntity, (agent) => agent.user, {
     nullable: true,
-    eager: true,
+    // eager: true,
   })
   agent: AgentEntity;
 
   @OneToOne(() => CustomerEntity, (customer) => customer.user, {
     nullable: true,
-    eager: true,
+    // eager: true,
   })
   customer: CustomerEntity;
 

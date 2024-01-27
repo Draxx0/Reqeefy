@@ -25,7 +25,6 @@ export class AgencyEntity extends TimestampEntity {
 
   @OneToOne(() => UploadFileEntity, (uploadFile) => uploadFile.agency, {
     nullable: true,
-    eager: true,
     onDelete: 'CASCADE',
   })
   agency_photo: UploadFileEntity;
@@ -35,13 +34,10 @@ export class AgencyEntity extends TimestampEntity {
   users: UserEntity[];
 
   @OneToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agency, {
-    eager: true,
     cascade: ['insert', 'update'],
   })
   agency_groups: AgencyGroupEntity[];
 
-  @OneToMany(() => ProjectEntity, (project) => project.agency, {
-    eager: true,
-  })
+  @OneToMany(() => ProjectEntity, (project) => project.agency, {})
   projects: ProjectEntity[];
 }

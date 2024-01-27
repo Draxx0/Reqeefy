@@ -10,9 +10,11 @@ import { TicketsModule } from './tickets/tickets.module';
 import { UploadFilesModule } from './upload-files/upload-files.module';
 import { UsersModule } from './users/users.module';
 import { TicketSubjectsModule } from './ticket-subjects/ticket-subjects.module';
+import { AuthenticationModule } from 'src/authentication/authentication.module';
 
 @Module({
   imports: [
+    UsersModule,
     AgenciesModule,
     AgencyGroupsModule,
     AgentsModule,
@@ -23,7 +25,7 @@ import { TicketSubjectsModule } from './ticket-subjects/ticket-subjects.module';
     TicketSubjectsModule,
     TicketsModule,
     UploadFilesModule,
-    UsersModule,
+    AuthenticationModule,
   ],
   providers: [],
   controllers: [],

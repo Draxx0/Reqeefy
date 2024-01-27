@@ -44,9 +44,7 @@ export class AgentEntity extends TimestampEntity {
   @JoinTable()
   projects_referents: ProjectEntity[];
 
-  @ManyToMany(() => TicketEntity, (ticket) => ticket.support_agents, {
-    eager: true,
-  })
+  @ManyToMany(() => TicketEntity, (ticket) => ticket.support_agents, {})
   tickets_support: TicketEntity[];
 
   @ManyToMany(() => TicketEntity, (ticket) => ticket.agents_referents)

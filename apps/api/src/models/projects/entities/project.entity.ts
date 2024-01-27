@@ -33,19 +33,16 @@ export class ProjectEntity extends TimestampEntity {
 
   @ManyToMany(() => AgentEntity, (agent) => agent.projects_referents, {
     cascade: ['insert', 'update'],
-    eager: true,
   })
   agents_referents: AgentEntity[];
 
   @OneToMany(() => TicketEntity, (ticket) => ticket.project, {
-    eager: true,
     onDelete: 'CASCADE',
   })
   tickets: TicketEntity[];
 
   @ManyToMany(() => CustomerEntity, (customer) => customer.projects, {
     cascade: ['insert', 'update'],
-    eager: true,
   })
   @JoinTable()
   customers: CustomerEntity[];
@@ -59,7 +56,6 @@ export class ProjectEntity extends TimestampEntity {
     () => TicketSubjectCategoryEntity,
     (ticketSubjectCategory) => ticketSubjectCategory.project,
     {
-      eager: true,
       onDelete: 'CASCADE',
     },
   )

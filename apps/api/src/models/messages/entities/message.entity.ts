@@ -25,14 +25,12 @@ export class MessageEntity extends TimestampEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.messages, {
     onDelete: 'CASCADE',
-    eager: true,
   })
   user: UserEntity;
 
   @OneToMany(() => UploadFileEntity, (uploadFile) => uploadFile.message, {
     onDelete: 'CASCADE',
     cascade: ['insert', 'update'],
-    eager: true,
   })
   upload_files: UploadFileEntity[];
 
