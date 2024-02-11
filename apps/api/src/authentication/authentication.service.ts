@@ -42,10 +42,8 @@ export class AuthenticationService {
 
     const isPasswordMatching = await bcrypt.compare(password, user.password);
 
-    console.log('isPasswordMatching', isPasswordMatching);
-
     if (!isPasswordMatching) {
-      console.log('Wrong password provided');
+      console.error('Wrong password provided');
       throw new HttpException('Password is invalid', HttpStatus.UNAUTHORIZED);
     }
 
@@ -75,9 +73,12 @@ export class AuthenticationService {
     }
 
     const hashedPassword = await bcrypt.hash(body.password, 10);
-    body.password = hashedPassword;
+    const newUser = {
+      ...body,
+      password: hashedPassword,
+    };
 
-    const createdUser = this.userRepository.create(body);
+    const createdUser = this.userRepository.create(newUser);
     await this.userRepository.save(createdUser);
   }
 }

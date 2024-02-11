@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { AgentsService } from './agents.service';
 import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
+import { PaginatedData } from '@reqeefy/types';
+import { AgentEntity } from './entities/agent.entity';
+import { AgentQueries } from './queries/queries';
 
 @Controller('agents')
 export class AgentsController {
@@ -13,8 +25,10 @@ export class AgentsController {
   }
 
   @Get()
-  findAll() {
-    return this.agentsService.findAll();
+  async findAll(
+    @Query() queries: AgentQueries,
+  ): Promise<PaginatedData<AgentEntity>> {
+    return this.agentsService.findAll(queries);
   }
 
   @Get(':id')
