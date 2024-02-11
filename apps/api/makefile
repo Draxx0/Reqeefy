@@ -6,6 +6,11 @@ up:
 down:
 	docker-compose -f docker-compose.dev.yml down
 
+.PHONY: rvolumes
+rvolumes:
+	docker volume prune
+
+
 .PHONY: restart
 restart:
 	docker-compose -f docker-compose.dev.yml restart
