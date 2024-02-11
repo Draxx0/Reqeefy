@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Delete, Request, Query } from '@nestjs/common';
+import { Controller, Get, Param, Delete, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
@@ -14,11 +14,6 @@ export class UsersController {
     @Query() queries: UserQueries,
   ): Promise<PaginatedData<UserEntity>> {
     return await this.usersService.findAll(queries);
-  }
-
-  @Get('me')
-  getCurrentUserConnected(@Request() req) {
-    return req.user;
   }
 
   @Delete(':id')
