@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
@@ -23,7 +23,13 @@ export class UsersService {
       sort_order = 'DESC',
     } = queries;
 
-    const query = this.userRepository.createQueryBuilder('user');
+    const query = this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .leftJoinAndSelect('user.agent', 'agent')
+      .leftJoinAndSelect('user.customer', 'customer')
+      .leftJoinAndSelect('user.agencies', 'agencies')
+      .leftJoinAndSelect('user.messages', 'messages');
 
     if (search) {
       query.where('user.firstName LIKE :search OR user.lastName LIKE :search', {
@@ -45,16 +51,16 @@ export class UsersService {
     });
   }
 
-  async findOneByEmail(email: string): Promise<UserEntity | undefined> {
+  async findOneByEmail(email: string): Promise<UserEntity | null> {
     const user = await this.userRepository.findOneBy({ email });
     if (!user) {
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      return null;
     }
 
     return user;
   }
 
   async deleteOne(id: string): Promise<DeleteResult> {
-    return await this.userRepository.softDelete(id);
+    return await this.userRepository.delete(id);
   }
 }
