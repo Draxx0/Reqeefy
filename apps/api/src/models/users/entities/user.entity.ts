@@ -38,24 +38,32 @@ export class UserEntity extends TimestampEntity {
   @OneToOne(() => UploadFileEntity, (uploadFile) => uploadFile.user, {
     nullable: true,
     eager: true,
+    onDelete: 'CASCADE',
+    cascade: ['insert', 'update'],
   })
   avatar: UploadFileEntity;
 
   @OneToOne(() => AgentEntity, (agent) => agent.user, {
     nullable: true,
-    // eager: true,
+    onDelete: 'CASCADE',
+    cascade: ['insert', 'update'],
   })
   agent: AgentEntity;
 
   @OneToOne(() => CustomerEntity, (customer) => customer.user, {
     nullable: true,
-    // eager: true,
+    onDelete: 'CASCADE',
+    cascade: ['insert', 'update'],
   })
   customer: CustomerEntity;
 
-  @ManyToMany(() => AgencyEntity, (agency) => agency.users)
+  @ManyToMany(() => AgencyEntity, (agency) => agency.users, {
+    onDelete: 'CASCADE',
+  })
   agencies: AgencyEntity[];
 
-  @OneToMany(() => MessageEntity, (message) => message.user)
+  @OneToMany(() => MessageEntity, (message) => message.user, {
+    onDelete: 'NO ACTION',
+  })
   messages: MessageEntity[];
 }
