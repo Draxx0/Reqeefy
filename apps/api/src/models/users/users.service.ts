@@ -60,6 +60,15 @@ export class UsersService {
     return user;
   }
 
+  async findOneById(id: string): Promise<UserEntity | null> {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      return null;
+    }
+
+    return user;
+  }
+
   async deleteOne(id: string): Promise<DeleteResult> {
     return await this.userRepository.delete(id);
   }
