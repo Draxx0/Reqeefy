@@ -60,7 +60,7 @@ export class AuthenticationService {
     };
   }
 
-  async signup(body: AuthenticationSignupDto): Promise<void> {
+  async signup(body: AuthenticationSignupDto): Promise<UserEntity> {
     const isEmailAlreadyUsed = await this.usersService.findOneByEmail(
       body.email,
     );
@@ -79,6 +79,6 @@ export class AuthenticationService {
     };
 
     const createdUser = this.userRepository.create(newUser);
-    await this.userRepository.save(createdUser);
+    return await this.userRepository.save(createdUser);
   }
 }

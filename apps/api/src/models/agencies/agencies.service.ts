@@ -1,38 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAgencyDto } from './dto/create-agency.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AuthenticationService } from 'src/authentication/authentication.service';
 import { Repository } from 'typeorm';
-import { AgencyEntity } from './entities/agency.entity';
-import { UserEntity } from '../users/entities/user.entity';
-import { AgencyQueries } from './queries/queries';
 import { PaginationService } from '../common/models/pagination.service';
+import { AgencyEntity } from './entities/agency.entity';
+import { AgencyQueries } from './queries/queries';
+import {
+  CreateAgencyWithExistingUserDto,
+  CreateAgencyWithNewUserDto,
+} from './dto/create-agency.dto';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AgenciesService {
   constructor(
     @InjectRepository(AgencyEntity)
     private readonly agencyRepository: Repository<AgencyEntity>,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
+    private readonly authenticationService: AuthenticationService,
     private readonly paginationService: PaginationService,
+    private readonly usersService: UsersService,
   ) {}
-
-  async create(body: CreateAgencyDto) {
-    const agency = this.agencyRepository.create(body);
-
-    console.log('agency', agency);
-
-    return await this.agencyRepository.save(agency);
-
-    // this.userRepository.create({
-    //   email,
-    //   password,
-    //   agencies: [agency],
-    // });
-
-    // // The cascade option will automatically save the user
-    // await this.userRepository.save(agency);
-  }
 
   async findAll(queries: AgencyQueries) {
     const {
@@ -63,5 +50,34 @@ export class AgenciesService {
       limit_per_page,
       data: agencies,
     });
+  }
+
+  async createWithNewUser(body: CreateAgencyWithNewUserDto) {
+    const { email, first_name, last_name, password } = body;
+    const signedUser = await this.authenticationService.signup({
+      email,
+      first_name,
+      last_name,
+      password,
+    });
+    const agency = this.agencyRepository.create({
+      ...body,
+      users: [signedUser],
+    });
+    return await this.agencyRepository.save(agency);
+  }
+
+  async createWithExistingUser(
+    id: string,
+    body: CreateAgencyWithExistingUserDto,
+  ) {
+    const user = await this.usersService.findOneById(id);
+
+    const agency = this.agencyRepository.create({
+      ...body,
+      users: [user],
+    });
+
+    return await this.agencyRepository.save(agency);
   }
 }
