@@ -15,7 +15,7 @@ Please delete options that are not relevant.
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] This change requires a documentation update
 
-# How Has This Been Tested?
+## How Has This Been Tested?
 
 Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce. Please also list any relevant details for your test configuration
 
@@ -29,7 +29,7 @@ Please describe the tests that you ran to verify your changes. Provide instructi
 - Toolchain:
 - SDK:
 
-# Checklist:
+## Checklist:
 
 - [ ] My code follows the style guidelines of this project
 - [ ] I have performed a self-review of my code
@@ -57,7 +57,7 @@ Veuillez supprimer les options qui ne sont pas pertinentes.
 - Changement de rupture (correctif ou caractéristique qui ferait que la fonctionnalité existante ne fonctionnerait pas comme prévu)
 - Cette modification nécessite une mise à jour de la documentation
 
-# Comment cela a-t-il été testé ?
+## Comment cela a-t-il été testé ?
 
 Veuillez décrire les tests que vous avez effectués pour vérifier vos modifications. Fournissez des instructions pour que nous puissions les reproduire. Veuillez également indiquer tous les détails pertinents pour votre configuration de test
 
@@ -71,7 +71,7 @@ Veuillez décrire les tests que vous avez effectués pour vérifier vos modifica
 - Chaîne d'outils :
 - SDK :
 
-# Checklist :
+## Checklist :
 
 - [ ] Mon code respecte les directives de style de ce projet
 - [ ] J'ai effectué une auto-évaluation de mon code
