@@ -1,5 +1,5 @@
 ---
-name: Feature request [FR]
+name: "✨ Feature request [FR] \U0001F1EB\U0001F1F7"
 about: Suggérer une idée pour ce projet
 title: "[FEATURE-REQUEST]"
 labels: enhancement

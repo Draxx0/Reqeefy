@@ -1,5 +1,5 @@
 ---
-name: Bug report [EN]
+name: "\U0001F41B Bug report [EN] \U0001F1EC\U0001F1E7"
 about: Create a report to help us improve
 title: "[BUG]"
 labels: bug

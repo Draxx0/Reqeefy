@@ -1,5 +1,5 @@
 ---
-name: Bug report [FR]
+name: "\U0001F41B Bug report [FR] \U0001F1EB\U0001F1F7"
 about: Créer un rapport pour nous aider à nous améliorer
 title: "[BUG]"
 labels: bug
