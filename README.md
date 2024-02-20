@@ -30,7 +30,7 @@ Afin de réaliser ce projet, voici une liste exhaustive des outils utilisés :
 - ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 - ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
-Ce projet est sous licence MIT.
+Ce projet est sous licence [MIT](LICENSE.md).
 
 # 🇬🇧 Reqeefy 🇬🇧
 
@@ -64,5 +64,5 @@ In order to carry out this project, here is an exhaustive list of the tools used
 - ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 - ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
-This project is under license MIT.
+This project is under license [MIT](LICENSE.md).
 
