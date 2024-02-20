@@ -52,12 +52,6 @@ export class TicketEntity extends TimestampEntity {
   @JoinTable()
   support_agents: AgentEntity[];
 
-  @ManyToMany(() => AgentEntity, (agent) => agent.tickets_referents, {
-    cascade: ['insert', 'update'],
-  })
-  @JoinTable()
-  agents_referents: AgentEntity[];
-
   @ManyToMany(() => CustomerEntity, (customer) => customer.tickets, {
     cascade: ['insert', 'update'],
     nullable: true,

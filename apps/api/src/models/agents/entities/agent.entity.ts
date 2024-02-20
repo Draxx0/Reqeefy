@@ -46,7 +46,4 @@ export class AgentEntity extends TimestampEntity {
 
   @ManyToMany(() => TicketEntity, (ticket) => ticket.support_agents, {})
   tickets_support: TicketEntity[];
-
-  @ManyToMany(() => TicketEntity, (ticket) => ticket.agents_referents)
-  tickets_referents: TicketEntity[];
 }

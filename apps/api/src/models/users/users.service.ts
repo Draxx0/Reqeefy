@@ -69,6 +69,15 @@ export class UsersService {
     return user;
   }
 
+  async updateSelectedOne(
+    user: UserEntity,
+    updateData: Partial<UserEntity>,
+  ): Promise<UserEntity> {
+    await this.userRepository.save({ ...user, ...updateData });
+
+    return await this.findOneById(user.id);
+  }
+
   async deleteOne(id: string): Promise<DeleteResult> {
     return await this.userRepository.delete(id);
   }

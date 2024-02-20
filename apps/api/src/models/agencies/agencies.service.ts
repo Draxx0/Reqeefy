@@ -10,6 +10,7 @@ import {
   CreateAgencyWithNewUserDto,
 } from './dto/create-agency.dto';
 import { UsersService } from '../users/users.service';
+import { AgentsService } from '../agents/agents.service';
 
 @Injectable()
 export class AgenciesService {
@@ -17,8 +18,9 @@ export class AgenciesService {
     @InjectRepository(AgencyEntity)
     private readonly agencyRepository: Repository<AgencyEntity>,
     private readonly authenticationService: AuthenticationService,
-    private readonly paginationService: PaginationService,
     private readonly usersService: UsersService,
+    private readonly agentService: AgentsService,
+    private readonly paginationService: PaginationService,
   ) {}
 
   async findAll(queries: AgencyQueries) {
@@ -30,7 +32,9 @@ export class AgenciesService {
       sort_order = 'DESC',
     } = queries;
 
-    const query = this.agencyRepository.createQueryBuilder('agency');
+    const query = this.agencyRepository
+      .createQueryBuilder('agency')
+      .leftJoinAndSelect('agency.users', 'users');
 
     if (search) {
       query.where('agency.name LIKE :search', {
@@ -60,9 +64,19 @@ export class AgenciesService {
       last_name,
       password,
     });
+
+    const agent = await this.agentService.create({
+      id: signedUser.id,
+      role: 'superadmin',
+    });
+    const updatedUser = await this.usersService.updateSelectedOne(signedUser, {
+      ...signedUser,
+      agent,
+    });
+
     const agency = this.agencyRepository.create({
       ...body,
-      users: [signedUser],
+      users: [updatedUser],
     });
     return await this.agencyRepository.save(agency);
   }
@@ -73,9 +87,19 @@ export class AgenciesService {
   ) {
     const user = await this.usersService.findOneById(id);
 
+    const agent = await this.agentService.create({
+      id,
+      role: 'superadmin',
+    });
+
+    const updatedUser = await this.usersService.updateSelectedOne(user, {
+      ...user,
+      agent,
+    });
+
     const agency = this.agencyRepository.create({
       ...body,
-      users: [user],
+      users: [updatedUser],
     });
 
     return await this.agencyRepository.save(agency);

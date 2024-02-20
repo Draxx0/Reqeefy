@@ -1,22 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
 import { AgentQueries } from './queries/queries';
 import { PaginationService } from '../common/models/pagination.service';
 import { AgentEntity } from './entities/agent.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PaginatedData } from '@reqeefy/types';
+import { AgentRole, PaginatedData } from '@reqeefy/types';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AgentsService {
   constructor(
     @InjectRepository(AgentEntity)
     private readonly agentRepository: Repository<AgentEntity>,
+    private readonly userService: UsersService,
     private readonly paginationService: PaginationService,
   ) {}
-  create(createAgentDto: CreateAgentDto) {
-    return 'This action adds a new agent';
+  async create({ id, role }: { id: string; role: AgentRole }) {
+    const user = await this.userService.findOneById(id);
+    const agent = this.agentRepository.create({
+      user,
+      role,
+    });
+
+    return this.agentRepository.save(agent);
   }
 
   async findAll(queries: AgentQueries): Promise<PaginatedData<AgentEntity>> {

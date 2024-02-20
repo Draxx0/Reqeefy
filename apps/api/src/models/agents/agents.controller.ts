@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -9,7 +8,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { AgentsService } from './agents.service';
-import { CreateAgentDto } from './dto/create-agent.dto';
 import { UpdateAgentDto } from './dto/update-agent.dto';
 import { PaginatedData } from '@reqeefy/types';
 import { AgentEntity } from './entities/agent.entity';
@@ -19,10 +17,10 @@ import { AgentQueries } from './queries/queries';
 export class AgentsController {
   constructor(private readonly agentsService: AgentsService) {}
 
-  @Post()
-  create(@Body() createAgentDto: CreateAgentDto) {
-    return this.agentsService.create(createAgentDto);
-  }
+  // @Post()
+  // create(@Body() createAgentDto: CreateAgentDto) {
+  //   return this.agentsService.create(createAgentDto);
+  // }
 
   @Get()
   async findAll(

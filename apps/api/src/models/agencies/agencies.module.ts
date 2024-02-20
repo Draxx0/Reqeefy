@@ -6,6 +6,7 @@ import { AgencyEntity } from './entities/agency.entity';
 import { PaginationModule } from '../common/models/pagination.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { UsersModule } from '../users/users.module';
+import { AgentsModule } from '../agents/agents.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UsersModule } from '../users/users.module';
     AuthenticationModule,
     PaginationModule,
     UsersModule,
+    AgentsModule,
   ],
   controllers: [AgenciesController],
   providers: [AgenciesService],

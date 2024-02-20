@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+import { AgencyActivityAreaValues } from '../data/data';
 
 export class CreateAgencyWithNewUserDto {
   @IsString()
@@ -13,22 +14,7 @@ export class CreateAgencyWithNewUserDto {
   name: string;
 
   @IsNotEmpty()
-  @IsIn([
-    'Conception de sites Web et développement web',
-    'Marketing numérique',
-    'Design graphique',
-    "Développement d'applications mobiles",
-    'Commerce électronique',
-    'Consultation en stratégie web',
-    'Développement de contenu',
-    'Hébergement Web et services techniques',
-    'Formation et coaching en ligne',
-    'Optimisation de la conversion',
-    'Gestion de la réputation en ligne',
-    "Analyse de données et intelligence d'affaires",
-    'Gestion de la relation client',
-    'Stratégie digitale',
-  ])
+  @IsIn([...AgencyActivityAreaValues])
   activity_area: AgencyActivityArea;
 
   @IsOptional()
@@ -64,22 +50,7 @@ export class CreateAgencyWithExistingUserDto {
   name: string;
 
   @IsNotEmpty()
-  @IsIn([
-    'Conception de sites Web et développement web',
-    'Marketing numérique',
-    'Design graphique',
-    "Développement d'applications mobiles",
-    'Commerce électronique',
-    'Consultation en stratégie web',
-    'Développement de contenu',
-    'Hébergement Web et services techniques',
-    'Formation et coaching en ligne',
-    'Optimisation de la conversion',
-    'Gestion de la réputation en ligne',
-    "Analyse de données et intelligence d'affaires",
-    'Gestion de la relation client',
-    'Stratégie digitale',
-  ])
+  @IsIn([...AgencyActivityAreaValues])
   activity_area: AgencyActivityArea;
 
   @IsOptional()
