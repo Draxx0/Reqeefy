@@ -30,6 +30,8 @@ Afin de réaliser ce projet, voici une liste exhaustive des outils utilisés :
 - ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 - ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
 
+Ce projet est sous licence MIT.
+
 # 🇬🇧 Reqeefy 🇬🇧
 
 **Reqeefy** is an application that enables an agency to centralize customer requests. The agency integrates customers into the product and gives them access to send their requests directly to the application in the form of a "ticket", similar to a threaded discussion. Reqeefy can also be used to create tickets internally, enabling the agency to solve problems before the customer has notified it.
@@ -61,4 +63,6 @@ In order to carry out this project, here is an exhaustive list of the tools used
 
 - ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 - ![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+
+This project is under license MIT.
 
