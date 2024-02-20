@@ -1,9 +1,9 @@
 ---
-name: Bug report
+name: Bug report [EN]
 about: Create a report to help us improve
 title: "[BUG]"
 labels: bug
-assignees: ''
+assignees: Draxx0
 
 ---
 

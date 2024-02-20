@@ -1,9 +1,9 @@
 ---
-name: Feature request
+name: Feature request [EN]
 about: Suggest an idea for this project
 title: "[FEATURE-REQUEST]"
 labels: enhancement
-assignees: ''
+assignees: Draxx0
 
 ---
 
