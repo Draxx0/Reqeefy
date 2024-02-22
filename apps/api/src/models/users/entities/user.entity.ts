@@ -4,6 +4,7 @@ import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
 import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 import { MessageEntity } from 'src/models/messages/entities/message.entity';
 import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
+import { UserPreferencesEntity } from 'src/models/user-preferences/entities/user-preferences.entity';
 import {
   Column,
   Entity,
@@ -56,6 +57,12 @@ export class UserEntity extends TimestampEntity {
     cascade: ['insert', 'update'],
   })
   customer: CustomerEntity;
+
+  @OneToOne(
+    () => UserPreferencesEntity,
+    (user_preferences) => user_preferences.user,
+  )
+  preferences: UserPreferencesEntity;
 
   @ManyToMany(() => AgencyEntity, (agency) => agency.users, {
     onDelete: 'CASCADE',

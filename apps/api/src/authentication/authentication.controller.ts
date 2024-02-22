@@ -4,10 +4,14 @@ import { AuthenticationService } from './authentication.service';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { LocalGuard } from './guards/local.guard';
+import { UserPreferencesService } from 'src/models/user-preferences/user-preferences.service';
 
 @Controller('auth')
 export class AuthenticationController {
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(
+    private authenticationService: AuthenticationService,
+    private readonly userPreferencesService: UserPreferencesService,
+  ) {}
 
   @Post('signin')
   @UseGuards(LocalGuard)
@@ -17,7 +21,14 @@ export class AuthenticationController {
 
   @Post('signup')
   async signup(@Body() authenticationSignupDto: AuthenticationSignupDto) {
-    await this.authenticationService.signup(authenticationSignupDto);
+    const user = await this.authenticationService.signup(
+      authenticationSignupDto,
+    );
+
+    // Create default preferences for user
+    await this.userPreferencesService.create(user.id, {
+      viewMode: 'grid',
+    });
 
     return await this.authenticationService.signin({
       email: authenticationSignupDto.email,

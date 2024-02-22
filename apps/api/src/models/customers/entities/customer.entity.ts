@@ -26,6 +26,6 @@ export class CustomerEntity extends TimestampEntity {
   })
   projects: ProjectEntity[];
 
-  @ManyToMany(() => TicketEntity, (ticket) => ticket.customers, {})
+  @ManyToMany(() => TicketEntity, (ticket) => ticket.customers)
   tickets: TicketEntity[];
 }

@@ -11,6 +11,7 @@ import { UploadFilesModule } from './upload-files/upload-files.module';
 import { UsersModule } from './users/users.module';
 import { TicketSubjectsModule } from './ticket-subjects/ticket-subjects.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
+import { UserPreferencesModule } from './user-preferences/user-preferences.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthenticationModule } from 'src/authentication/authentication.module';
     TicketsModule,
     UploadFilesModule,
     AuthenticationModule,
+    UserPreferencesModule,
   ],
   providers: [],
   controllers: [],

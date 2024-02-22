@@ -29,7 +29,8 @@ export class UsersService {
       .leftJoinAndSelect('user.agent', 'agent')
       .leftJoinAndSelect('user.customer', 'customer')
       .leftJoinAndSelect('user.agencies', 'agencies')
-      .leftJoinAndSelect('user.messages', 'messages');
+      .leftJoinAndSelect('user.messages', 'messages')
+      .leftJoinAndSelect('user.preferences', 'preferences');
 
     if (search) {
       query.where('user.firstName LIKE :search OR user.lastName LIKE :search', {

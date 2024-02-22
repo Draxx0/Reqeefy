@@ -24,7 +24,7 @@ export class TicketEntity extends TimestampEntity {
 
   @Column({
     type: 'enum',
-    enum: ['open', 'closed', 'pending', 'resolved'],
+    enum: ['open', 'pending', 'archived'],
     default: 'open',
   })
   status: TicketStatus;
@@ -40,6 +40,12 @@ export class TicketEntity extends TimestampEntity {
     default: false,
   })
   distributed: boolean;
+
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+  })
+  archiving_date: Date;
 
   // RELATIONS
 
