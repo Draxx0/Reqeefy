@@ -1,9 +1,11 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UserPreferencesService } from './user-preferences.service';
 import { CreateUserPreferencesDTO } from './dto/create-user-preferences.dto';
 import { UpdateUserPreferencesDTO } from './dto/update-user-preferences.dto';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('user-preferences')
+@UseGuards(JwtAuthGuard)
 export class UserPreferencesController {
   constructor(
     private readonly userPreferencesService: UserPreferencesService,

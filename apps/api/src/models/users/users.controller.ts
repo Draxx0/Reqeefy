@@ -1,11 +1,20 @@
-import { Controller, Get, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PaginatedData } from '@reqeefy/types';
 import { UserQueries } from './queries/queries';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

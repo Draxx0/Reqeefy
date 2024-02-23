@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
@@ -14,8 +15,10 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerQueries } from './queries/queries';
 import { PaginatedData } from '@reqeefy/types';
 import { CustomerEntity } from './entities/customer.entity';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('customers')
+@UseGuards(JwtAuthGuard)
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 

@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { TicketSubjectsService } from './ticket-subjects.service';
 import { CreateTicketSubjectDto } from './dto/create-ticket-subject.dto';
 import { UpdateTicketSubjectDto } from './dto/update-ticket-subject.dto';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('ticket-subjects')
+@UseGuards(JwtAuthGuard)
 export class TicketSubjectsController {
   constructor(private readonly ticketSubjectsService: TicketSubjectsService) {}
 
@@ -23,7 +34,10 @@ export class TicketSubjectsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketSubjectDto: UpdateTicketSubjectDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTicketSubjectDto: UpdateTicketSubjectDto,
+  ) {
     return this.ticketSubjectsService.update(+id, updateTicketSubjectDto);
   }
 
