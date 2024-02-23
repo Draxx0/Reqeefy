@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAgencyGroupDto } from './dto/create-agency-group.dto';
-import { UpdateAgencyGroupDto } from './dto/update-agency-group.dto';
+import { CreateAgencyGroupDTO } from './dto/create-agency-group.dto';
+import { AgencyGroupEntity } from './entities/agency-group.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AgencyGroupsService {
-  create(createAgencyGroupDto: CreateAgencyGroupDto) {
-    return 'This action adds a new agencyGroup';
+  constructor(
+    @InjectRepository(AgencyGroupEntity)
+    private readonly agencyGroupRepository: Repository<AgencyGroupEntity>,
+  ) {}
+
+  async findAll() {
+    const query = this.agencyGroupRepository
+      .createQueryBuilder('agency_group')
+      .leftJoinAndSelect('agency_group.agency', 'agency');
+
+    return await query.getMany();
   }
 
-  findAll() {
-    return `This action returns all agencyGroups`;
-  }
+  create(createAgencyGroupDto: CreateAgencyGroupDTO) {
+    const agencyGroup = this.agencyGroupRepository.create({
+      ...createAgencyGroupDto,
+      agency: { id: createAgencyGroupDto.agencyId },
+    });
 
-  findOne(id: number) {
-    return `This action returns a #${id} agencyGroup`;
-  }
-
-  update(id: number, updateAgencyGroupDto: UpdateAgencyGroupDto) {
-    return `This action updates a #${id} agencyGroup`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} agencyGroup`;
+    return this.agencyGroupRepository.save(agencyGroup);
   }
 }

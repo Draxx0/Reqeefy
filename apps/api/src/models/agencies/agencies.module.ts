@@ -7,12 +7,14 @@ import { PaginationModule } from '../common/models/pagination.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { UsersModule } from '../users/users.module';
 import { AgentsModule } from '../agents/agents.module';
+import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AgencyEntity]),
     AuthenticationModule,
     PaginationModule,
+    AgencyGroupsModule,
     UsersModule,
     AgentsModule,
   ],

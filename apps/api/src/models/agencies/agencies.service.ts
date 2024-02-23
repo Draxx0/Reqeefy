@@ -11,6 +11,7 @@ import {
 } from './dto/create-agency.dto';
 import { UsersService } from '../users/users.service';
 import { AgentsService } from '../agents/agents.service';
+import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 
 @Injectable()
 export class AgenciesService {
@@ -20,6 +21,7 @@ export class AgenciesService {
     private readonly authenticationService: AuthenticationService,
     private readonly usersService: UsersService,
     private readonly agentService: AgentsService,
+    private readonly agencyGroupsService: AgencyGroupsService,
     private readonly paginationService: PaginationService,
   ) {}
 
@@ -34,7 +36,10 @@ export class AgenciesService {
 
     const query = this.agencyRepository
       .createQueryBuilder('agency')
-      .leftJoinAndSelect('agency.users', 'users');
+      .leftJoinAndSelect('agency.users', 'users')
+      .leftJoinAndSelect('agency.agency_photo', 'agency_photo')
+      .leftJoinAndSelect('agency.agency_groups', 'agency_groups')
+      .leftJoinAndSelect('agency.projects', 'projects');
 
     if (search) {
       query.where('agency.name LIKE :search', {
@@ -57,7 +62,16 @@ export class AgenciesService {
   }
 
   async createWithNewUser(body: CreateAgencyWithNewUserDto) {
-    const { email, first_name, last_name, password } = body;
+    const {
+      email,
+      first_name,
+      last_name,
+      password,
+      activity_area,
+      description,
+      name,
+      website_url,
+    } = body;
     const signedUser = await this.authenticationService.signup({
       email,
       first_name,
@@ -75,7 +89,10 @@ export class AgenciesService {
     });
 
     const agency = this.agencyRepository.create({
-      ...body,
+      activity_area,
+      description,
+      name,
+      website_url,
       users: [updatedUser],
     });
     return await this.agencyRepository.save(agency);
@@ -85,6 +102,8 @@ export class AgenciesService {
     id: string,
     body: CreateAgencyWithExistingUserDto,
   ) {
+    const { activity_area, description, name, website_url, agency_groups } =
+      body;
     const user = await this.usersService.findOneById(id);
 
     const agent = await this.agentService.create({
@@ -98,9 +117,23 @@ export class AgenciesService {
     });
 
     const agency = this.agencyRepository.create({
-      ...body,
+      activity_area,
+      description,
+      name,
+      website_url,
       users: [updatedUser],
     });
+
+    const createdGroups = await Promise.all(
+      agency_groups.map((group_name) =>
+        this.agencyGroupsService.create({
+          name: group_name,
+          agencyId: agency.id,
+        }),
+      ),
+    );
+
+    agency.agency_groups = createdGroups;
 
     return await this.agencyRepository.save(agency);
   }

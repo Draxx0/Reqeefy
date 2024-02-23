@@ -63,9 +63,7 @@ export class AgencyEntity extends TimestampEntity {
   @JoinTable()
   users: UserEntity[];
 
-  @OneToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agency, {
-    cascade: ['insert', 'update'],
-  })
+  @OneToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agency)
   agency_groups: AgencyGroupEntity[];
 
   @OneToMany(() => ProjectEntity, (project) => project.agency, {})

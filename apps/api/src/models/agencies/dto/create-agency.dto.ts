@@ -1,5 +1,6 @@
 import { AgencyActivityArea } from '@reqeefy/types';
 import {
+  IsArray,
   IsEmail,
   IsIn,
   IsNotEmpty,
@@ -9,13 +10,18 @@ import {
 import { AgencyActivityAreaValues } from '../data/data';
 
 export class CreateAgencyWithNewUserDto {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @IsNotEmpty()
   @IsIn([...AgencyActivityAreaValues])
   activity_area: AgencyActivityArea;
+
+  @IsNotEmpty()
+  @IsArray()
+  @IsString({ each: true })
+  agency_groups: string[];
 
   @IsOptional()
   @IsString()
@@ -45,13 +51,18 @@ export class CreateAgencyWithNewUserDto {
 }
 
 export class CreateAgencyWithExistingUserDto {
-  @IsString()
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @IsNotEmpty()
   @IsIn([...AgencyActivityAreaValues])
   activity_area: AgencyActivityArea;
+
+  @IsNotEmpty()
+  @IsArray()
+  @IsString({ each: true })
+  agency_groups: string[];
 
   @IsOptional()
   @IsString()
