@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TicketSubjectCategoriesService } from './ticket-subject-categories.service';
 import { CreateTicketSubjectCategoryDto } from './dto/create-ticket-subject-category.dto';
 import { UpdateTicketSubjectCategoryDto } from './dto/update-ticket-subject-category.dto';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('ticket-subject-categories')
+@UseGuards(JwtAuthGuard)
 export class TicketSubjectCategoriesController {
   constructor(
     private readonly ticketSubjectCategoriesService: TicketSubjectCategoriesService,

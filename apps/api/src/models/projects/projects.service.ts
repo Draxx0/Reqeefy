@@ -1,26 +1,81 @@
-import { Injectable } from '@nestjs/common';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { CreateProjectDTO } from './dto/create-project.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ProjectEntity } from './entities/project.entity';
+import { Repository } from 'typeorm';
+import { AgentsService } from '../agents/agents.service';
+import { PaginationService } from '../common/models/pagination.service';
+import { ProjectQueries } from './queries/queries';
 
 @Injectable()
 export class ProjectsService {
-  create(createProjectDto: CreateProjectDto) {
-    return 'This action adds a new project';
+  constructor(
+    @InjectRepository(ProjectEntity)
+    private readonly projectsRepository: Repository<ProjectEntity>,
+    private readonly paginationService: PaginationService,
+    private readonly agentsService: AgentsService,
+  ) {}
+
+  async findAll(queries: ProjectQueries) {
+    const {
+      page = 1,
+      limit_per_page = 10,
+      search,
+      sort_by = 'created_at',
+      sort_order = 'DESC',
+    } = queries;
+
+    const query = this.projectsRepository
+      .createQueryBuilder('project')
+      .leftJoinAndSelect('project.agency', 'agency')
+      .leftJoinAndSelect('project.agents_referents', 'agents_referents')
+      .leftJoinAndSelect('agents_referents.user', 'user')
+      .leftJoinAndSelect('project.tickets', 'tickets')
+      .leftJoinAndSelect('project.customers', 'customers')
+      .leftJoinAndSelect('project.photo_url', 'photo_url');
+
+    if (search) {
+      query.where('project.name LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
+
+    const [projects, total] = await query
+      .skip((page - 1) * limit_per_page)
+      .orderBy(`project.${sort_by}`, sort_order)
+      .take(limit_per_page)
+      .getManyAndCount();
+
+    return this.paginationService.paginate<ProjectEntity>({
+      page,
+      total,
+      limit_per_page,
+      data: projects,
+    });
   }
 
-  findAll() {
-    return `This action returns all projects`;
+  async create(body: CreateProjectDTO) {
+    const { name, agencyId, agents_referents_ids } = body;
+
+    const agents_referents =
+      await this.agentsService.findAllByIds(agents_referents_ids);
+
+    const project = this.projectsRepository.create({
+      name,
+      agency: { id: agencyId },
+      agents_referents,
+    });
+
+    return await this.projectsRepository.save(project);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
-  }
+  async delete(id: string) {
+    const project = await this.projectsRepository.findOneBy({ id });
 
-  update(id: number, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
-  }
+    if (!project) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+    return await this.projectsRepository.remove(project);
   }
 }

@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UploadFilesService } from './upload-files.service';
 import { CreateUploadFileDto } from './dto/create-upload-file.dto';
 import { UpdateUploadFileDto } from './dto/update-upload-file.dto';
+import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('upload-files')
+@UseGuards(JwtAuthGuard)
 export class UploadFilesController {
   constructor(private readonly uploadFilesService: UploadFilesService) {}
 
