@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { UpdateAgentDto } from './dto/update-agent.dto';
+import { HttpException, Injectable } from '@nestjs/common';
 import { AgentQueries } from './queries/queries';
 import { PaginationService } from '../common/models/pagination.service';
 import { AgentEntity } from './entities/agent.entity';
@@ -48,9 +47,9 @@ export class AgentsService {
       );
     }
 
-    const [users, total] = await query
+    const [agents, total] = await query
       .skip((page - 1) * limit_per_page)
-      .orderBy(`user.${sort_by}`, sort_order)
+      .orderBy(`agent.${sort_by}`, sort_order)
       .take(limit_per_page)
       .getManyAndCount();
 
@@ -58,19 +57,21 @@ export class AgentsService {
       page,
       total,
       limit_per_page,
-      data: users,
+      data: agents,
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} agent`;
-  }
+  async findAllByIds(ids: string[]) {
+    const query = this.agentRepository
+      .createQueryBuilder('agent')
+      .leftJoinAndSelect('agent.user', 'user');
 
-  update(id: number, updateAgentDto: UpdateAgentDto) {
-    return `This action updates a #${id} agent`;
-  }
+    const users = await query
+      .where('agent.user.id IN (:...ids)', { ids })
+      .getMany();
 
-  remove(id: number) {
-    return `This action removes a #${id} agent`;
+    if (!users.length) throw new HttpException('Agents not found', 404);
+
+    return users;
   }
 }
