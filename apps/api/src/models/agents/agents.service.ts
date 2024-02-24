@@ -1,11 +1,15 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { AgentQueries } from './queries/queries';
-import { PaginationService } from '../common/models/pagination.service';
-import { AgentEntity } from './entities/agent.entity';
-import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AgentRole, PaginatedData } from '@reqeefy/types';
+import { AuthenticationService } from 'src/authentication/authentication.service';
+import { AuthenticationSignupDto } from 'src/authentication/dto/authentication-signup.dto';
+import { Repository } from 'typeorm';
+import { PaginationService } from '../common/models/pagination.service';
 import { UsersService } from '../users/users.service';
+import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
+import { AgentEntity } from './entities/agent.entity';
+import { AgentQueries } from './queries/queries';
+import { AgenciesService } from '../agencies/agencies.service';
 
 @Injectable()
 export class AgentsService {
@@ -14,12 +18,50 @@ export class AgentsService {
     private readonly agentRepository: Repository<AgentEntity>,
     private readonly userService: UsersService,
     private readonly paginationService: PaginationService,
+    private readonly authenticationService: AuthenticationService,
+    // private readonly agenciesService: AgenciesService,
   ) {}
   async create({ id, role }: { id: string; role: AgentRole }) {
     const user = await this.userService.findOneById(id);
     const agent = this.agentRepository.create({
       user,
       role,
+    });
+
+    return this.agentRepository.save(agent);
+  }
+
+  async createUserAgent(body: CreateAgentDTO, id: string) {
+    const createUserBody: AuthenticationSignupDto = {
+      email: body.email,
+      password: body.password,
+      first_name: body.first_name,
+      last_name: body.last_name,
+    };
+
+    // const agency = await this.agenciesService.findOneById(id);
+
+    const user = await this.authenticationService.signup(createUserBody);
+
+    // const updatedUser = await this.userService.updateSelectedOne(user, {
+    //   ...user,
+    //   agencies: [agency],
+    // });
+
+    const agent = this.agentRepository.create({
+      user,
+      role: body.role,
+    });
+
+    return this.agentRepository.save(agent);
+  }
+
+  async createExistingUserAgent(body: AddAgentToAgencyDTO, id: string) {
+    const user = await this.userService.findOneById(id);
+
+    const agent = this.agentRepository.create({
+      user,
+      role: body.role,
     });
 
     return this.agentRepository.save(agent);

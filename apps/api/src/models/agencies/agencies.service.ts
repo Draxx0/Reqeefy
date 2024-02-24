@@ -2,25 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthenticationService } from 'src/authentication/authentication.service';
 import { Repository } from 'typeorm';
+import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
+import { AgentsService } from '../agents/agents.service';
 import { PaginationService } from '../common/models/pagination.service';
-import { AgencyEntity } from './entities/agency.entity';
-import { AgencyQueries } from './queries/queries';
+import { UsersService } from '../users/users.service';
 import {
   CreateAgencyWithExistingUserDto,
   CreateAgencyWithNewUserDto,
 } from './dto/create-agency.dto';
-import { UsersService } from '../users/users.service';
-import { AgentsService } from '../agents/agents.service';
-import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
+import { AgencyEntity } from './entities/agency.entity';
+import { AgencyQueries } from './queries/queries';
 
 @Injectable()
 export class AgenciesService {
   constructor(
+    private readonly agentService: AgentsService,
     @InjectRepository(AgencyEntity)
     private readonly agencyRepository: Repository<AgencyEntity>,
     private readonly authenticationService: AuthenticationService,
     private readonly usersService: UsersService,
-    private readonly agentService: AgentsService,
     private readonly agencyGroupsService: AgencyGroupsService,
     private readonly paginationService: PaginationService,
   ) {}
@@ -59,6 +59,18 @@ export class AgenciesService {
       limit_per_page,
       data: agencies,
     });
+  }
+
+  async findOneById(id: string) {
+    const query = this.agencyRepository
+      .createQueryBuilder('agency')
+      .leftJoinAndSelect('agency.users', 'users')
+      .leftJoinAndSelect('agency.agency_photo', 'agency_photo')
+      .leftJoinAndSelect('agency.agency_groups', 'agency_groups')
+      .leftJoinAndSelect('agency.projects', 'projects')
+      .where('agency.id = :id', { id });
+
+    return await query.getOne();
   }
 
   async createWithNewUser(body: CreateAgencyWithNewUserDto) {

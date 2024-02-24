@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AgenciesService } from './agencies.service';
 import { AgenciesController } from './agencies.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,12 +11,12 @@ import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
 
 @Module({
   imports: [
+    forwardRef(() => AgentsModule),
     TypeOrmModule.forFeature([AgencyEntity]),
     AuthenticationModule,
     PaginationModule,
     AgencyGroupsModule,
     UsersModule,
-    AgentsModule,
   ],
   controllers: [AgenciesController],
   providers: [AgenciesService],
