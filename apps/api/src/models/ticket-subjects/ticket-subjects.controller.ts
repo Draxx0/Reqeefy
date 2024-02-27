@@ -1,16 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { TicketSubjectsService } from './ticket-subjects.service';
 import { CreateTicketSubjectDto } from './dto/create-ticket-subject.dto';
-import { UpdateTicketSubjectDto } from './dto/update-ticket-subject.dto';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('ticket-subjects')
@@ -18,31 +8,11 @@ import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 export class TicketSubjectsController {
   constructor(private readonly ticketSubjectsService: TicketSubjectsService) {}
 
-  @Post()
-  create(@Body() createTicketSubjectDto: CreateTicketSubjectDto) {
-    return this.ticketSubjectsService.create(createTicketSubjectDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.ticketSubjectsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketSubjectsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
+  @Post(':id')
+  create(
     @Param('id') id: string,
-    @Body() updateTicketSubjectDto: UpdateTicketSubjectDto,
+    @Body() createTicketSubjectDto: CreateTicketSubjectDto,
   ) {
-    return this.ticketSubjectsService.update(+id, updateTicketSubjectDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketSubjectsService.remove(+id);
+    return this.ticketSubjectsService.create(id, createTicketSubjectDto);
   }
 }

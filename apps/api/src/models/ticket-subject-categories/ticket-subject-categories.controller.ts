@@ -30,8 +30,11 @@ export class TicketSubjectCategoriesController {
     );
   }
 
-  @Get()
-  findAll(@Query() queries: TicketSubjectCategoriesQueries) {
-    return this.ticketSubjectCategoriesService.findAll(queries);
+  @Get(':id')
+  findAll(
+    @Query() queries: TicketSubjectCategoriesQueries,
+    @Param('id') id: string,
+  ) {
+    return this.ticketSubjectCategoriesService.findAll(queries, id);
   }
 }

@@ -22,14 +22,15 @@ export class TicketSubjectCategoriesService {
     return this.ticketSubjectCategoryRepository.save(ticketSubjectCategory);
   }
 
-  async findAll(queries: TicketSubjectCategoriesQueries) {
+  async findAll(queries: TicketSubjectCategoriesQueries, projectId: string) {
     const { limit_per_page = 10, page = 1, search } = queries;
     const query = this.ticketSubjectCategoryRepository
       .createQueryBuilder('ticketSubjectCategory')
       .leftJoinAndSelect(
         'ticketSubjectCategory.ticket_subjects',
         'ticket_subjects',
-      );
+      )
+      .where('ticketSubjectCategory.project.id = :projectId', { projectId });
 
     if (search) {
       query.where('ticketSubjectCategory.name LIKE :search', {
