@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { UserQueries } from './queries/queries';
-import { PaginationService } from '../common/models/pagination.service';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 import { PaginatedData } from '@reqeefy/types';
 
 @Injectable()
@@ -76,6 +76,15 @@ export class UsersService {
     updateData: Partial<UserEntity>,
   ): Promise<UserEntity> {
     await this.userRepository.save({ ...user, ...updateData });
+
+    return await this.findOneById(user.id);
+  }
+
+  async updateUserAndInsertAgencyRelation(
+    user: UserEntity,
+    id: string,
+  ): Promise<UserEntity> {
+    await this.userRepository.save({ ...user, agencies: [{ id }] });
 
     return await this.findOneById(user.id);
   }

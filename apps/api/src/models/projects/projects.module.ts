@@ -4,7 +4,7 @@ import { ProjectsController } from './projects.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProjectEntity } from './entities/project.entity';
 import { AgentsModule } from '../agents/agents.module';
-import { PaginationModule } from '../common/models/pagination.module';
+import { PaginationModule } from '../common/models/pagination/pagination.module';
 
 @Module({
   imports: [

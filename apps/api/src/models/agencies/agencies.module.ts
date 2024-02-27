@@ -1,9 +1,9 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AgenciesService } from './agencies.service';
 import { AgenciesController } from './agencies.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgencyEntity } from './entities/agency.entity';
-import { PaginationModule } from '../common/models/pagination.module';
+import { PaginationModule } from '../common/models/pagination/pagination.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { UsersModule } from '../users/users.module';
 import { AgentsModule } from '../agents/agents.module';
@@ -11,8 +11,8 @@ import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
 
 @Module({
   imports: [
-    forwardRef(() => AgentsModule),
     TypeOrmModule.forFeature([AgencyEntity]),
+    AgentsModule,
     AuthenticationModule,
     PaginationModule,
     AgencyGroupsModule,
@@ -20,5 +20,6 @@ import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
   ],
   controllers: [AgenciesController],
   providers: [AgenciesService],
+  exports: [AgenciesService],
 })
 export class AgenciesModule {}

@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ProjectEntity } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import { AgentsService } from '../agents/agents.service';
-import { PaginationService } from '../common/models/pagination.service';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 import { ProjectQueries } from './queries/queries';
 
 @Injectable()
@@ -32,7 +32,15 @@ export class ProjectsService {
       .leftJoinAndSelect('agents_referents.user', 'user')
       .leftJoinAndSelect('project.tickets', 'tickets')
       .leftJoinAndSelect('project.customers', 'customers')
-      .leftJoinAndSelect('project.photo_url', 'photo_url');
+      .leftJoinAndSelect('project.photo_url', 'photo_url')
+      .leftJoinAndSelect(
+        'project.ticket_subject_categories',
+        'ticket_subject_categories',
+      )
+      .leftJoinAndSelect(
+        'ticket_subject_categories.ticket_subjects',
+        'ticket_subjects',
+      );
 
     if (search) {
       query.where('project.name LIKE :search', {

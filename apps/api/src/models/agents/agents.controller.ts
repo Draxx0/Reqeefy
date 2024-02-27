@@ -31,7 +31,6 @@ export class AgentsController {
     @Body() body: CreateAgentDTO[],
     @Param('id') id: string,
   ) {
-    console.log('BODY : ', body);
     return await Promise.all(
       body.map((agent) => this.agentsService.createUserAgent(agent, id)),
     );

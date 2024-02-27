@@ -4,7 +4,7 @@ import { AuthenticationService } from 'src/authentication/authentication.service
 import { Repository } from 'typeorm';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 import { AgentsService } from '../agents/agents.service';
-import { PaginationService } from '../common/models/pagination.service';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 import { UsersService } from '../users/users.service';
 import {
   CreateAgencyWithExistingUserDto,
@@ -16,13 +16,13 @@ import { AgencyQueries } from './queries/queries';
 @Injectable()
 export class AgenciesService {
   constructor(
-    private readonly agentService: AgentsService,
     @InjectRepository(AgencyEntity)
     private readonly agencyRepository: Repository<AgencyEntity>,
     private readonly authenticationService: AuthenticationService,
     private readonly usersService: UsersService,
     private readonly agencyGroupsService: AgencyGroupsService,
     private readonly paginationService: PaginationService,
+    private readonly agentService: AgentsService,
   ) {}
 
   async findAll(queries: AgencyQueries) {
@@ -95,6 +95,7 @@ export class AgenciesService {
       id: signedUser.id,
       role: 'superadmin',
     });
+
     const updatedUser = await this.usersService.updateSelectedOne(signedUser, {
       ...signedUser,
       agent,

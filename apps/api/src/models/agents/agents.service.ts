@@ -4,12 +4,11 @@ import { AgentRole, PaginatedData } from '@reqeefy/types';
 import { AuthenticationService } from 'src/authentication/authentication.service';
 import { AuthenticationSignupDto } from 'src/authentication/dto/authentication-signup.dto';
 import { Repository } from 'typeorm';
-import { PaginationService } from '../common/models/pagination.service';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 import { UsersService } from '../users/users.service';
 import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
-import { AgenciesService } from '../agencies/agencies.service';
 
 @Injectable()
 export class AgentsService {
@@ -19,7 +18,6 @@ export class AgentsService {
     private readonly userService: UsersService,
     private readonly paginationService: PaginationService,
     private readonly authenticationService: AuthenticationService,
-    // private readonly agenciesService: AgenciesService,
   ) {}
   async create({ id, role }: { id: string; role: AgentRole }) {
     const user = await this.userService.findOneById(id);
@@ -39,17 +37,13 @@ export class AgentsService {
       last_name: body.last_name,
     };
 
-    // const agency = await this.agenciesService.findOneById(id);
-
     const user = await this.authenticationService.signup(createUserBody);
 
-    // const updatedUser = await this.userService.updateSelectedOne(user, {
-    //   ...user,
-    //   agencies: [agency],
-    // });
+    const updatedUser =
+      await this.userService.updateUserAndInsertAgencyRelation(user, id);
 
     const agent = this.agentRepository.create({
-      user,
+      user: updatedUser,
       role: body.role,
     });
 

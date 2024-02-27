@@ -4,7 +4,7 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerQueries } from './queries/queries';
 import { PaginatedData } from '@reqeefy/types';
 import { CustomerEntity } from './entities/customer.entity';
-import { PaginationService } from '../common/models/pagination.service';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
