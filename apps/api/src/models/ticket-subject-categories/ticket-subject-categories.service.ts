@@ -1,26 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTicketSubjectCategoryDto } from './dto/create-ticket-subject-category.dto';
-import { UpdateTicketSubjectCategoryDto } from './dto/update-ticket-subject-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TicketSubjectCategoryEntity } from './entities/ticket-subject-category.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TicketSubjectCategoriesService {
-  create(createTicketSubjectCategoryDto: CreateTicketSubjectCategoryDto) {
-    return 'This action adds a new ticketSubjectCategory';
+  constructor(
+    @InjectRepository(TicketSubjectCategoryEntity)
+    private readonly ticketSubjectCategoryRepository: Repository<TicketSubjectCategoryEntity>,
+  ) {}
+  async create(id: string, body: CreateTicketSubjectCategoryDto) {
+    const ticketSubjectCategory = this.ticketSubjectCategoryRepository.create({
+      ...body,
+      project: { id },
+    });
+
+    return this.ticketSubjectCategoryRepository.save(ticketSubjectCategory);
   }
 
   findAll() {
     return `This action returns all ticketSubjectCategories`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} ticketSubjectCategory`;
-  }
-
-  update(id: number, updateTicketSubjectCategoryDto: UpdateTicketSubjectCategoryDto) {
-    return `This action updates a #${id} ticketSubjectCategory`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} ticketSubjectCategory`;
   }
 }
