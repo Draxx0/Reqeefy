@@ -1,7 +1,16 @@
-import { Controller, Get, Post, Body, UseGuards, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { TicketSubjectCategoriesService } from './ticket-subject-categories.service';
 import { CreateTicketSubjectCategoryDto } from './dto/create-ticket-subject-category.dto';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { TicketSubjectCategoriesQueries } from './queries/queries';
 
 @Controller('ticket-subject-categories')
 @UseGuards(JwtAuthGuard)
@@ -22,7 +31,7 @@ export class TicketSubjectCategoriesController {
   }
 
   @Get()
-  findAll() {
-    return this.ticketSubjectCategoriesService.findAll();
+  findAll(@Query() queries: TicketSubjectCategoriesQueries) {
+    return this.ticketSubjectCategoriesService.findAll(queries);
   }
 }
