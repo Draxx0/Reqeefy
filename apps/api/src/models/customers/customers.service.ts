@@ -1,23 +1,38 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CustomerQueries } from './queries/queries';
 import { PaginatedData } from '@reqeefy/types';
 import { CustomerEntity } from './entities/customer.entity';
 import { PaginationService } from '../common/models/pagination/pagination.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { AuthenticationService } from 'src/authentication/authentication.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class CustomersService {
   constructor(
     @InjectRepository(CustomerEntity)
     private readonly customerRepository: Repository<CustomerEntity>,
+    private readonly authenticationService: AuthenticationService,
     private readonly paginationService: PaginationService,
+    private readonly usersService: UsersService,
   ) {}
 
-  create(createCustomerDto: CreateCustomerDto) {
-    return 'create ';
+  async create(body: CreateCustomerDto, agencyId: string) {
+    const signedUser = await this.authenticationService.signup(body);
+
+    const updatedUser =
+      await this.usersService.updateUserAndInsertAgencyRelation(
+        signedUser,
+        agencyId,
+      );
+
+    const customer = this.customerRepository.create({
+      user: updatedUser,
+    });
+
+    return await this.customerRepository.save(customer);
   }
 
   async findAll(
@@ -56,17 +71,5 @@ export class CustomersService {
       limit_per_page,
       data: users,
     });
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
-  }
-
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
   }
 }
