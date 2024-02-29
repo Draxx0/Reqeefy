@@ -9,8 +9,10 @@ import { PaginationService } from '../common/models/pagination/pagination.servic
 @Injectable()
 export class TicketSubjectCategoriesService {
   constructor(
+    // REPOSITORIES
     @InjectRepository(TicketSubjectCategoryEntity)
     private readonly ticketSubjectCategoryRepository: Repository<TicketSubjectCategoryEntity>,
+    // SERVICES
     private readonly paginationService: PaginationService,
   ) {}
   async create(id: string, body: CreateTicketSubjectCategoryDto) {

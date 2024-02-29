@@ -10,13 +10,15 @@ import { ProjectQueries } from './queries/queries';
 @Injectable()
 export class ProjectsService {
   constructor(
+    // REPOSITORIES
     @InjectRepository(ProjectEntity)
     private readonly projectsRepository: Repository<ProjectEntity>,
+    // SERVICES
     private readonly paginationService: PaginationService,
     private readonly agentsService: AgentsService,
   ) {}
 
-  async findAll(queries: ProjectQueries) {
+  async findAllByAgency(queries: ProjectQueries, agencyId: string) {
     const {
       page = 1,
       limit_per_page = 10,
@@ -40,7 +42,8 @@ export class ProjectsService {
       .leftJoinAndSelect(
         'ticket_subject_categories.ticket_subjects',
         'ticket_subjects',
-      );
+      )
+      .where('project.agency.id = :agencyId', { agencyId });
 
     if (search) {
       query.where('project.name LIKE :search', {
@@ -60,6 +63,16 @@ export class ProjectsService {
       limit_per_page,
       data: projects,
     });
+  }
+
+  async findOneById(id: string) {
+    const project = await this.projectsRepository.findOneBy({ id });
+
+    if (!project) {
+      throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
+    }
+
+    return project;
   }
 
   async create(body: CreateProjectDTO) {

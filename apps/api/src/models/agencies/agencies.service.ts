@@ -16,8 +16,10 @@ import { AgencyQueries } from './queries/queries';
 @Injectable()
 export class AgenciesService {
   constructor(
+    // REPOSITORIES
     @InjectRepository(AgencyEntity)
     private readonly agencyRepository: Repository<AgencyEntity>,
+    // SERVICES
     private readonly authenticationService: AuthenticationService,
     private readonly usersService: UsersService,
     private readonly agencyGroupsService: AgencyGroupsService,

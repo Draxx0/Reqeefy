@@ -12,27 +12,40 @@ import { UsersService } from '../users/users.service';
 @Injectable()
 export class CustomersService {
   constructor(
+    // REPOSITORIES
     @InjectRepository(CustomerEntity)
     private readonly customerRepository: Repository<CustomerEntity>,
+    // SERVICES
     private readonly authenticationService: AuthenticationService,
     private readonly paginationService: PaginationService,
     private readonly usersService: UsersService,
   ) {}
 
-  async create(body: CreateCustomerDto, agencyId: string) {
-    const signedUser = await this.authenticationService.signup(body);
+  async create(body: CreateCustomerDto[], agencyId: string) {
+    const signedUsers = await Promise.all(
+      body.map(async (user) => {
+        return await this.authenticationService.signup(user);
+      }),
+    );
 
-    const updatedUser =
-      await this.usersService.updateUserAndInsertAgencyRelation(
-        signedUser,
-        agencyId,
-      );
+    const updatedUsers = await Promise.all(
+      signedUsers.map(async (user) => {
+        return await this.usersService.updateUserAndInsertAgencyRelation(
+          user,
+          agencyId,
+        );
+      }),
+    );
 
-    const customer = this.customerRepository.create({
-      user: updatedUser,
+    const customers = updatedUsers.map((user) => {
+      return this.customerRepository.create({
+        user,
+      });
     });
 
-    return await this.customerRepository.save(customer);
+    return Promise.all(
+      customers.map((customer) => this.customerRepository.save(customer)),
+    );
   }
 
   async findAll(

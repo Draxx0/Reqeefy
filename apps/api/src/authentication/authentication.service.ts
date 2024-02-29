@@ -12,10 +12,12 @@ import { TokenObject } from 'src/common/types/api';
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    // REPOSITORIES
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    // SERVICES
+    private usersService: UsersService,
+    private jwtService: JwtService,
   ) {}
 
   async signin({

@@ -9,8 +9,10 @@ import { PaginatedData } from '@reqeefy/types';
 @Injectable()
 export class UsersService {
   constructor(
+    // REPOSITORIES
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    // SERVICES
     private readonly paginationService: PaginationService,
   ) {}
 

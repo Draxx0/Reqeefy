@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class AgencyGroupsService {
   constructor(
+    // REPOSITORIES
     @InjectRepository(AgencyGroupEntity)
     private readonly agencyGroupRepository: Repository<AgencyGroupEntity>,
   ) {}

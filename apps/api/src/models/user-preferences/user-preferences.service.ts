@@ -9,8 +9,10 @@ import { UsersService } from '../users/users.service';
 @Injectable()
 export class UserPreferencesService {
   constructor(
+    // REPOSITORIES
     @InjectRepository(UserPreferencesEntity)
     private readonly userPreferencesRepository: Repository<UserPreferencesEntity>,
+    // SERVICES
     private readonly usersService: UsersService,
   ) {}
 
