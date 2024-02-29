@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerQueries } from './queries/queries';
 import { PaginatedData } from '@reqeefy/types';
@@ -84,5 +84,19 @@ export class CustomersService {
       limit_per_page,
       data: users,
     });
+  }
+
+  async findOneByUserId(userId: string) {
+    const customer = this.customerRepository
+      .createQueryBuilder('customer')
+      .leftJoinAndSelect('customer.user', 'user')
+      .where('customer.user.id = :userId', { userId })
+      .getOne();
+
+    if (!customer) {
+      throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+    }
+
+    return customer;
   }
 }

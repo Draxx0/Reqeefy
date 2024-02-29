@@ -49,7 +49,7 @@ export class TicketEntity extends TimestampEntity {
     nullable: true,
     default: null,
   })
-  archiving_date: Date;
+  archiving_at: Date;
 
   // RELATIONS
 
@@ -61,6 +61,7 @@ export class TicketEntity extends TimestampEntity {
 
   @ManyToMany(() => AgentEntity, (agent) => agent.tickets_support, {
     cascade: ['insert', 'update'],
+    nullable: true,
   })
   @JoinTable()
   support_agents: AgentEntity[];

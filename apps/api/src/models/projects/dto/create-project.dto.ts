@@ -4,9 +4,6 @@ export class CreateProjectDTO {
   @IsString()
   name: string;
 
-  @IsString()
-  agencyId: string;
-
   // Optionnally PHOTO_URL
 
   //! I'm not sure if that works

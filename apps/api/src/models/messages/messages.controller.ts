@@ -6,6 +6,7 @@ import {
   Param,
   Req,
   HttpException,
+  Get,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { MessagesService } from './messages.service';
@@ -26,5 +27,10 @@ export class MessagesController {
     if (!req.user) throw new HttpException('Unauthorized', 401);
     console.log(req.user);
     // return this.messagesService.create(createMessageDto, id, req.user.id);
+  }
+
+  @Get('')
+  findAllByTicket(@Param('id') id: string) {
+    return this.messagesService.findAllByTicket(id);
   }
 }

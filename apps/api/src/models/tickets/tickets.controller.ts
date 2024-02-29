@@ -17,13 +17,18 @@ import { TicketQueries } from './queries/queries';
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @Post(':id')
+  @Post('/project/:id')
   create(@Body() createTicketDto: CreateTicketDto, @Param('id') id: string) {
     return this.ticketsService.create(createTicketDto, id);
   }
 
+  @Get('/agency/:id')
+  findAllByAgency(@Param('id') id: string, @Query() queries: TicketQueries) {
+    return this.ticketsService.findAllByAgency(queries, id);
+  }
+
   @Get(':id')
-  findAllByProject(@Param('id') id: string, @Query() queries: TicketQueries) {
-    return this.ticketsService.findAllByProject(queries, id);
+  findOneById(@Param('id') id: string) {
+    return this.ticketsService.findOneById(id);
   }
 }

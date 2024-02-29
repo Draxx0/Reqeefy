@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { TicketQueries } from './queries/queries';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import { TicketEntity } from './entities/ticket.entity';
 import { Repository } from 'typeorm';
 import { PaginationService } from '../common/models/pagination/pagination.service';
 import { MessagesService } from '../messages/messages.service';
+import { CustomersService } from '../customers/customers.service';
 
 @Injectable()
 export class TicketsService {
@@ -16,9 +17,10 @@ export class TicketsService {
     // SERVICES
     private readonly messageService: MessagesService,
     private readonly paginationService: PaginationService,
+    private readonly customerService: CustomersService,
   ) {}
 
-  async findAllByProject(queries: TicketQueries, projectId: string) {
+  async findAllByAgency(queries: TicketQueries, agencyId: string) {
     const {
       page = 1,
       limit_per_page = 10,
@@ -29,11 +31,12 @@ export class TicketsService {
 
     const query = this.ticketRepository
       .createQueryBuilder('ticket')
-      .where('ticket.project.id = :projectId', { projectId })
       .leftJoinAndSelect('ticket.customers', 'customers')
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
       .leftJoinAndSelect('ticket.subject', 'subject')
-      .leftJoinAndSelect('ticket.messages', 'messages');
+      .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('ticket.project', 'project')
+      .where('project.agency.id = :agencyId', { agencyId });
 
     if (search) {
       query.where('ticket.title LIKE :search', { search: `%${search}%` });
@@ -53,20 +56,46 @@ export class TicketsService {
     });
   }
 
+  async findOneById(id: string) {
+    const ticket = this.ticketRepository
+      .createQueryBuilder('ticket')
+      .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('messages.user', 'user')
+      .leftJoinAndSelect('ticket.customers', 'customers')
+      .leftJoinAndSelect('customers.user', 'customer_user')
+      .leftJoinAndSelect('ticket.support_agents', 'support_agents')
+      .leftJoinAndSelect('ticket.subject', 'subject')
+      .leftJoinAndSelect('ticket.project', 'project')
+      .where('ticket.id = :id', { id })
+      .getOne();
+
+    if (!ticket) {
+      throw new HttpException('Ticket not found', HttpStatus.NOT_FOUND);
+    }
+
+    return ticket;
+  }
+
   async create(createTicketDto: CreateTicketDto, projectId: string) {
-    const { customerId, message, title } = createTicketDto;
+    const { userId, message, title } = createTicketDto;
+
+    const customer = await this.customerService.findOneByUserId(userId);
+
+    const newTicket = this.ticketRepository.create({
+      title,
+      customers: [{ id: customer.id }],
+      project: { id: projectId },
+    });
+
+    const ticket = await this.ticketRepository.save(newTicket);
 
     const newMessage = await this.messageService.createOnTicket(
       message,
-      customerId,
+      ticket,
+      userId,
     );
 
-    const ticket = this.ticketRepository.create({
-      title,
-      customers: [{ id: customerId }],
-      messages: [newMessage],
-      project: { id: projectId },
-    });
+    ticket.messages = [newMessage];
 
     return this.ticketRepository.save(ticket);
   }
