@@ -3,43 +3,27 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   UseGuards,
+  Param,
+  Query,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
-import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { TicketQueries } from './queries/queries';
 
 @Controller('tickets')
 @UseGuards(JwtAuthGuard)
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @Post()
-  create(@Body() createTicketDto: CreateTicketDto) {
-    return this.ticketsService.create(createTicketDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.ticketsService.findAll();
+  @Post(':id')
+  create(@Body() createTicketDto: CreateTicketDto, @Param('id') id: string) {
+    return this.ticketsService.create(createTicketDto, id);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketsService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketsService.update(+id, updateTicketDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketsService.remove(+id);
+  findAllByProject(@Param('id') id: string, @Query() queries: TicketQueries) {
+    return this.ticketsService.findAllByProject(queries, id);
   }
 }

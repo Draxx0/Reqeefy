@@ -26,13 +26,15 @@ export class TicketEntity extends TimestampEntity {
   @Column({
     type: 'enum',
     enum: ['open', 'pending', 'archived'],
-    default: 'open',
+    default: 'pending',
   })
   status: TicketStatus;
 
   @Column({
     type: 'enum',
     enum: ['low', 'medium', 'high'],
+    nullable: true,
+    default: null,
   })
   priority: TicketPriority;
 
@@ -45,6 +47,7 @@ export class TicketEntity extends TimestampEntity {
   @Column({
     type: 'timestamp',
     nullable: true,
+    default: null,
   })
   archiving_date: Date;
 
