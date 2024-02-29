@@ -1,9 +1,9 @@
-import { IsIn, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsIn, IsOptional, IsString } from 'class-validator';
 import { PaginateQueries } from 'src/models/common/queries/pagination.queries';
 
 export class ProjectQueries extends PaginateQueries {
   @IsOptional()
-  @IsNotEmpty()
+  @IsString()
   search?: string;
 
   @IsOptional()

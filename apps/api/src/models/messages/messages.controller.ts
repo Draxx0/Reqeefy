@@ -1,16 +1,15 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   UseGuards,
+  Param,
+  Req,
+  HttpException,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 
 @Controller('messages')
@@ -18,28 +17,14 @@ import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
-  @Post()
-  create(@Body() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(createMessageDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.messagesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.messagesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDto) {
-    return this.messagesService.update(+id, updateMessageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.messagesService.remove(+id);
+  @Post('ticket/:id')
+  create(
+    @Body() createMessageDto: CreateMessageDto,
+    @Param('id') id: string,
+    @Req() req: Request,
+  ) {
+    if (!req.user) throw new HttpException('Unauthorized', 401);
+    console.log(req.user);
+    // return this.messagesService.create(createMessageDto, id, req.user.id);
   }
 }

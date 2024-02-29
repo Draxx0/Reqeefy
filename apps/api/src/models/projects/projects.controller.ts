@@ -23,9 +23,9 @@ export class ProjectsController {
     return await this.projectsService.create(createProjectDto);
   }
 
-  @Get()
-  async findAll(@Query() queries: ProjectQueries) {
-    return await this.projectsService.findAll(queries);
+  @Get(':id')
+  async findAll(@Query() queries: ProjectQueries, @Param('id') id: string) {
+    return await this.projectsService.findAllByAgency(queries, id);
   }
 
   @Delete(':id')

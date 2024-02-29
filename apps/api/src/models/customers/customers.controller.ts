@@ -19,9 +19,9 @@ import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 
-  @Post(':id')
+  @Post('/agency/:id')
   async create(
-    @Body() createCustomerDto: CreateCustomerDto,
+    @Body() createCustomerDto: CreateCustomerDto[],
     @Param('id') id: string,
   ) {
     return this.customersService.create(createCustomerDto, id);
