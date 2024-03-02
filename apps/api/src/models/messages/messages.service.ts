@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { CreateMessageDto } from './dto/create-message.dto';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { MessageEntity } from './entities/message.entity';
-import { TicketEntity } from '../tickets/entities/ticket.entity';
 import { sanitize } from 'src/utils/sanitizer';
+import { Repository } from 'typeorm';
+import { TicketEntity } from '../tickets/entities/ticket.entity';
+import { CreateMessageDto } from './dto/create-message.dto';
+import { MessageEntity } from './entities/message.entity';
 
 @Injectable()
 export class MessagesService {
@@ -39,9 +39,25 @@ export class MessagesService {
     return this.messageRepository.save(message);
   }
 
-  findAllByTicket(ticketId: string) {
-    return this.messageRepository.find({
-      relations: ['user', 'ticket'],
-    });
+  async findOneById(id: string) {
+    const message = await this.messageRepository
+      .createQueryBuilder('message')
+      .leftJoinAndSelect('message.ticket', 'ticket')
+      .where('message.id = :id', { id })
+      .getOne();
+
+    if (!message) {
+      throw new HttpException('Message not found', 404);
+    }
+
+    return message;
+  }
+
+  async updateReadStatus(id: string) {
+    const message = await this.findOneById(id);
+
+    message.readed = true;
+
+    return this.messageRepository.save(message);
   }
 }

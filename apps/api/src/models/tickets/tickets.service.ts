@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { PaginationService } from '../common/models/pagination/pagination.service';
 import { MessagesService } from '../messages/messages.service';
 import { CustomersService } from '../customers/customers.service';
+import { UserEntity } from '../users/entities/user.entity';
 
 @Injectable()
 export class TicketsService {
@@ -98,5 +99,15 @@ export class TicketsService {
     ticket.messages = [newMessage];
 
     return this.ticketRepository.save(ticket);
+  }
+
+  async updateStatus(ticket: TicketEntity, user: UserEntity) {
+    if (ticket.status === 'pending' && user.agent) {
+      ticket.status = 'open';
+      await this.ticketRepository.save(ticket);
+    } else if (ticket.status === 'open' && user.customer) {
+      ticket.status = 'pending';
+      await this.ticketRepository.save(ticket);
+    }
   }
 }

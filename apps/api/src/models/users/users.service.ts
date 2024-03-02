@@ -64,7 +64,14 @@ export class UsersService {
   }
 
   async findOneById(id: string): Promise<UserEntity | null> {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.agencies', 'agencies')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .leftJoinAndSelect('user.agent', 'agent')
+      .leftJoinAndSelect('user.customer', 'customer')
+      .where('user.id = :id', { id })
+      .getOne();
 
     if (!user) {
       throw new HttpException('User not found', 404);

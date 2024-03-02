@@ -1,36 +1,32 @@
 import {
   Controller,
-  Post,
-  Body,
-  UseGuards,
+  Get,
+  HttpException,
   Param,
   Req,
-  HttpException,
-  Get,
+  UseGuards,
 } from '@nestjs/common';
-import { Request } from 'express';
-import { MessagesService } from './messages.service';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { MessagesService } from './messages.service';
+import { UserRequest } from 'src/common/types/api';
+import { UsersService } from '../users/users.service';
 
 @Controller('messages')
 @UseGuards(JwtAuthGuard)
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(
+    private readonly messagesService: MessagesService,
+    private readonly usersService: UsersService,
+  ) {}
 
-  @Post('ticket/:id')
-  create(
-    @Body() createMessageDto: CreateMessageDto,
-    @Param('id') id: string,
-    @Req() req: Request,
-  ) {
+  @Get('/:id')
+  async updateReadStatus(@Param('id') id: string, @Req() req: UserRequest) {
     if (!req.user) throw new HttpException('Unauthorized', 401);
-    console.log(req.user);
-    // return this.messagesService.create(createMessageDto, id, req.user.id);
-  }
+    const user = await this.usersService.findOneById(req.user.id);
 
-  @Get('')
-  findAllByTicket(@Param('id') id: string) {
-    return this.messagesService.findAllByTicket(id);
+    // If user is not an agent, don't update read status
+    if (!user.agent) return;
+
+    return this.messagesService.updateReadStatus(id);
   }
 }

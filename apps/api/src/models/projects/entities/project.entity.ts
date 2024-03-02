@@ -57,6 +57,7 @@ export class ProjectEntity extends TimestampEntity {
     (ticketSubjectCategory) => ticketSubjectCategory.project,
     {
       onDelete: 'CASCADE',
+      cascade: ['insert', 'update'],
     },
   )
   ticket_subject_categories: TicketSubjectCategoryEntity[];
