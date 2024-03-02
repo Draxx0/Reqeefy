@@ -14,10 +14,10 @@ const ALLOWED_TAGS = [
   'pre',
   'strong',
   'em',
-] as const;
+];
 
 export const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat([...ALLOWED_TAGS]),
+  allowedTags: ALLOWED_TAGS,
   allowedAttributes: {
     a: ['href'],
     img: [
