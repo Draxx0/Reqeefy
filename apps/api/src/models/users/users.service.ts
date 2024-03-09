@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
@@ -55,9 +55,22 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<UserEntity | null> {
-    const user = await this.userRepository.findOneBy({ email });
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .leftJoinAndSelect('user.agent', 'agent')
+      .leftJoinAndSelect('user.customer', 'customer')
+      .leftJoinAndSelect('user.agencies', 'agencies')
+      .leftJoinAndSelect('user.messages', 'messages')
+      .leftJoinAndSelect('user.preferences', 'preferences')
+      .where('user.email = :email', { email })
+      .getOne();
+
     if (!user) {
-      return null;
+      throw new HttpException(
+        'User not found with this email',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     return user;

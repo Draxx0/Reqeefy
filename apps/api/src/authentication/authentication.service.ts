@@ -24,23 +24,7 @@ export class AuthenticationService {
     email,
     password,
   }: AuthenticationSigninDto): Promise<TokenObject> {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndSelect('user.agent', 'agent')
-      .leftJoinAndSelect('user.customer', 'customer')
-      .leftJoinAndSelect('user.agencies', 'agencies')
-      .leftJoinAndSelect('user.messages', 'messages')
-      .addSelect('user.password')
-      .where('user.email = :email', { email })
-      .getOne();
-
-    if (!user) {
-      throw new HttpException(
-        'No user found with this email',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    const user = await this.usersService.findOneByEmail(email);
 
     const isPasswordMatching = await bcrypt.compare(password, user.password);
 
