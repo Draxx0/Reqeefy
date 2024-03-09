@@ -1,15 +1,15 @@
 import { IsArray, IsString } from 'class-validator';
+import { TicketSubjectCategoryEntity } from 'src/models/ticket-subject-categories/entities/ticket-subject-category.entity';
 
 export class CreateProjectDTO {
   @IsString()
   name: string;
 
-  @IsString()
-  agencyId: string;
-
   // Optionnally PHOTO_URL
 
-  //! I'm not sure if that works
+  @IsArray()
+  ticket_subject_categories: TicketSubjectCategoryEntity[];
+
   @IsArray()
   @IsString({ each: true })
   agents_referents_ids: string[];

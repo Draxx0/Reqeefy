@@ -30,7 +30,7 @@ export class TicketSubjectCategoriesController {
     );
   }
 
-  @Get(':id')
+  @Get('/project/:id')
   findAll(
     @Query() queries: TicketSubjectCategoriesQueries,
     @Param('id') id: string,

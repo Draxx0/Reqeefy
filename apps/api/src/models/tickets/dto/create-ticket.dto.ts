@@ -8,8 +8,10 @@ export class CreateTicketDto {
 
   @IsNotEmpty()
   @IsUUID()
-  customerId: string;
+  userId: string;
 
   @IsNotEmpty()
   message: MessageEntity;
+
+  // UPLOAD FILE
 }

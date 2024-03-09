@@ -18,13 +18,19 @@ import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
-  @Post()
-  async create(@Body() createProjectDto: CreateProjectDTO) {
-    return await this.projectsService.create(createProjectDto);
+  @Post('/agency/:id')
+  async create(
+    @Body() createProjectDto: CreateProjectDTO,
+    @Param('id') id: string,
+  ) {
+    return await this.projectsService.create(createProjectDto, id);
   }
 
-  @Get(':id')
-  async findAll(@Query() queries: ProjectQueries, @Param('id') id: string) {
+  @Get('/agency/:id')
+  async findAllByAgency(
+    @Query() queries: ProjectQueries,
+    @Param('id') id: string,
+  ) {
     return await this.projectsService.findAllByAgency(queries, id);
   }
 

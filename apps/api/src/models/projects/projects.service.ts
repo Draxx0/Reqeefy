@@ -75,8 +75,8 @@ export class ProjectsService {
     return project;
   }
 
-  async create(body: CreateProjectDTO) {
-    const { name, agencyId, agents_referents_ids } = body;
+  async create(body: CreateProjectDTO, agencyId: string) {
+    const { name, agents_referents_ids, ticket_subject_categories } = body;
 
     const agents_referents =
       await this.agentsService.findAllByIds(agents_referents_ids);
@@ -85,6 +85,7 @@ export class ProjectsService {
       name,
       agency: { id: agencyId },
       agents_referents,
+      ticket_subject_categories,
     });
 
     return await this.projectsRepository.save(project);
