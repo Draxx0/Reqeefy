@@ -67,10 +67,7 @@ export class UsersService {
       .getOne();
 
     if (!user) {
-      throw new HttpException(
-        'User not found with this email',
-        HttpStatus.NOT_FOUND,
-      );
+      return null;
     }
 
     return user;
