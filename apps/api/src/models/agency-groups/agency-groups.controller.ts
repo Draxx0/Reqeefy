@@ -1,6 +1,6 @@
-import { Controller, Post, Body, UseGuards, Get } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Param } from '@nestjs/common';
 import { AgencyGroupsService } from './agency-groups.service';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CreateAgencyGroupDTO } from './dto/create-agency-group.dto';
 
 @Controller('agency-groups')
@@ -8,9 +8,9 @@ import { CreateAgencyGroupDTO } from './dto/create-agency-group.dto';
 export class AgencyGroupsController {
   constructor(private readonly agencyGroupsService: AgencyGroupsService) {}
 
-  @Get()
-  findAll() {
-    return this.agencyGroupsService.findAll();
+  @Get('/agency/:id')
+  findAll(@Param('id') id: string) {
+    return this.agencyGroupsService.findAllByAgency(id);
   }
 
   @Post()

@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { TicketSubjectsService } from './ticket-subjects.service';
 import { CreateTicketSubjectDto } from './dto/create-ticket-subject.dto';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('ticket-subjects')
 @UseGuards(JwtAuthGuard)

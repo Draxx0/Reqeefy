@@ -12,7 +12,7 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CustomerQueries } from './queries/queries';
 import { PaginatedData } from '@reqeefy/types';
 import { CustomerEntity } from './entities/customer.entity';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('customers')
 @UseGuards(JwtAuthGuard)

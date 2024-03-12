@@ -23,8 +23,8 @@ export class AgenciesService {
     private readonly authenticationService: AuthenticationService,
     private readonly usersService: UsersService,
     private readonly agencyGroupsService: AgencyGroupsService,
-    private readonly paginationService: PaginationService,
     private readonly agentService: AgentsService,
+    private readonly paginationService: PaginationService,
   ) {}
 
   async findAll(queries: AgencyQueries) {
@@ -85,7 +85,9 @@ export class AgenciesService {
       description,
       name,
       website_url,
+      agency_groups,
     } = body;
+
     const signedUser = await this.authenticationService.signup({
       email,
       first_name,
@@ -110,6 +112,14 @@ export class AgenciesService {
       website_url,
       users: [updatedUser],
     });
+
+    const createdAgencyGroups = await this.createAgencyGroups(
+      agency_groups,
+      agency.id,
+    );
+
+    agency.agency_groups = createdAgencyGroups;
+
     return await this.agencyRepository.save(agency);
   }
 
@@ -139,17 +149,24 @@ export class AgenciesService {
       users: [updatedUser],
     });
 
-    const createdGroups = await Promise.all(
+    const createdAgencyGroups = await this.createAgencyGroups(
+      agency_groups,
+      agency.id,
+    );
+
+    agency.agency_groups = createdAgencyGroups;
+
+    return await this.agencyRepository.save(agency);
+  }
+
+  private async createAgencyGroups(agency_groups: string[], agencyId: string) {
+    return await Promise.all(
       agency_groups.map((group_name) =>
         this.agencyGroupsService.create({
           name: group_name,
-          agencyId: agency.id,
+          agencyId,
         }),
       ),
     );
-
-    agency.agency_groups = createdGroups;
-
-    return await this.agencyRepository.save(agency);
   }
 }

@@ -6,7 +6,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { MessagesService } from './messages.service';
 import { UserRequest } from 'src/common/types/api';
 import { UsersService } from '../users/users.service';

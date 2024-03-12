@@ -66,6 +66,6 @@ export class AgencyEntity extends TimestampEntity {
   @OneToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agency)
   agency_groups: AgencyGroupEntity[];
 
-  @OneToMany(() => ProjectEntity, (project) => project.agency, {})
+  @OneToMany(() => ProjectEntity, (project) => project.agency)
   projects: ProjectEntity[];
 }

@@ -2,7 +2,7 @@ import { Body, Controller, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { UserPreferencesService } from './user-preferences.service';
 import { CreateUserPreferencesDTO } from './dto/create-user-preferences.dto';
 import { UpdateUserPreferencesDTO } from './dto/update-user-preferences.dto';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('user-preferences')
 @UseGuards(JwtAuthGuard)

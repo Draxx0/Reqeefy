@@ -11,7 +11,7 @@ import { UserEntity } from './entities/user.entity';
 import { DeleteResult } from 'typeorm';
 import { PaginatedData } from '@reqeefy/types';
 import { UserQueries } from './queries/queries';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)

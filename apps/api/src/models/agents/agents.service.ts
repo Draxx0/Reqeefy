@@ -9,6 +9,7 @@ import { UsersService } from '../users/users.service';
 import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
+import { generateRandomPassword } from 'src/utils/generateRandomPassword';
 
 @Injectable()
 export class AgentsService {
@@ -34,7 +35,7 @@ export class AgentsService {
   async createUserAgent(body: CreateAgentDTO, id: string) {
     const createUserBody: AuthenticationSignupDto = {
       email: body.email,
-      password: body.password,
+      password: generateRandomPassword(),
       first_name: body.first_name,
       last_name: body.last_name,
     };

@@ -11,7 +11,7 @@ import {
 import { ProjectsService } from './projects.service';
 import { CreateProjectDTO } from './dto/create-project.dto';
 import { ProjectQueries } from './queries/queries';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 
 @Controller('projects')
 @UseGuards(JwtAuthGuard)

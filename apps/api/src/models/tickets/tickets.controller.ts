@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { TicketQueries } from './queries/queries';
 import { CreateMessageDto } from '../messages/dto/create-message.dto';
 import { UserRequest } from 'src/common/types/api';

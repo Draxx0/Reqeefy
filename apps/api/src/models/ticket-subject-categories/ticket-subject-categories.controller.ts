@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { TicketSubjectCategoriesService } from './ticket-subject-categories.service';
 import { CreateTicketSubjectCategoryDto } from './dto/create-ticket-subject-category.dto';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { TicketSubjectCategoriesQueries } from './queries/queries';
 
 @Controller('ticket-subject-categories')

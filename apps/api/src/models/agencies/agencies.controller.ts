@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { AgenciesService } from './agencies.service';
 import { AgencyQueries } from './queries/queries';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import {
   CreateAgencyWithExistingUserDto,
   CreateAgencyWithNewUserDto,
@@ -19,6 +19,7 @@ import {
 export class AgenciesController {
   constructor(private readonly agenciesService: AgenciesService) {}
 
+  // DEV ENDPOINT
   @Get()
   @UseGuards(JwtAuthGuard)
   findAll(@Query() queries: AgencyQueries) {
@@ -26,7 +27,6 @@ export class AgenciesController {
   }
 
   @Post()
-  // Guard jwt
   createWithNewUser(@Body() createAgencyDto: CreateAgencyWithNewUserDto) {
     return this.agenciesService.createWithNewUser(createAgencyDto);
   }

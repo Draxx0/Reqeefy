@@ -11,7 +11,7 @@ import { AgentsService } from './agents.service';
 import { PaginatedData } from '@reqeefy/types';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
-import { JwtAuthGuard } from 'src/authentication/guards/jwt.guard';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
 
 @Controller('agents')

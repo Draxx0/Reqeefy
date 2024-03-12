@@ -3,8 +3,8 @@ import { UserRequest } from 'src/common/types/api';
 import { UserPreferencesService } from 'src/models/user-preferences/user-preferences.service';
 import { AuthenticationService } from './authentication.service';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
-import { JwtAuthGuard } from './guards/jwt.guard';
-import { LocalGuard } from './guards/local.guard';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { LocalGuard } from '../guards/local.guard';
 
 @Controller('auth')
 export class AuthenticationController {
