@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
@@ -64,6 +64,7 @@ export class UsersService {
       .leftJoinAndSelect('user.messages', 'messages')
       .leftJoinAndSelect('user.preferences', 'preferences')
       .where('user.email = :email', { email })
+      .addSelect('user.password')
       .getOne();
 
     if (!user) {

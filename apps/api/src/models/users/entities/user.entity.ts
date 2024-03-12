@@ -40,7 +40,6 @@ export class UserEntity extends TimestampEntity {
     nullable: true,
     eager: true,
     onDelete: 'CASCADE',
-    cascade: ['insert', 'update'],
   })
   avatar: UploadFileEntity;
 
