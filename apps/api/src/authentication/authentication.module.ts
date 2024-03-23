@@ -6,8 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from '../strategies/local.strategy';
-import { JwtStrategy } from '../strategies/jwt.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserPreferencesModule } from 'src/models/user-preferences/user-preferences.module';
 
 @Module({
