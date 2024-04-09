@@ -41,6 +41,7 @@ export class TicketsController {
         401,
       );
     }
+
     return this.ticketsService.create(createTicketDto, id);
   }
 
@@ -56,14 +57,26 @@ export class TicketsController {
 
     const ticket = await this.ticketsService.findOneById(id);
 
+    if (!ticket.distributed) {
+      throw new HttpException(
+        'Ticket not distributed, you can"t add a message',
+        400,
+      );
+    }
+
     await this.ticketsService.updateStatus(ticket, user);
 
     return this.messagesService.create(createMessageDto, id, req.user.id);
   }
 
-  @Get('/agency/:id')
+  @Get('agency/:id')
   findAllByAgency(@Param('id') id: string, @Query() queries: TicketQueries) {
     return this.ticketsService.findAllByAgency(queries, id);
+  }
+
+  @Get('project/:id')
+  findAllByProject(@Param('id') id: string, @Query() queries: TicketQueries) {
+    return this.ticketsService.findAllByProjects(queries, id);
   }
 
   @Get(':id')

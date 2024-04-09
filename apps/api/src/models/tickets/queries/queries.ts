@@ -1,4 +1,4 @@
-import { IsIn, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsIn, IsOptional, IsString } from 'class-validator';
 import { PaginateQueries } from 'src/models/common/queries/pagination.queries';
 
 export class TicketQueries extends PaginateQueries {
@@ -13,4 +13,8 @@ export class TicketQueries extends PaginateQueries {
   @IsOptional()
   @IsIn(['ASC', 'DESC'])
   sort_order?: 'ASC' | 'DESC';
+
+  @IsOptional()
+  @IsBoolean()
+  distributed?: boolean;
 }

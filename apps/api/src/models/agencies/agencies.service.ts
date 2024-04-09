@@ -39,6 +39,8 @@ export class AgenciesService {
     const query = this.agencyRepository
       .createQueryBuilder('agency')
       .leftJoinAndSelect('agency.users', 'users')
+      .leftJoinAndSelect('users.agent', 'agent')
+      .leftJoinAndSelect('users.customer', 'customer')
       .leftJoinAndSelect('agency.agency_photo', 'agency_photo')
       .leftJoinAndSelect('agency.agency_groups', 'agency_groups')
       .leftJoinAndSelect('agency.projects', 'projects');

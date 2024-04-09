@@ -28,6 +28,7 @@ export class TicketsService {
       search,
       sort_by = 'created_at',
       sort_order = 'DESC',
+      distributed = false,
     } = queries;
 
     const query = this.ticketRepository
@@ -37,10 +38,57 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.messages', 'messages')
       .leftJoinAndSelect('ticket.project', 'project')
-      .where('project.agency.id = :agencyId', { agencyId });
+      .where('project.agency = :agencyId', { agencyId });
 
     if (search) {
       query.where('ticket.title LIKE :search', { search: `%${search}%` });
+    }
+
+    if (distributed) {
+      query.andWhere('ticket.distributed = :distributed', { distributed });
+    }
+
+    const [tickets, total] = await query
+      .skip((page - 1) * limit_per_page)
+      .orderBy(`ticket.${sort_by}`, sort_order)
+      .take(limit_per_page)
+      .getManyAndCount();
+
+    tickets.forEach((ticket) => ticket.sortMessages());
+
+    return this.paginationService.paginate<TicketEntity>({
+      page,
+      total,
+      limit_per_page,
+      data: tickets,
+    });
+  }
+
+  async findAllByProjects(queries: TicketQueries, projectId: string) {
+    const {
+      page = 1,
+      limit_per_page = 10,
+      search,
+      sort_by = 'created_at',
+      sort_order = 'DESC',
+      distributed,
+    } = queries;
+
+    const query = this.ticketRepository
+      .createQueryBuilder('ticket')
+      .leftJoinAndSelect('ticket.customers', 'customers')
+      .leftJoinAndSelect('ticket.support_agents', 'support_agents')
+      .leftJoinAndSelect('ticket.subject', 'subject')
+      .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('ticket.project', 'project')
+      .where('project.id = :projectId', { projectId });
+
+    if (search) {
+      query.where('ticket.title LIKE :search', { search: `%${search}%` });
+    }
+
+    if (distributed) {
+      query.andWhere('ticket.distributed = :distributed', { distributed });
     }
 
     const [tickets, total] = await query
@@ -58,7 +106,7 @@ export class TicketsService {
   }
 
   async findOneById(id: string) {
-    const ticket = this.ticketRepository
+    const ticket = await this.ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.messages', 'messages')
       .leftJoinAndSelect('messages.user', 'user')
@@ -74,6 +122,8 @@ export class TicketsService {
       throw new HttpException('Ticket not found', HttpStatus.NOT_FOUND);
     }
 
+    ticket.sortMessages();
+
     return ticket;
   }
 
@@ -81,6 +131,8 @@ export class TicketsService {
     const { userId, message, title } = createTicketDto;
 
     const customer = await this.customerService.findOneByUserId(userId);
+
+    console.log(customer);
 
     const newTicket = this.ticketRepository.create({
       title,

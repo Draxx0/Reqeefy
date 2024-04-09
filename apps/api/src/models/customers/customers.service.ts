@@ -99,4 +99,12 @@ export class CustomersService {
 
     return customer;
   }
+
+  async findAllByIds(ids: string[]) {
+    return this.customerRepository
+      .createQueryBuilder('customer')
+      .leftJoinAndSelect('customer.user', 'user')
+      .where('customer.id IN (:...ids)', { ids })
+      .getMany();
+  }
 }

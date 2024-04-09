@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { AgentsService } from '../agents/agents.service';
 import { PaginationService } from '../common/models/pagination/pagination.service';
 import { ProjectQueries } from './queries/queries';
+import { CustomerEntity } from '../customers/entities/customer.entity';
+import { UpdateProjectDto } from './dto/update-project.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -34,6 +36,7 @@ export class ProjectsService {
       .leftJoinAndSelect('agents_referents.user', 'user')
       .leftJoinAndSelect('project.tickets', 'tickets')
       .leftJoinAndSelect('project.customers', 'customers')
+      .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('project.photo_url', 'photo_url')
       .leftJoinAndSelect(
         'project.ticket_subject_categories',
@@ -66,7 +69,14 @@ export class ProjectsService {
   }
 
   async findOneById(id: string) {
-    const project = await this.projectsRepository.findOneBy({ id });
+    const project = this.projectsRepository
+      .createQueryBuilder('project')
+      .leftJoinAndSelect('project.agency', 'agency')
+      .leftJoinAndSelect('project.agents_referents', 'agents_referents')
+      .leftJoinAndSelect('project.customers', 'customers')
+      .leftJoinAndSelect('project.tickets', 'tickets')
+      .where('project.id = :id', { id })
+      .getOne();
 
     if (!project) {
       throw new HttpException('Project not found', HttpStatus.NOT_FOUND);
@@ -99,5 +109,29 @@ export class ProjectsService {
     }
 
     return await this.projectsRepository.remove(project);
+  }
+
+  async update(id: string, body: UpdateProjectDto) {
+    const project = await this.findOneById(id);
+
+    return await this.projectsRepository.save({
+      ...project,
+      ...body,
+    });
+  }
+
+  async addCustomersToProject(
+    projectId: string,
+    customers: CustomerEntity[],
+  ): Promise<ProjectEntity> {
+    const project = await this.findOneById(projectId);
+
+    if (project.customers.length === 0) {
+      return await this.update(projectId, { customers });
+    }
+
+    return this.update(projectId, {
+      customers: [...project.customers, ...customers],
+    });
   }
 }

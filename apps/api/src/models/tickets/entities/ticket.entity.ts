@@ -77,4 +77,14 @@ export class TicketEntity extends TimestampEntity {
     cascade: ['insert', 'update'],
   })
   messages: MessageEntity[];
+
+  // METHODS
+
+  sortMessages() {
+    if (this.messages.length > 1) {
+      this.messages.sort((a, b) => {
+        return b.created_at.getTime() - a.created_at.getTime();
+      });
+    }
+  }
 }
