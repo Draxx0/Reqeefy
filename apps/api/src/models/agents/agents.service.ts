@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AgentRole, PaginatedData } from '@reqeefy/types';
 import { AuthenticationService } from 'src/authentication/authentication.service';
@@ -10,6 +10,8 @@ import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
 import { generateRandomPassword } from 'src/utils/generateRandomPassword';
+import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
+import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 
 @Injectable()
 export class AgentsService {
@@ -21,6 +23,7 @@ export class AgentsService {
     private readonly userService: UsersService,
     private readonly paginationService: PaginationService,
     private readonly authenticationService: AuthenticationService,
+    private readonly agencyGroupsService: AgencyGroupsService,
   ) {}
   async create({ id, role }: { id: string; role: AgentRole }) {
     const user = await this.userService.findOneById(id);
@@ -75,7 +78,8 @@ export class AgentsService {
 
     const query = this.agentRepository
       .createQueryBuilder('agent')
-      .leftJoinAndSelect('agent.user', 'user');
+      .leftJoinAndSelect('agent.user', 'user')
+      .leftJoinAndSelect('agent.agency_groups', 'agency_groups');
 
     if (search) {
       query.where(
@@ -100,6 +104,20 @@ export class AgentsService {
     });
   }
 
+  async findOneById(id: string) {
+    const agent = await this.agentRepository
+      .createQueryBuilder('agent')
+      .leftJoinAndSelect('agent.user', 'user')
+      .leftJoinAndSelect('agent.agency_groups', 'agency_groups')
+      .where('agent.id = :id', { id })
+      .getOne();
+
+    if (!agent)
+      throw new HttpException('Agent not found', HttpStatus.NOT_FOUND);
+
+    return agent;
+  }
+
   async findAllByIds(ids: string[]) {
     const query = this.agentRepository
       .createQueryBuilder('agent')
@@ -112,5 +130,35 @@ export class AgentsService {
     if (!users.length) throw new HttpException('Agents not found', 404);
 
     return users;
+  }
+
+  async findAllByAgencyGroups(agencyGroup: AgencyGroupEntity[]) {
+    const query = this.agentRepository
+      .createQueryBuilder('agent')
+      .leftJoinAndSelect('agent.user', 'user');
+
+    const agents = await query
+      .leftJoin('agent.agency_groups', 'agency_groups')
+      .where('agency_groups.id IN (:...ids)', {
+        ids: agencyGroup.map((group) => group.id),
+      })
+      .getMany();
+
+    return agents;
+  }
+
+  async addAgentToAgencyGroup(
+    agentId: string,
+    agencyGroupId: string,
+  ): Promise<void> {
+    const agent = await this.findOneById(agentId);
+
+    const agencyGroup =
+      await this.agencyGroupsService.findOneById(agencyGroupId);
+
+    await this.agentRepository.save({
+      ...agent,
+      agency_groups: [...agent.agency_groups, agencyGroup],
+    });
   }
 }

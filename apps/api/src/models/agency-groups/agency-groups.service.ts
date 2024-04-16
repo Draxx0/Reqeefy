@@ -23,6 +23,10 @@ export class AgencyGroupsService {
       .getMany();
   }
 
+  async findOneById(id: string) {
+    return this.agencyGroupRepository.findOneBy({ id });
+  }
+
   create(createAgencyGroupDto: CreateAgencyGroupDTO) {
     const agencyGroup = this.agencyGroupRepository.create({
       ...createAgencyGroupDto,
@@ -30,5 +34,9 @@ export class AgencyGroupsService {
     });
 
     return this.agencyGroupRepository.save(agencyGroup);
+  }
+
+  async findByIds(ids: string[]) {
+    return await Promise.all(ids.map((id) => this.findOneById(id)));
   }
 }

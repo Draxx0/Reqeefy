@@ -8,6 +8,10 @@ import { PaginationService } from '../common/models/pagination/pagination.servic
 import { MessagesService } from '../messages/messages.service';
 import { CustomersService } from '../customers/customers.service';
 import { UserEntity } from '../users/entities/user.entity';
+import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
+import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
+import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
+import { AgentsService } from '../agents/agents.service';
 
 @Injectable()
 export class TicketsService {
@@ -15,10 +19,14 @@ export class TicketsService {
     // REPOSITORIES
     @InjectRepository(TicketEntity)
     private readonly ticketRepository: Repository<TicketEntity>,
+    @InjectRepository(AgencyGroupEntity)
+    private readonly agencyGroupRepository: Repository<AgencyGroupEntity>,
     // SERVICES
     private readonly messageService: MessagesService,
     private readonly paginationService: PaginationService,
     private readonly customerService: CustomersService,
+    private readonly agencyGroupsService: AgencyGroupsService,
+    private readonly agentsService: AgentsService,
   ) {}
 
   async findAllByAgency(queries: TicketQueries, agencyId: string) {
@@ -115,6 +123,7 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.project', 'project')
+      .leftJoinAndSelect('ticket.agency_groups', 'agency_groups')
       .where('ticket.id = :id', { id })
       .getOne();
 
@@ -161,5 +170,27 @@ export class TicketsService {
       ticket.status = 'pending';
       await this.ticketRepository.save(ticket);
     }
+  }
+
+  async distribute(id: string, body: DistributeTicketDTO) {
+    const ticket = await this.findOneById(id);
+
+    if (ticket.distributed) {
+      throw new HttpException('Ticket already distributed', 400);
+    }
+
+    const agency_groups = await this.agencyGroupsService.findByIds(
+      body.agent_groups_ids,
+    );
+
+    const agents =
+      await this.agentsService.findAllByAgencyGroups(agency_groups);
+
+    return this.ticketRepository.save({
+      ...ticket,
+      distributed: true,
+      agency_groups,
+      support_agents: agents,
+    });
   }
 }

@@ -8,6 +8,7 @@ import {
   Query,
   Req,
   HttpException,
+  Put,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -17,6 +18,8 @@ import { CreateMessageDto } from '../messages/dto/create-message.dto';
 import { UserRequest } from 'src/common/types/api';
 import { MessagesService } from '../messages/messages.service';
 import { UsersService } from '../users/users.service';
+import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
+import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 
 @Controller('tickets')
 @UseGuards(JwtAuthGuard)
@@ -25,6 +28,7 @@ export class TicketsController {
     private readonly ticketsService: TicketsService,
     private readonly messagesService: MessagesService,
     private readonly usersService: UsersService,
+    private readonly agencyGroupsService: AgencyGroupsService,
   ) {}
 
   @Post('/project/:id')
@@ -82,5 +86,32 @@ export class TicketsController {
   @Get(':id')
   findOneById(@Param('id') id: string) {
     return this.ticketsService.findOneById(id);
+  }
+
+  @Put(':id')
+  async distribute(
+    @Param('id') id: string,
+    @Body() body: DistributeTicketDTO,
+    @Req() req: UserRequest,
+  ) {
+    if (!req.user) throw new HttpException('Unauthorized', 401);
+
+    const user = await this.usersService.findOneById(req.user.id);
+
+    if (!user.agent) {
+      throw new HttpException(
+        'Unauthorized, customers aren"t authorize to distribute',
+        401,
+      );
+    }
+
+    if (user.agent.role === 'agent') {
+      throw new HttpException(
+        'Unauthorized, only distributors and superadmin can distribute',
+        401,
+      );
+    }
+
+    return this.ticketsService.distribute(id, body);
   }
 }

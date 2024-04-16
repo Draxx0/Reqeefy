@@ -14,6 +14,7 @@ import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 import { ProjectEntity } from 'src/models/projects/entities/project.entity';
 import { MessageEntity } from 'src/models/messages/entities/message.entity';
 import { TicketSubjectEntity } from 'src/models/ticket-subjects/entities/ticket-subject.entity';
+import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
 
 @Entity('ticket')
 export class TicketEntity extends TimestampEntity {
@@ -78,8 +79,14 @@ export class TicketEntity extends TimestampEntity {
   })
   messages: MessageEntity[];
 
-  // METHODS
+  @ManyToMany(() => AgencyGroupEntity, (agency_group) => agency_group.tickets, {
+    cascade: ['insert', 'update'],
+    nullable: true,
+  })
+  @JoinTable()
+  agency_groups: AgencyGroupEntity[];
 
+  // METHODS
   sortMessages() {
     if (this.messages.length > 1) {
       this.messages.sort((a, b) => {

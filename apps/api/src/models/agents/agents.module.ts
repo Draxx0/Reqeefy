@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AgentEntity } from './entities/agent.entity';
 import { UsersModule } from '../users/users.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
+import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthenticationModule } from 'src/authentication/authentication.module';
     PaginationModule,
     AuthenticationModule,
     UsersModule,
+    AgencyGroupsModule,
   ],
   controllers: [AgentsController],
   providers: [AgentsService],
