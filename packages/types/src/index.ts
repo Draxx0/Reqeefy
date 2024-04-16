@@ -5,3 +5,4 @@ export type * from './project';
 export type * from './pagination';
 export type * from './agency';
 export type * from './user-preferences';
+export type * from './upload-file';
