@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { fontsVariables } from '@/lib';
 import { Navigation } from '@/layouts';
+import TanstackQueryProvider from '@/utils/TanstackQueryProvider';
 
 export const metadata: Metadata = {
   title: 'Reqeefy',
@@ -16,9 +17,10 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={fontsVariables}>
-        <Navigation />
-
-        <main>{children}</main>
+        <TanstackQueryProvider>
+          <Navigation />
+          <main>{children}</main>
+        </TanstackQueryProvider>
       </body>
     </html>
   );

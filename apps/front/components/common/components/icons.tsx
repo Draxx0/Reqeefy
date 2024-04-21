@@ -1,4 +1,6 @@
-import { TicketSlash } from 'lucide-react';
+import { Settings, TicketSlash, Shuffle } from 'lucide-react';
 export const Icons = {
   ticket: TicketSlash,
+  distribution: Shuffle,
+  settings: Settings,
 };
