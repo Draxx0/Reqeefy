@@ -20,3 +20,4 @@ export * from './components/tooltip';
 export * from './components/toast';
 export * from './components/breadcrumb';
 export * from './components/link';
+export * from './components/icons';

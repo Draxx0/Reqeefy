@@ -3,7 +3,5 @@ export { useToast } from './components/use-toast';
 export * from './components/button';
 export * from './components/form';
 export * from './components/switch';
-export {
-  AttachmentButton,
-  AttachmentArea,
-} from './components/attachmentButton';
+export * from './components/attachmentButton';
+export * from './components/radio-group';
