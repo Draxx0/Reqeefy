@@ -5,9 +5,10 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib';
+import Link from 'next/link';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap active:translate-y-1 rounded-lg font-bold border-2 ring-offset-background transition-all ease-in-out duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap disabled:select-none active:translate-y-1 rounded-lg font-bold border-2 ring-offset-background transition-all ease-in-out duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -39,11 +40,14 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   children?: React.ReactNode;
   isLoading?: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, isLoading, ...props }, ref) => {
+  (
+    { className, variant, size, isLoading, children, disabled, ...props },
+    ref
+  ) => {
     return (
       <button
         className={cn([
@@ -57,9 +61,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ])}
         onClick={props.onClick}
         ref={ref}
+        disabled={disabled || isLoading}
       >
         {!isLoading ? (
-          props.children
+          children
         ) : (
           <div className="flex gap-2">
             <ClipLoader
@@ -81,4 +86,33 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = 'Button';
 
-export { Button, buttonVariants };
+export interface ButtonLinkProps extends VariantProps<typeof buttonVariants> {
+  children?: React.ReactNode;
+  className?: string;
+  href: string;
+}
+
+const ButtonLink = ({
+  variant,
+  size,
+  className,
+  children,
+  href,
+}: ButtonLinkProps) => {
+  return (
+    <Link
+      className={cn(
+        buttonVariants({
+          variant,
+          size,
+          className,
+        })
+      )}
+      href={href}
+    >
+      {children}
+    </Link>
+  );
+};
+
+export { Button, buttonVariants, ButtonLink };

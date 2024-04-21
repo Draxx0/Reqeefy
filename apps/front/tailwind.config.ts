@@ -35,11 +35,7 @@ const config = {
           DEFAULT: 'var(--neutral-white)',
           _30: 'var(--neutral-white-30)',
         },
-        black: {
-          DEFAULT: 'var(--neutral-dark)',
-          _30: 'var(--neutral-dark-30)',
-          _50: 'var(--neutral-dark-50)',
-        },
+
         gray: {
           '500': 'var(--gray-500)',
           '700': 'var(--gray-700)',
