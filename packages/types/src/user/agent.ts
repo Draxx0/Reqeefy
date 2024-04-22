@@ -1,4 +1,5 @@
-import { AgentRole } from './enum';
+import { Agency } from "../agency";
+import { AgentRole } from "./enum";
 
 export interface Agent {
   id: string;
