@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { TokenObject } from 'src/common/types/api';
+import { UserEntity } from 'src/models/users/entities/user.entity';
 import { UsersService } from 'src/models/users/users.service';
+import { Repository } from 'typeorm';
 import { AuthenticationSigninDto } from './dto/authentication-signin.dto';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { UserEntity } from 'src/models/users/entities/user.entity';
-import { TokenObject } from 'src/common/types/api';
 
 @Injectable()
 export class AuthenticationService {
@@ -25,6 +25,10 @@ export class AuthenticationService {
     password,
   }: AuthenticationSigninDto): Promise<TokenObject> {
     const user = await this.usersService.findOneByEmail(email);
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
 
     const isPasswordMatching = await bcrypt.compare(password, user.password);
 
