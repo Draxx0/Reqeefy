@@ -19,21 +19,3 @@ export default function AuthLoginPage() {
     </div>
   );
 }
-
-// <button
-//   onClick={() => {
-//     setUser({
-//       agent: {} as Agent,
-//       email: '',
-//       first_name: '',
-//       last_name: '',
-//       id: '123',
-//       avatar: null,
-//       customer: {} as Customer,
-//       is_email_confirmed: false,
-//       preferences: {} as UserPreferences,
-//     });
-//   }}
-// >
-//   Login
-// </button>

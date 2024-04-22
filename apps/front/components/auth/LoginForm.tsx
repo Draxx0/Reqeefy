@@ -1,38 +1,24 @@
 'use client';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { loginSchema } from '@/schemas';
+
+import { useLogin } from "@/hooks/auth/useLogin";
 import {
   Button,
+  Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  Form,
 } from '../client.index';
 import { Input } from '../server.index';
-import { useEffect } from 'react';
 
 export const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginSchema>>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
 
-  // console.log(form.formState.isValid);
-
-  // useEffect(() => {
-  //   console.log(form.formState.isValid);
-  // }, [form.formState.isValid]);
+  const { form, isPending, onSubmit } = useLogin();
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(() => {})} className="space-y-8">
+      <form onSubmit={onSubmit} className="space-y-8">
         <FormField
           control={form.control}
           name="email"
@@ -73,6 +59,7 @@ export const LoginForm = () => {
           type="submit"
           className="w-full"
           disabled={!form.formState.isValid}
+          isLoading={isPending}
         >
           Je me connecte
         </Button>
