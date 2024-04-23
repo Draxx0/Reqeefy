@@ -5,4 +5,6 @@ export const STATIC_PATHS = {
   REGISTER: '/auth/register',
   SETTINGS: '/settings',
   DISTRIBUTIONS: '/distributions',
+  CONFIDENTIALITY: '/confidentiality',
+  SERVICE_CONDITION: '/service-conditions',
 };

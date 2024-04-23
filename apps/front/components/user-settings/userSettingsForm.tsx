@@ -1,6 +1,6 @@
 'use client';
 
-import { useLogin } from '@/hooks';
+import { useUserSettings } from '@/hooks';
 import {
   Button,
   Form,
@@ -12,22 +12,22 @@ import {
 } from '../client.index';
 import { Input } from '../server.index';
 
-export const LoginForm = () => {
-  const { form, isPending, onSubmit } = useLogin();
+export const UserSettingsForm = () => {
+  const { form, isPending, onSubmit } = useUserSettings();
 
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="space-y-8">
         <FormField
           control={form.control}
-          name="email"
+          name="first_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xl font-bold">Adresse email</FormLabel>
+              <FormLabel className="text-xl font-bold">Prénom</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Adresse email"
-                  type="email"
+                  placeholder="Votre prénom"
+                  type="text"
                   {...field}
                   className="w-full"
                 />
@@ -38,14 +38,14 @@ export const LoginForm = () => {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="last_name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xl font-bold">Mot de passe</FormLabel>
+              <FormLabel className="text-xl font-bold">Nom</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Mot de passe"
-                  type="password"
+                  placeholder="Votre nom"
+                  type="text"
                   {...field}
                   className="w-full"
                 />
@@ -56,11 +56,10 @@ export const LoginForm = () => {
         />
         <Button
           type="submit"
-          className="w-full"
-          disabled={!form.formState.isValid}
+          disabled={!form.formState.isValid || !form.formState.isDirty}
           isLoading={isPending}
         >
-          Je me connecte
+          Enregistrer mes modifications
         </Button>
       </form>
     </Form>

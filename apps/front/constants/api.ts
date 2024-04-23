@@ -2,7 +2,7 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const GET = (token: string) => {
   return {
-    method: "GET",
+    method: 'GET',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -11,9 +11,9 @@ const GET = (token: string) => {
 
 const POST = <T>(data: T, token: string) => {
   return {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),
@@ -22,9 +22,9 @@ const POST = <T>(data: T, token: string) => {
 
 const PUT = <T>(data: T, token: string) => {
   return {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(data),

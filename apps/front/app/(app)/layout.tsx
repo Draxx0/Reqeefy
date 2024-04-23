@@ -8,7 +8,7 @@ export default function AppGroupLayout({
   return (
     <>
       <Navigation />
-      <main className="ml-[5vw]">{children}</main>
+      <main className="my-[50px] mx-auto max-w-8/10">{children}</main>
     </>
   );
 }

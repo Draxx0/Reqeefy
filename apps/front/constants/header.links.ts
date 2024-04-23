@@ -1,6 +1,7 @@
 import { Icons } from '@/components/server.index';
 import { HeaderLink } from '@/types/header';
-export const HEADER_LINKS: Array<HeaderLink> = [
+
+export const NAV_TOP_LINKS: Array<HeaderLink> = [
   {
     path: '/',
     tooltipLabel: 'Discussions',
@@ -12,9 +13,21 @@ export const HEADER_LINKS: Array<HeaderLink> = [
     icon: Icons.distribution,
     needsPermissions: ['distributor', 'superadmin'],
   },
+];
+
+export const NAV_BOTTOM_LINKS: Array<HeaderLink> = [
   {
     path: '/settings',
     tooltipLabel: 'Paramètres',
     icon: Icons.settings,
   },
+  // {
+  //   path: '/user-settings',
+  //   tooltipLabel: 'Paramètres utilisateur',
+  // },
+  // {
+  //   path: '/logout',
+  //   tooltipLabel: 'Déconnexion',
+  //   icon: Icons.logout,
+  // },
 ];

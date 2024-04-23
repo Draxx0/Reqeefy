@@ -1,7 +1,7 @@
 import { fontsVariables } from '@/lib';
 import TanstackQueryProvider from '@/utils/TanstackQueryProvider';
 import type { Metadata } from 'next';
-import { Toaster } from "sonner";
+import { Toaster } from 'sonner';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -19,12 +19,13 @@ export default function RootLayout({
       <body className={fontsVariables}>
         <TanstackQueryProvider>
           {children}
-          <Toaster toastOptions={{
-
-            classNames: {
-              error: 'bg-red-500 text-white',
-            },
-          }} />
+          <Toaster
+            toastOptions={{
+              classNames: {
+                error: 'bg-red-500 text-white',
+              },
+            }}
+          />
         </TanstackQueryProvider>
       </body>
     </html>

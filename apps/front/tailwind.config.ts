@@ -6,7 +6,6 @@ const config = {
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
-    './containers/**/*.{ts,tsx}',
     './layouts/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
@@ -20,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      maxWidth: {
+        '8/10': '80%',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

@@ -1,5 +1,4 @@
-import { LoginForm } from '@/components/auth/LoginForm';
-import { ButtonLink } from '@/components/client.index';
+import { ButtonLink, LoginForm } from '@/components/client.index';
 import { STATIC_PATHS } from '@/constants';
 
 export default function AuthLoginPage() {

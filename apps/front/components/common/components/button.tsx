@@ -8,12 +8,11 @@ import { cn } from '@/lib';
 import Link from 'next/link';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap disabled:select-none active:translate-y-1 rounded-lg font-bold border-2 ring-offset-background transition-all ease-in-out duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center whitespace-nowrap disabled:select-none active:translate-y-1 rounded-lg font-bold border-2 ring-offset-background transition-all text-sm ease-in-out duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default:
-          'bg-primary-700 text-white border-primary-500 hover:shadow-md ',
+        default: 'bg-primary-700 text-white border-primary-500 hover:shadow-md',
         destructive:
           'bg-primary-900 text-white border-primary-700 hover:shadow-md',
         disabled:

@@ -21,3 +21,4 @@ export * from './components/toast';
 export * from './components/breadcrumb';
 export * from './components/link';
 export * from './components/icons';
+export * from './components/page-header';

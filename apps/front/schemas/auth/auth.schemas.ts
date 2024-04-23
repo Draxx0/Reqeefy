@@ -10,7 +10,7 @@ const loginSchema = z.object({
 });
 
 const registerSchema = z.object({
-  agencyName: z.string().min(1, {
+  name: z.string().min(1, {
     message: 'Veuillez entrer le nom de votre agence',
   }),
   activity_area: z.enum(AGENCY_ACTIVITIES_AREA),
@@ -20,9 +20,12 @@ const registerSchema = z.object({
       message: 'Veuillez entrer une URL valide',
     })
     .optional(),
-  agency_jobs: z.array(z.string()).min(1, {
+  agency_groups: z.array(z.string()).min(1, {
     message: 'Veuillez choisir au moins un posts',
   }),
+  // agency_groups: z.string().min(1, {
+  //   message: 'Veuillez choisir au moins un posts',
+  // }),
   description: z
     .string()
     .min(1, {
