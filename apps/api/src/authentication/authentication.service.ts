@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { TokenObject } from 'src/common/types/api';
@@ -8,6 +7,7 @@ import { UsersService } from 'src/models/users/users.service';
 import { Repository } from 'typeorm';
 import { AuthenticationSigninDto } from './dto/authentication-signin.dto';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
+import { JwtUtilsService } from './jwt/jwt-utils.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -17,7 +17,7 @@ export class AuthenticationService {
     private readonly userRepository: Repository<UserEntity>,
     // SERVICES
     private usersService: UsersService,
-    private jwtService: JwtService,
+    private readonly jwtUtilsService: JwtUtilsService,
   ) {}
 
   async signin({
@@ -37,17 +37,9 @@ export class AuthenticationService {
       throw new HttpException('Password is invalid', HttpStatus.UNAUTHORIZED);
     }
 
-    const payload = {
-      id: user.id,
-      email: user.email,
-    };
-
     delete user.password;
 
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-      user,
-    };
+    return await this.jwtUtilsService.generateJwtToken(user);
   }
 
   async signup(body: AuthenticationSignupDto): Promise<UserEntity> {

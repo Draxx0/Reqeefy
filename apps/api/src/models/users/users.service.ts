@@ -1,10 +1,18 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { DeleteResult, Repository } from 'typeorm';
 import { UserQueries } from './queries/queries';
 import { PaginationService } from '../common/models/pagination/pagination.service';
-import { PaginatedData } from '@reqeefy/types';
+import { PaginatedData, UserRole } from '@reqeefy/types';
+import { TokenObject, UserRequest } from 'src/common/types/api';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +22,7 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
     // SERVICES
     private readonly paginationService: PaginationService,
+    private jwtUtilsService: JwtUtilsService,
   ) {}
 
   async findAll(queries: UserQueries): Promise<PaginatedData<UserEntity>> {
@@ -103,13 +112,39 @@ export class UsersService {
   async updateUserAndInsertAgencyRelation(
     user: UserEntity,
     id: string,
+    role: UserRole,
   ): Promise<UserEntity> {
-    await this.userRepository.save({ ...user, agencies: [{ id }] });
+    await this.userRepository.save({ ...user, agencies: [{ id }], role });
 
     return await this.findOneById(user.id);
   }
 
   async deleteOne(id: string): Promise<DeleteResult> {
     return await this.userRepository.delete(id);
+  }
+
+  async updateUserProfile({
+    userId,
+    req,
+    body,
+  }: {
+    userId: string;
+    req: UserRequest;
+    body: UpdateUserDto;
+  }): Promise<TokenObject> {
+    //! Should be replaced by a guard
+    const user = await this.findOneById(userId);
+
+    if (user.id !== req.user.id) {
+      throw new UnauthorizedException(
+        HttpStatus.UNAUTHORIZED,
+        'You are not authorized to update this user',
+      );
+    }
+    //!
+
+    const updatedUser = await this.updateSelectedOne(user, body);
+
+    return await this.jwtUtilsService.generateJwtToken(updatedUser);
   }
 }
