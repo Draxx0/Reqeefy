@@ -66,15 +66,14 @@ export class AgenciesService {
   }
 
   async findOneById(id: string) {
-    const query = this.agencyRepository
+    return await this.agencyRepository
       .createQueryBuilder('agency')
       .leftJoinAndSelect('agency.users', 'users')
       .leftJoinAndSelect('agency.agency_photo', 'agency_photo')
       .leftJoinAndSelect('agency.agency_groups', 'agency_groups')
       .leftJoinAndSelect('agency.projects', 'projects')
-      .where('agency.id = :id', { id });
-
-    return await query.getOne();
+      .where('agency.id = :id', { id })
+      .getOne();
   }
 
   async createWithNewUser(body: CreateAgencyWithNewUserDto) {
@@ -97,13 +96,11 @@ export class AgenciesService {
       password,
     });
 
-    const agent = await this.agentService.create({
-      id: signedUser.id,
-      role: 'superadmin',
-    });
+    const agent = await this.agentService.create(signedUser.id);
 
     const updatedUser = await this.usersService.updateSelectedOne(signedUser, {
       ...signedUser,
+      role: 'superadmin',
       agent,
     });
 
@@ -122,7 +119,12 @@ export class AgenciesService {
 
     agency.agency_groups = createdAgencyGroups;
 
-    return await this.agencyRepository.save(agency);
+    await this.agencyRepository.save(agency);
+
+    return await this.authenticationService.signin({
+      email,
+      password,
+    });
   }
 
   async createWithExistingUser(
@@ -133,13 +135,11 @@ export class AgenciesService {
       body;
     const user = await this.usersService.findOneById(id);
 
-    const agent = await this.agentService.create({
-      id,
-      role: 'superadmin',
-    });
+    const agent = await this.agentService.create(id);
 
     const updatedUser = await this.usersService.updateSelectedOne(user, {
       ...user,
+      role: 'superadmin',
       agent,
     });
 

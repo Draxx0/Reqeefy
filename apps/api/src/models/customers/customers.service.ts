@@ -33,6 +33,7 @@ export class CustomersService {
         return await this.usersService.updateUserAndInsertAgencyRelation(
           user,
           agencyId,
+          'customer',
         );
       }),
     );

@@ -26,6 +26,13 @@ export class AgenciesController {
     return this.agenciesService.findAll(queries);
   }
 
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  findOne(@Param('id') id: string) {
+    //! NEED GUARD IF USER THAT REQUEST IS IN AGENCY
+    return this.agenciesService.findOneById(id);
+  }
+
   @Post()
   createWithNewUser(@Body() createAgencyDto: CreateAgencyWithNewUserDto) {
     return this.agenciesService.createWithNewUser(createAgencyDto);

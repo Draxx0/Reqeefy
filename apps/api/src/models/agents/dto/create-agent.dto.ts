@@ -1,17 +1,17 @@
-import { AgentRole } from '@reqeefy/types';
+import { UserRole } from '@reqeefy/types';
 import { IsIn, IsNotEmpty } from 'class-validator';
 import { AuthenticationSignupDto } from 'src/authentication/dto/authentication-signup.dto';
 
 export class CreateAgentDTO extends AuthenticationSignupDto {
   @IsNotEmpty()
-  @IsIn(['superadmin', 'distributor', 'agent'])
-  role: AgentRole;
+  @IsIn(['customer', 'superadmin', 'distributor', 'agent'])
+  role: UserRole;
 }
 
 export class AddAgentToAgencyDTO {
   @IsNotEmpty()
   @IsIn(['superadmin', 'distributor', 'agent'])
-  role: AgentRole;
+  role: UserRole;
 
   @IsNotEmpty()
   agencyId: string;

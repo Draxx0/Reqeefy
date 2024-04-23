@@ -1,3 +1,4 @@
+import { UserRole } from '@reqeefy/types';
 import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
 import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
@@ -33,6 +34,13 @@ export class UserEntity extends TimestampEntity {
 
   @Column({ default: false, type: 'boolean' })
   is_email_confirmed: boolean;
+
+  @Column({
+    type: 'enum',
+    enum: ['superadmin', 'distributor', 'agent', 'customer'],
+    nullable: true,
+  })
+  role: UserRole;
 
   // RELATIONS
 

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AgentRole, PaginatedData } from '@reqeefy/types';
+import { PaginatedData } from '@reqeefy/types';
 import { AuthenticationService } from 'src/authentication/authentication.service';
 import { AuthenticationSignupDto } from 'src/authentication/dto/authentication-signup.dto';
 import { Repository } from 'typeorm';
@@ -25,11 +25,10 @@ export class AgentsService {
     private readonly authenticationService: AuthenticationService,
     private readonly agencyGroupsService: AgencyGroupsService,
   ) {}
-  async create({ id, role }: { id: string; role: AgentRole }) {
+  async create(id: string) {
     const user = await this.userService.findOneById(id);
     const agent = this.agentRepository.create({
       user,
-      role,
     });
 
     return this.agentRepository.save(agent);
@@ -46,11 +45,14 @@ export class AgentsService {
     const user = await this.authenticationService.signup(createUserBody);
 
     const updatedUser =
-      await this.userService.updateUserAndInsertAgencyRelation(user, id);
+      await this.userService.updateUserAndInsertAgencyRelation(
+        user,
+        id,
+        body.role,
+      );
 
     const agent = this.agentRepository.create({
       user: updatedUser,
-      role: body.role,
     });
 
     return this.agentRepository.save(agent);
@@ -59,9 +61,12 @@ export class AgentsService {
   async createExistingUserAgent(body: AddAgentToAgencyDTO, id: string) {
     const user = await this.userService.findOneById(id);
 
-    const agent = this.agentRepository.create({
-      user,
+    const updatedUser = await this.userService.updateSelectedOne(user, {
       role: body.role,
+    });
+
+    const agent = this.agentRepository.create({
+      user: updatedUser,
     });
 
     return this.agentRepository.save(agent);

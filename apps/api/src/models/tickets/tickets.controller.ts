@@ -105,7 +105,7 @@ export class TicketsController {
       );
     }
 
-    if (user.agent.role === 'agent') {
+    if (user.role === 'agent') {
       throw new HttpException(
         'Unauthorized, only distributors and superadmin can distribute',
         401,
