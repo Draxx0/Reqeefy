@@ -1,3 +1,4 @@
+import { ProjectStatus } from '@reqeefy/types';
 import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
 import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
@@ -23,6 +24,16 @@ export class ProjectEntity extends TimestampEntity {
 
   @Column()
   name: string;
+
+  @Column()
+  description: string;
+
+  @Column({
+    type: 'enum',
+    enum: ['active', 'inactive', 'archived'],
+    default: 'active',
+  })
+  status: ProjectStatus;
 
   // RELATIONS
 
