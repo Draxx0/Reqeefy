@@ -1,3 +1,5 @@
+import { Project } from '@reqeefy/types';
+
 export interface createAgencyCredentials {
   name: string;
   activity_area: string;
@@ -15,5 +17,5 @@ export interface AgencyCustomerTableData {
   first_name: string;
   last_name: string;
   email: string;
-  project: string;
+  project: Project | null;
 }

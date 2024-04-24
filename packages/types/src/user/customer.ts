@@ -5,6 +5,6 @@ import { User } from './user';
 export interface Customer {
   id: string;
   user: User | null;
-  projects: Project[];
+  project: Project;
   tickets: Ticket[];
 }

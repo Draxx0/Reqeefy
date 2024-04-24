@@ -6,6 +6,7 @@ import {
   Entity,
   JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -21,10 +22,10 @@ export class CustomerEntity extends TimestampEntity {
   @JoinColumn()
   user: UserEntity;
 
-  @ManyToMany(() => ProjectEntity, (project) => project.customers, {
+  @ManyToOne(() => ProjectEntity, (project) => project.customers, {
     onDelete: 'CASCADE',
   })
-  projects: ProjectEntity[];
+  project: ProjectEntity;
 
   @ManyToMany(() => TicketEntity, (ticket) => ticket.customers)
   tickets: TicketEntity[];

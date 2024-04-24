@@ -9,7 +9,6 @@ import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.e
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -52,10 +51,9 @@ export class ProjectEntity extends TimestampEntity {
   })
   tickets: TicketEntity[];
 
-  @ManyToMany(() => CustomerEntity, (customer) => customer.projects, {
+  @OneToMany(() => CustomerEntity, (customer) => customer.project, {
     cascade: ['insert', 'update'],
   })
-  @JoinTable()
   customers: CustomerEntity[];
 
   @ManyToOne(() => AgencyEntity, (agency) => agency.projects, {

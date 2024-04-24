@@ -9,3 +9,6 @@ export * from './components/attachmentButton';
 export * from './components/radio-group';
 export * from './components/alert-dialog';
 export * from './components/tabs';
+export * from './components/dropdown-menu';
+export * from './components/checkbox';
+export * from './components/dialog';

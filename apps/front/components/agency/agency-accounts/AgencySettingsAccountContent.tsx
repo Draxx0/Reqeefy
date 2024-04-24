@@ -2,7 +2,7 @@
 
 import { Agency } from '@reqeefy/types';
 import { PageHeader } from '../../server.index';
-import { DataTable } from './customers/data-table';
+import { DataTable } from '../../common/components/data-table';
 import { columns } from './customers/columns';
 import { useMemo } from 'react';
 
@@ -19,7 +19,7 @@ export const AgencySettingsAccountContent = ({
       first_name: userAsCustomer.first_name,
       last_name: userAsCustomer.last_name,
       email: userAsCustomer.email,
-      project: userAsCustomer.customer?.projects[0]?.name || 'Aucun projet',
+      project: userAsCustomer.customer?.project || null,
     }));
   }, [agency.users]);
 
@@ -38,7 +38,11 @@ export const AgencySettingsAccountContent = ({
           size="small"
           description="Gérez les clients de votre agence, ajoutez-en de nouveaux ou modifiez les informations existantes."
         />
-        <DataTable columns={columns} data={customers} />
+        <DataTable
+          columns={columns}
+          data={customers}
+          isAccessible={agency.projects.length > 0 || true}
+        />
       </div>
     </div>
   );
