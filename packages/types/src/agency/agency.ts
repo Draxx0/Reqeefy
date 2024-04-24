@@ -8,7 +8,7 @@ export interface Agency {
   id: string;
   name: string;
   description: string | null;
-  websitte_url: string | null;
+  website_url: string | null;
   activity_area: AgencyActivityArea;
   agency_photo: UploadFile | null;
   users: User[];

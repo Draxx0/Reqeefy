@@ -1,1 +1,3 @@
-export interface UploadFile {}
+export interface UploadFile {
+  path: string;
+}

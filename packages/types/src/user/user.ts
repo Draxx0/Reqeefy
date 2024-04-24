@@ -1,3 +1,4 @@
+import { Agency } from '../agency';
 import { UploadFile } from '../upload-file';
 import { UserPreferences } from '../user-preferences';
 import { Agent } from './agent';
@@ -13,6 +14,7 @@ export interface User {
   is_email_confirmed: boolean;
   avatar: UploadFile | null;
   agent: Agent | null;
+  agency: Agency | null;
   customer: Customer | null;
   preferences: UserPreferences;
 }
