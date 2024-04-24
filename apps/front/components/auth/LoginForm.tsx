@@ -23,7 +23,7 @@ export const LoginForm = () => {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xl font-bold">Adresse email</FormLabel>
+              <FormLabel className="text-lg font-bold">Adresse email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Adresse email"
@@ -41,7 +41,7 @@ export const LoginForm = () => {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xl font-bold">Mot de passe</FormLabel>
+              <FormLabel className="text-lg font-bold">Mot de passe</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Mot de passe"

@@ -65,7 +65,7 @@ export const SignupForm = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">
+                    <FormLabel className="text-lg font-bold">
                       Nom de l&apos;agence
                     </FormLabel>
                     <FormControl>
@@ -85,7 +85,7 @@ export const SignupForm = () => {
                 name="activity_area"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">
+                    <FormLabel className="text-lg font-bold">
                       Dans quel domaine d’activité exercé vous ?
                     </FormLabel>
                     <FormControl>
@@ -118,7 +118,7 @@ export const SignupForm = () => {
                 name="website_url"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">
+                    <FormLabel className="text-lg font-bold">
                       Lien vers votre site web
                     </FormLabel>
                     <FormControl>
@@ -138,7 +138,7 @@ export const SignupForm = () => {
                 name="agency_groups"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">
+                    <FormLabel className="text-lg font-bold">
                       Définir les postes de l’entreprise
                     </FormLabel>
                     <FormControl>
@@ -158,7 +158,7 @@ export const SignupForm = () => {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">
+                    <FormLabel className="text-lg font-bold">
                       Description brève de l’agence
                     </FormLabel>
                     <FormControl>
@@ -184,7 +184,7 @@ export const SignupForm = () => {
                 name="first_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">Prénom</FormLabel>
+                    <FormLabel className="text-lg font-bold">Prénom</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="John"
@@ -203,7 +203,7 @@ export const SignupForm = () => {
                 name="last_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">Nom</FormLabel>
+                    <FormLabel className="text-lg font-bold">Nom</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="Doe"
@@ -222,7 +222,7 @@ export const SignupForm = () => {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">
+                    <FormLabel className="text-lg font-bold">
                       Adresse email
                     </FormLabel>
                     <FormControl>
@@ -243,7 +243,7 @@ export const SignupForm = () => {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-xl font-bold">
+                    <FormLabel className="text-lg font-bold">
                       Mot de passe
                     </FormLabel>
                     <FormControl>

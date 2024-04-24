@@ -7,6 +7,7 @@ export default function UserSettingsPage() {
       <PageHeader
         title={'Informations personnelles'}
         description={'Modifier vos informations personnelles ici.'}
+        hasSeparator
       />
 
       <div className="max-w-3xl">

@@ -1,6 +1,7 @@
 import { userSettingsSchema } from '@/schemas';
 import { authService, userService } from '@/services';
 import { useAuthStore } from '@/stores';
+import { renderErrorToast } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -35,13 +36,7 @@ export const useUserSettings = () => {
     onError: (error) => {
       console.error('ERROR', error);
 
-      toast.error('Une erreur est survenue', {
-        duration: 10000,
-        description: error.message,
-        classNames: {
-          error: 'bg-red-500',
-        },
-      });
+      renderErrorToast(error.message);
     },
     onSuccess({ access_token, user }, variables, context) {
       setUser(user);

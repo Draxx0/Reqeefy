@@ -8,3 +8,4 @@ export * from './components/switch';
 export * from './components/attachmentButton';
 export * from './components/radio-group';
 export * from './components/alert-dialog';
+export * from './components/tabs';

@@ -111,7 +111,7 @@ export const Navigation = () => {
                   >
                     <Avatar className="h-full w-full">
                       <AvatarImage
-                        src={user.avatar as string}
+                        src={user.avatar?.path}
                         alt={`Avatar de ${user.first_name} ${user.last_name}`}
                       />
                       <AvatarFallback>

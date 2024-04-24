@@ -8,7 +8,12 @@ export const useGetAgency = () => {
 
   const query = useQuery({
     queryKey: ['agency'],
-    queryFn: async () => {},
+    queryFn: async () => {
+      if (!user?.agency) return null;
+
+      return await agencyService.get(user.agency.id);
+    },
+    staleTime: 1000 * 60 * 60,
     enabled: !!user,
     ...DEFAULT_USE_QUERY_PARAMS,
   });

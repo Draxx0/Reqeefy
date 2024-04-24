@@ -1,12 +1,6 @@
 import { PageHeader } from '@/components/server.index';
+import { AgencySettings } from '@/containers';
 
 export default function SettingsPage() {
-  return (
-    <section className="space-y-12">
-      <PageHeader
-        title={'Informations agence'}
-        description={'Gérez les informations de votre agence.'}
-      />
-    </section>
-  );
+  return <AgencySettings />;
 }
