@@ -39,7 +39,7 @@ export class UsersService {
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('user.agent', 'agent')
       .leftJoinAndSelect('user.customer', 'customer')
-      .leftJoinAndSelect('user.agencies', 'agencies')
+      .leftJoinAndSelect('user.agency', 'agency')
       .leftJoinAndSelect('user.messages', 'messages')
       .leftJoinAndSelect('user.preferences', 'preferences');
 
@@ -69,7 +69,7 @@ export class UsersService {
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('user.agent', 'agent')
       .leftJoinAndSelect('user.customer', 'customer')
-      .leftJoinAndSelect('user.agencies', 'agencies')
+      .leftJoinAndSelect('user.agency', 'agency')
       .leftJoinAndSelect('user.messages', 'messages')
       .leftJoinAndSelect('user.preferences', 'preferences')
       .where('user.email = :email', { email })
@@ -86,7 +86,7 @@ export class UsersService {
   async findOneById(id: string): Promise<UserEntity | null> {
     const user = await this.userRepository
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.agencies', 'agencies')
+      .leftJoinAndSelect('user.agency', 'agency')
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('user.agent', 'agent')
       .leftJoinAndSelect('user.customer', 'customer')
@@ -111,10 +111,14 @@ export class UsersService {
 
   async updateUserAndInsertAgencyRelation(
     user: UserEntity,
-    id: string,
+    agencyId: string,
     role: UserRole,
   ): Promise<UserEntity> {
-    await this.userRepository.save({ ...user, agencies: [{ id }], role });
+    await this.userRepository.save({
+      ...user,
+      agency: { id: agencyId },
+      role,
+    });
 
     return await this.findOneById(user.id);
   }

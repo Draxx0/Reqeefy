@@ -8,10 +8,11 @@ import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { UsersModule } from '../users/users.module';
 import { AgentsModule } from '../agents/agents.module';
 import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
+import { UserEntity } from '../users/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AgencyEntity]),
+    TypeOrmModule.forFeature([AgencyEntity, UserEntity]),
     AgentsModule,
     AuthenticationModule,
     PaginationModule,

@@ -7,8 +7,6 @@ import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -57,10 +55,9 @@ export class AgencyEntity extends TimestampEntity {
   })
   agency_photo: UploadFileEntity;
 
-  @ManyToMany(() => UserEntity, (user) => user.agencies, {
+  @OneToMany(() => UserEntity, (user) => user.agency, {
     cascade: ['insert', 'update'],
   })
-  @JoinTable()
   users: UserEntity[];
 
   @OneToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agency)

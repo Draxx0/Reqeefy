@@ -47,26 +47,3 @@ export class CreateAgencyWithNewUserDto {
   @IsString()
   password: string;
 }
-
-export class CreateAgencyWithExistingUserDto {
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @IsNotEmpty()
-  @IsIn([...AgencyActivityAreaValues])
-  activity_area: AgencyActivityArea;
-
-  @IsNotEmpty()
-  @IsArray()
-  @IsString({ each: true })
-  agency_groups: string[];
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-
-  @IsOptional()
-  @IsString()
-  website_url?: string;
-}

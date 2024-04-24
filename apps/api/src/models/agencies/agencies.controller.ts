@@ -4,16 +4,17 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
 import { AgenciesService } from './agencies.service';
 import { AgencyQueries } from './queries/queries';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
-import {
-  CreateAgencyWithExistingUserDto,
-  CreateAgencyWithNewUserDto,
-} from './dto/create-agency.dto';
+import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorator/roles.decorator';
+import { AgencyEntity } from './entities/agency.entity';
 
 @Controller('agencies')
 export class AgenciesController {
@@ -38,12 +39,13 @@ export class AgenciesController {
     return this.agenciesService.createWithNewUser(createAgencyDto);
   }
 
-  @Post(':id')
-  @UseGuards(JwtAuthGuard)
-  createWithExistingUser(
+  @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('superadmin')
+  update(
     @Param('id') id: string,
-    @Body() createAgencyDto: CreateAgencyWithExistingUserDto,
+    @Body() updateAgencyDto: Partial<AgencyEntity>,
   ) {
-    return this.agenciesService.createWithExistingUser(id, createAgencyDto);
+    return this.agenciesService.update(id, updateAgencyDto);
   }
 }

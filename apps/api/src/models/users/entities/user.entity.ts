@@ -9,7 +9,7 @@ import { UserPreferencesEntity } from 'src/models/user-preferences/entities/user
 import {
   Column,
   Entity,
-  ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -71,10 +71,10 @@ export class UserEntity extends TimestampEntity {
   )
   preferences: UserPreferencesEntity;
 
-  @ManyToMany(() => AgencyEntity, (agency) => agency.users, {
+  @ManyToOne(() => AgencyEntity, (agency) => agency.users, {
     onDelete: 'CASCADE',
   })
-  agencies: AgencyEntity[];
+  agency: AgencyEntity;
 
   @OneToMany(() => MessageEntity, (message) => message.user, {
     onDelete: 'NO ACTION',

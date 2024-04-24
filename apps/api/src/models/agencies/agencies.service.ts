@@ -6,12 +6,10 @@ import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 import { AgentsService } from '../agents/agents.service';
 import { PaginationService } from '../common/models/pagination/pagination.service';
 import { UsersService } from '../users/users.service';
-import {
-  CreateAgencyWithExistingUserDto,
-  CreateAgencyWithNewUserDto,
-} from './dto/create-agency.dto';
+import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
 import { AgencyEntity } from './entities/agency.entity';
 import { AgencyQueries } from './queries/queries';
+import { UserEntity } from '../users/entities/user.entity';
 
 @Injectable()
 export class AgenciesService {
@@ -19,6 +17,8 @@ export class AgenciesService {
     // REPOSITORIES
     @InjectRepository(AgencyEntity)
     private readonly agencyRepository: Repository<AgencyEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     // SERVICES
     private readonly authenticationService: AuthenticationService,
     private readonly usersService: UsersService,
@@ -96,20 +96,11 @@ export class AgenciesService {
       password,
     });
 
-    const agent = await this.agentService.create(signedUser.id);
-
-    const updatedUser = await this.usersService.updateSelectedOne(signedUser, {
-      ...signedUser,
-      role: 'superadmin',
-      agent,
-    });
-
     const agency = this.agencyRepository.create({
       activity_area,
       description,
       name,
       website_url,
-      users: [updatedUser],
     });
 
     const createdAgencyGroups = await this.createAgencyGroups(
@@ -121,44 +112,27 @@ export class AgenciesService {
 
     await this.agencyRepository.save(agency);
 
+    const agent = await this.agentService.create(signedUser.id);
+
+    const updatedUser = await this.usersService.updateSelectedOne(signedUser, {
+      ...signedUser,
+      role: 'superadmin',
+      agent,
+      agency,
+    });
+
+    await this.userRepository.save(updatedUser);
+
     return await this.authenticationService.signin({
       email,
       password,
     });
   }
 
-  async createWithExistingUser(
-    id: string,
-    body: CreateAgencyWithExistingUserDto,
-  ) {
-    const { activity_area, description, name, website_url, agency_groups } =
-      body;
-    const user = await this.usersService.findOneById(id);
+  async update(id: string, body: Partial<AgencyEntity>) {
+    await this.agencyRepository.update(id, body);
 
-    const agent = await this.agentService.create(id);
-
-    const updatedUser = await this.usersService.updateSelectedOne(user, {
-      ...user,
-      role: 'superadmin',
-      agent,
-    });
-
-    const agency = this.agencyRepository.create({
-      activity_area,
-      description,
-      name,
-      website_url,
-      users: [updatedUser],
-    });
-
-    const createdAgencyGroups = await this.createAgencyGroups(
-      agency_groups,
-      agency.id,
-    );
-
-    agency.agency_groups = createdAgencyGroups;
-
-    return await this.agencyRepository.save(agency);
+    return await this.findOneById(id);
   }
 
   private async createAgencyGroups(agency_groups: string[], agencyId: string) {
