@@ -11,6 +11,7 @@ export class JwtUtilsService {
     const payload = {
       id: user.id,
       email: user.email,
+      role: user.role,
     };
 
     return {
