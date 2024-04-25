@@ -1,3 +1,5 @@
+'use client';
+
 import { loginSchema } from '@/schemas';
 import { authService } from '@/services';
 import { useAuthStore } from '@/stores';
@@ -6,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import { z } from 'zod';
 
 export const useLogin = () => {

@@ -1,4 +1,5 @@
-export interface PaginatedData<T> {  pagination: Pagination;
+export interface PaginatedData<T> {
+  pagination: Pagination;
   data: T[] | null;
 }
 

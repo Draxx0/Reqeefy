@@ -36,12 +36,16 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   isAccessible?: boolean;
+  hasEmailFilter?: boolean;
+  children?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   isAccessible,
+  hasEmailFilter = false,
+  children,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -74,8 +78,8 @@ export function DataTable<TData, TValue>({
           <div className="flex items-center gap-3">
             <Lock className="text-primary-700" />
             <p className="text-lg text-center">
-              Veuillez d&apos;abord ajouter un premier projet avant
-              d&apos;ajouter vos premiers clients.
+              Veuillez d&apos;abord ajouter un premier projet avant d&apos;aller
+              plus loin.
             </p>
           </div>
         </div>
@@ -83,43 +87,52 @@ export function DataTable<TData, TValue>({
       <div
         className={`space-y-4 ${!isAccessible ? 'blur-[10px] pointer-events-none select-none' : ''}`}
       >
-        <div className="flex items-center justify-between">
-          <Input
-            placeholder="Filtrer par email"
-            value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-            onChange={(event) =>
-              table.getColumn('email')?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
+        <div
+          className={`flex w-full items-center ${!hasEmailFilter ? 'justify-end' : 'justify-between'}`}
+        >
+          {hasEmailFilter && (
+            <Input
+              placeholder="Filtrer par email"
+              value={
+                (table.getColumn('email')?.getFilterValue() as string) ?? ''
+              }
+              onChange={(event) =>
+                table.getColumn('email')?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+          )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" className="ml-auto">
-                Filtrer les colonnes
-                <EyeOff className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="flex items-center gap-3">
+            {children}
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button variant="ghost" className="ml-auto">
+                  Filtrer les colonnes
+                  <EyeOff className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    );
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
 
         <div className="flex-1 text-sm text-muted-foreground">

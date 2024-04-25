@@ -2,7 +2,6 @@
 
 import {
   Button,
-  ButtonLink,
   Checkbox,
   DropdownMenu,
   DropdownMenuContent,
@@ -11,19 +10,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/client.index';
-import { AgencyCustomerTableData } from '@/types';
+import { AgencyAgentTableData } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
 import {
   ArrowUpDown,
+  Bolt,
   Copy,
-  FolderGit2,
   MoreHorizontal,
   Trash,
+  Users,
 } from 'lucide-react';
-import Link from 'next/link';
 import { toast } from 'sonner';
 
-export const columns: ColumnDef<AgencyCustomerTableData>[] = [
+export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -47,14 +46,17 @@ export const columns: ColumnDef<AgencyCustomerTableData>[] = [
     enableHiding: false,
   },
   {
+    id: 'ID',
     accessorKey: 'id',
     header: 'ID',
   },
   {
+    id: 'Nom',
     accessorKey: 'last_name',
     header: 'Nom',
   },
   {
+    id: 'Prénom',
     accessorKey: 'first_name',
     header: 'Prénom',
   },
@@ -73,15 +75,19 @@ export const columns: ColumnDef<AgencyCustomerTableData>[] = [
     },
   },
   {
-    accessorKey: 'project',
-    header: 'Projet',
+    id: 'Rôle',
+    accessorKey: 'role',
+    header: 'Rôle',
+  },
+  {
+    id: 'Groupe',
+    accessorKey: 'group',
+    header: 'Groupe',
   },
   {
     id: 'actions',
     cell: ({ row }) => {
-      const customer = row.original;
-
-      console.log(customer);
+      const agent = row.original;
 
       return (
         <DropdownMenu>
@@ -95,7 +101,7 @@ export const columns: ColumnDef<AgencyCustomerTableData>[] = [
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => {
-                navigator.clipboard.writeText(customer.email);
+                navigator.clipboard.writeText(agent.email);
                 toast.success('Email copié !');
               }}
               className="flex items-center gap-3"
@@ -104,19 +110,16 @@ export const columns: ColumnDef<AgencyCustomerTableData>[] = [
               <Copy className="h-4 w-4" />
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {customer.project ? (
-              <DropdownMenuItem>
-                <Link
-                  href={`/projects/${customer.project.id}`}
-                  className='className="capitalize flex items-center gap-3'
-                >
-                  Consulter le projet
-                  <FolderGit2 className="h-4 w-4" />
-                </Link>
-              </DropdownMenuItem>
-            ) : null}
-            <DropdownMenuItem className="capitalize flex items-center gap-3">
-              Supprimer le client
+            <DropdownMenuItem className="flex items-center gap-3">
+              Modifier le rôle
+              <Bolt className="h-4 w-4" />
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-3">
+              Modifier le groupe
+              <Users className="h-4 w-4" />
+            </DropdownMenuItem>
+            <DropdownMenuItem className="flex items-center gap-3">
+              Supprimer l&apos;agent
               <Trash className="h-4 w-4" />
             </DropdownMenuItem>
           </DropdownMenuContent>

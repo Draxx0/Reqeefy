@@ -9,7 +9,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../../client.index';
+} from '../../../components/client.index';
 import {
   Input,
   Select,
@@ -20,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
   Textarea,
-} from '../../server.index';
+} from '../../../components/server.index';
 import { Agency } from '@reqeefy/types';
 import { AGENCY_ACTIVITIES_AREA } from '@/constants';
 

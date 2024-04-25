@@ -1,18 +1,15 @@
 import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
-import { agencyService, authService } from '@/services';
+import { agencyService } from '@/services';
 import { renderErrorToast } from '@/utils';
 import { queryClient } from '@/utils/TanstackQueryProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Agency } from '@reqeefy/types';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 export const useAgencyUpdateInformations = ({ agency }: { agency: Agency }) => {
-  const router = useRouter();
-
   const form = useForm<z.infer<typeof agencyInformationsSchema>>({
     resolver: zodResolver(agencyInformationsSchema),
     defaultValues: {

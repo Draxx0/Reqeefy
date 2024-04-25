@@ -3,7 +3,13 @@
 import { Agency } from '@reqeefy/types';
 import { useMemo } from 'react';
 import { AgencySettingsInformationsForm } from './AgencySettingsInformationsForm';
-import { Button } from '../../client.index';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  Button,
+} from '../../../components/client.index';
 import {
   Alert,
   AlertDescription,
@@ -12,8 +18,9 @@ import {
   AvatarFallback,
   AvatarImage,
   PageHeader,
-} from '../../server.index';
+} from '../../../components/server.index';
 import { FolderGit2, Pickaxe, User } from 'lucide-react';
+import { AgencyGroupsTable } from './agency-groups/AgencyGroupsTable';
 
 export const AgencySettingsInformationsContent = ({
   agency,
@@ -31,7 +38,7 @@ export const AgencySettingsInformationsContent = ({
     }, 0);
 
     if (count === 0) {
-      return `${agency.name} n'a encore encore aucun client.`;
+      return `${agency.name} n'a encore aucun client.`;
     }
 
     return `${agency.name} a ${count} client(s).`;
@@ -104,6 +111,7 @@ export const AgencySettingsInformationsContent = ({
           <AlertDescription>{projectsCount}</AlertDescription>
         </Alert>
       </div>
+
       <div className="flex items-center gap-12">
         <Avatar className="w-20 h-20 rounded-xl">
           <AvatarImage
@@ -117,7 +125,7 @@ export const AgencySettingsInformationsContent = ({
         </Avatar>
 
         <div className="space-y-2">
-          <h2 className="text-lg">Photo de profile</h2>
+          <h2 className="text-lg">Photo de profil</h2>
           <div className="flex gap-4">
             <Button>Changer la photo</Button>
             {!agency.agency_photo && (
@@ -130,7 +138,19 @@ export const AgencySettingsInformationsContent = ({
           </p>
         </div>
       </div>
-      <AgencySettingsInformationsForm agency={agency} />
+
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger>
+            Modifier les informations de l&apos;agence
+          </AccordionTrigger>
+          <AccordionContent>
+            <AgencySettingsInformationsForm agency={agency} />
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <AgencyGroupsTable agency={agency} />
     </div>
   );
 };

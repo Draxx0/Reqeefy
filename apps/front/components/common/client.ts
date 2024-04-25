@@ -12,3 +12,5 @@ export * from './components/tabs';
 export * from './components/dropdown-menu';
 export * from './components/checkbox';
 export * from './components/dialog';
+export * from './components/accordion';
+export * from './components/paginationComponent';

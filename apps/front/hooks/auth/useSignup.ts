@@ -1,3 +1,5 @@
+'use client';
+
 import { registerSchema } from '@/schemas';
 import { agencyService } from '@/services';
 import { useAuthStore } from '@/stores';

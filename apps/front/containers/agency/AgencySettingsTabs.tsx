@@ -4,15 +4,22 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/client.index';
+import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 
 export const AgencySettingsTabs = ({ children }: PropsWithChildren<{}>) => {
   return (
     <Tabs defaultValue="agency" className="space-y-12">
-      <TabsList>
-        <TabsTrigger value="agency">Agence</TabsTrigger>
-        <TabsTrigger value="accounts">Comptes</TabsTrigger>
-        <TabsTrigger value="project">Projets</TabsTrigger>
+      <TabsList className="sticky top-4">
+        <TabsTrigger value="agency">
+          <Link href={'/settings'}>Agence</Link>
+        </TabsTrigger>
+        <TabsTrigger value="accounts">
+          <Link href={'/settings/accounts'}>Comptes</Link>
+        </TabsTrigger>
+        <TabsTrigger value="project">
+          <Link href={'/settings/projects'}>Projets</Link>
+        </TabsTrigger>
       </TabsList>
       {children}
     </Tabs>

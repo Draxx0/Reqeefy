@@ -1,6 +1,6 @@
-import { Agency } from '../agency';
+import { AgencyGroup } from '../agency';
 
 export interface Agent {
   id: string;
-  agency_groups: Agency;
+  agency_groups: AgencyGroup[];
 }
