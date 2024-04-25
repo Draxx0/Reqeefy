@@ -141,8 +141,6 @@ export class TicketsService {
 
     const customer = await this.customerService.findOneByUserId(userId);
 
-    console.log(customer);
-
     const newTicket = this.ticketRepository.create({
       title,
       customers: [{ id: customer.id }],
