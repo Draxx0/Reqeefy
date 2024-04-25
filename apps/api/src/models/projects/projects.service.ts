@@ -86,13 +86,19 @@ export class ProjectsService {
   }
 
   async create(body: CreateProjectDTO, agencyId: string) {
-    const { name, agents_referents_ids, ticket_subject_categories } = body;
+    const {
+      name,
+      agents_referents_ids,
+      ticket_subject_categories,
+      description,
+    } = body;
 
     const agents_referents =
       await this.agentsService.findAllByIds(agents_referents_ids);
 
     const project = this.projectsRepository.create({
       name,
+      description,
       agency: { id: agencyId },
       agents_referents,
       ticket_subject_categories,

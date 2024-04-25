@@ -5,6 +5,9 @@ export class CreateProjectDTO {
   @IsString()
   name: string;
 
+  @IsString()
+  description: string;
+
   // Optionnally PHOTO_URL
 
   @IsArray()
