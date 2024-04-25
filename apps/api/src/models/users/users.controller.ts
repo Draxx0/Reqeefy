@@ -17,7 +17,7 @@ import { UserQueries } from './queries/queries';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { TokenObject, UserRequest } from 'src/common/types/api';
-import { Roles } from 'src/decorator/roles.decorator';
+import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('users')
@@ -46,7 +46,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @Roles('superadmin')
+  @Roles(...SUPERADMINS_PERMISSIONS)
   deleteOne(@Param('id') id: string): Promise<DeleteResult> {
     return this.usersService.deleteOne(id);
   }

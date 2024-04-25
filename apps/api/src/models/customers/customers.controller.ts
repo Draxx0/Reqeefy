@@ -15,7 +15,7 @@ import { CustomerEntity } from './entities/customer.entity';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { UsersService } from '../users/users.service';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { Roles } from 'src/decorator/roles.decorator';
+import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 
 @Controller('customers')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -26,7 +26,7 @@ export class CustomersController {
   ) {}
 
   @Post('/agency/:id')
-  @Roles('superadmin')
+  @Roles(...SUPERADMINS_PERMISSIONS)
   async create(
     @Body() createCustomerDto: CreateCustomerDto[],
     @Param('id') id: string,

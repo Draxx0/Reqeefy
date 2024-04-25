@@ -15,9 +15,11 @@ import { ProjectQueries } from './queries/queries';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { AddCustomersToProjectDTO } from './dto/add-customers-to-project.dto';
 import { CustomersService } from '../customers/customers.service';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { AGENTS_PERMISSIONS, Roles } from 'src/decorator/roles.decorator';
 
 @Controller('projects')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class ProjectsController {
   constructor(
     private readonly projectsService: ProjectsService,
@@ -33,10 +35,12 @@ export class ProjectsController {
   }
 
   @Get('/agency/:id')
+  @Roles(...AGENTS_PERMISSIONS)
   async findAllByAgency(
     @Query() queries: ProjectQueries,
     @Param('id') id: string,
   ) {
+    console.log('request project');
     return await this.projectsService.findAllByAgency(queries, id);
   }
 

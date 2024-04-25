@@ -13,7 +13,7 @@ import { AgencyQueries } from './queries/queries';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { Roles } from 'src/decorator/roles.decorator';
+import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { AgencyEntity } from './entities/agency.entity';
 
 @Controller('agencies')
@@ -41,7 +41,7 @@ export class AgenciesController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('superadmin')
+  @Roles(...SUPERADMINS_PERMISSIONS)
   update(
     @Param('id') id: string,
     @Body() updateAgencyDto: Partial<AgencyEntity>,
