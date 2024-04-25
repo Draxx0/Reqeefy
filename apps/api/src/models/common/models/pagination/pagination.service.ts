@@ -17,8 +17,6 @@ export class PaginationService {
     const total_pages = Math.ceil(total / limit_per_page);
     const nextPage = page < total_pages ? page + 1 : null;
     const previousPage = page > 1 ? page - 1 : null;
-    const offset = (page - 1) * limit_per_page;
-    const paginatedData = data.slice(offset, offset + limit_per_page);
 
     return {
       pagination: {
@@ -28,7 +26,7 @@ export class PaginationService {
         nextPage,
         previousPage,
       },
-      data: paginatedData,
+      data,
     };
   }
 }
