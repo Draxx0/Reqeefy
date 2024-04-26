@@ -1,8 +1,7 @@
-import { Agent } from 'http';
 import { UploadFile } from '../upload-file';
 import { ProjectStatus } from './enum';
 import { Ticket, TicketSubjectCategory } from '../ticket';
-import { Customer } from '../user';
+import { Agent, Customer } from '../user';
 import { Agency } from '../agency';
 
 export interface Project {
