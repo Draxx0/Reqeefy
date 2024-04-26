@@ -79,3 +79,46 @@ h5,
 h6 {
   font-family: var(--font-belanosima);
 }
+
+/* MULTI SELECT REACT LIBRARY CSS OVERWRITES */
+
+.multiselect-container .searchWrapper {
+  border: none;
+}
+
+.optionListContainer {
+  left: -2px;
+  width: 100.4% !important;
+  border: #333333;
+}
+
+.chip {
+  background: var(--primary-700) !important;
+  color: white !important;
+  margin-bottom: 0 !important;
+}
+
+.multiSelectContainer input::placeholder {
+  color: var(--gray-700) !important;
+  transition: all 0.2s ease;
+}
+
+.multiSelectContainer input:focus::placeholder {
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.multiSelectContainer ul {
+  border-left: 2px solid var(--gray-700) !important;
+  border-right: 2px solid var(--gray-700) !important;
+  border-bottom: 2px solid var(--gray-700) !important;
+  border-top: none !important;
+}
+
+.multiSelectContainer li:hover {
+  background: var(--primary-500) !important;
+}
+
+.highlightOption {
+  background: var(--primary-500) !important;
+}

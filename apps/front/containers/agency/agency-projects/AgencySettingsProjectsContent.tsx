@@ -5,6 +5,7 @@ import { Input, PageHeader } from '../../../components/server.index';
 import { useGetProjects } from '@/hooks';
 import {
   Button,
+  CreateProjectForm,
   Dialog,
   DialogContent,
   DialogDescription,
@@ -44,7 +45,7 @@ export const AgencySettingsProjectsContent = ({
     if (searchTerm) console.log(searchTerm);
   }, [searchTerm]);
 
-  const pageSize = 3;
+  const pageSize = 6;
 
   const {
     data: projects,
@@ -100,17 +101,19 @@ export const AgencySettingsProjectsContent = ({
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Créer un nouveau projet</DialogTitle>
-                <DialogDescription>
+              <DialogHeader className="mb-4">
+                <DialogTitle className="text-2xl">
+                  Créer un nouveau projet
+                </DialogTitle>
+                <DialogDescription className="text-gray-900">
                   Remplissez les informations nécessaires pour créer un nouveau
                   projet.
                 </DialogDescription>
               </DialogHeader>
-              {/* FORM */}
-              <DialogFooter>
+              <CreateProjectForm agency={agency} />
+              {/* <DialogFooter>
                 <Button type="submit">Save changes</Button>
-              </DialogFooter>
+              </DialogFooter> */}
             </DialogContent>
           </Dialog>
           <Button

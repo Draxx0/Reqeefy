@@ -1,4 +1,5 @@
-'use client';import * as React from 'react';
+'use client';
+import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib';
@@ -40,6 +41,7 @@ const AttachmentButton = React.forwardRef<
         })
       )}
       onClick={onClick}
+      type="button"
       ref={ref}
     >
       <Plus />
