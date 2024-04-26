@@ -44,6 +44,12 @@ export class ProjectsController {
     return await this.projectsService.findAllByAgency(queries, id);
   }
 
+  @Get(':id')
+  @Roles(...AGENTS_PERMISSIONS)
+  async findOne(@Param('id') id: string) {
+    return await this.projectsService.findOneById(id);
+  }
+
   @Put(':id')
   async addCustomersToProject(
     @Param('id') id: string,

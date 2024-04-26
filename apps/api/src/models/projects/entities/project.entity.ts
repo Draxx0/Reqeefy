@@ -51,9 +51,7 @@ export class ProjectEntity extends TimestampEntity {
   })
   tickets: TicketEntity[];
 
-  @OneToMany(() => CustomerEntity, (customer) => customer.project, {
-    cascade: ['insert', 'update'],
-  })
+  @OneToMany(() => CustomerEntity, (customer) => customer.project)
   customers: CustomerEntity[];
 
   @ManyToOne(() => AgencyEntity, (agency) => agency.projects, {

@@ -37,6 +37,7 @@ export class TicketsController {
     @Param('id') id: string,
     @Req() req: UserRequest,
   ) {
+    console.log(req.user.id);
     const user = await this.usersService.findOneById(req.user.id);
 
     if (!user.customer) {
@@ -46,7 +47,7 @@ export class TicketsController {
       );
     }
 
-    return this.ticketsService.create(createTicketDto, id);
+    return this.ticketsService.create(createTicketDto, id, user.id);
   }
 
   @Post(':id/messages')

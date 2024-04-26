@@ -136,8 +136,12 @@ export class TicketsService {
     return ticket;
   }
 
-  async create(createTicketDto: CreateTicketDto, projectId: string) {
-    const { userId, message, title } = createTicketDto;
+  async create(
+    createTicketDto: CreateTicketDto,
+    projectId: string,
+    userId: string,
+  ) {
+    const { message, title } = createTicketDto;
 
     const customer = await this.customerService.findOneByUserId(userId);
 

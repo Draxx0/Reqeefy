@@ -75,6 +75,7 @@ export class ProjectsService {
       .leftJoinAndSelect('project.agents_referents', 'agents_referents')
       .leftJoinAndSelect('project.customers', 'customers')
       .leftJoinAndSelect('project.tickets', 'tickets')
+      .leftJoinAndSelect('agents_referents.user', 'user')
       .where('project.id = :id', { id })
       .getOne();
 

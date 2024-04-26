@@ -94,6 +94,7 @@ export class UsersService {
       .getOne();
 
     if (!user) {
+      console.log('User not found');
       throw new HttpException('User not found', 404);
     }
 
