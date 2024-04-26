@@ -25,6 +25,21 @@ const getAll = async (
   return response.json();
 };
 
+const getOne = async (projectId: string): Promise<Project> => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/projects/${projectId}`,
+    API_PARAMS.GET(authService.getToken())
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      'Une erreur est survenue lors de la récupération du projet.'
+    );
+  }
+
+  return response.json();
+};
+
 const create = async (
   data: z.infer<typeof createProjectSchema>,
   agencyId: string
@@ -43,5 +58,6 @@ const create = async (
 
 export const projectsService = {
   getAll,
+  getOne,
   create,
 };
