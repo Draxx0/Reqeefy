@@ -1,4 +1,4 @@
-import { IsArray, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 import { TicketSubjectCategoryEntity } from 'src/models/ticket-subject-categories/entities/ticket-subject-category.entity';
 
 export class CreateProjectDTO {
@@ -10,10 +10,14 @@ export class CreateProjectDTO {
 
   // Optionnally PHOTO_URL
 
+  @IsOptional()
   @IsArray()
   ticket_subject_categories: TicketSubjectCategoryEntity[];
 
   @IsArray()
-  @IsString({ each: true })
+  @IsString({
+    each: true,
+    message: 'agents_referents_ids must be an array of strings',
+  })
   agents_referents_ids: string[];
 }
