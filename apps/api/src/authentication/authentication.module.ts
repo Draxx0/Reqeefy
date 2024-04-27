@@ -9,6 +9,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserPreferencesModule } from 'src/models/user-preferences/user-preferences.module';
 import { JwtUtilsModule } from './jwt/jwt-utils.module';
+import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
 
 @Module({
   imports: [
@@ -19,7 +20,12 @@ import { JwtUtilsModule } from './jwt/jwt-utils.module';
     JwtUtilsModule,
   ],
   controllers: [AuthenticationController],
-  providers: [AuthenticationService, LocalStrategy, JwtStrategy],
+  providers: [
+    AuthenticationService,
+    LocalStrategy,
+    JwtStrategy,
+    RefreshJwtStrategy,
+  ],
   exports: [AuthenticationService],
 })
 export class AuthenticationModule {}

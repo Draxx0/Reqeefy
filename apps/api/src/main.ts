@@ -12,6 +12,7 @@ async function bootstrap() {
 
   app.enableCors({
     //! Should be changed to the production client URL
+    credentials: true,
     origin: 'http://localhost:3000',
   });
 

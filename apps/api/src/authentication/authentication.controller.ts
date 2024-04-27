@@ -5,12 +5,17 @@ import { AuthenticationService } from './authentication.service';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { LocalGuard } from '../guards/local.guard';
+import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
+import { JwtUtilsService } from './jwt/jwt-utils.service';
+import { UsersService } from 'src/models/users/users.service';
 
 @Controller('auth')
 export class AuthenticationController {
   constructor(
     private authenticationService: AuthenticationService,
-    private readonly userPreferencesService: UserPreferencesService,
+    private userPreferencesService: UserPreferencesService,
+    private usersService: UsersService,
+    private jwtUtilsService: JwtUtilsService,
   ) {}
 
   @Post('signin')
@@ -33,6 +38,13 @@ export class AuthenticationController {
       email: authenticationSignupDto.email,
       password: authenticationSignupDto.password,
     });
+  }
+
+  @UseGuards(RefreshJwtAuthGuard)
+  @Post('refresh')
+  async refresh(@Req() req: UserRequest) {
+    const user = await this.usersService.findOneById(req.user.id);
+    return await this.jwtUtilsService.refreshJwtToken(user);
   }
 
   @Get('status')
