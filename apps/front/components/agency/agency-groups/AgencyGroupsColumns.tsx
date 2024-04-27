@@ -12,7 +12,7 @@ import {
 } from '@/components/client.index';
 import { AgencyGroupTableData } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal, Pen, Trash } from 'lucide-react';
+import { ArrowUpDown, MoreHorizontal, Pen, Trash, Users } from 'lucide-react';
 
 export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
   {
@@ -61,6 +61,16 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
     id: 'Agents',
     accessorKey: 'agents',
     header: 'Agents',
+    cell: ({ row }) => {
+      const agents = row.original.agents;
+
+      return (
+        <div className="flex items-center gap-2">
+          <Users className="h-4 w-4" />
+          <span>{agents.length}</span>
+        </div>
+      );
+    },
   },
   {
     id: 'actions',

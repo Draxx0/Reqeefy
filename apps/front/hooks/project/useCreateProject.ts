@@ -3,6 +3,7 @@
 import { createProjectSchema } from '@/schemas';
 import { authService, projectsService } from '@/services';
 import { renderErrorToast } from '@/utils';
+import { queryClient } from '@/utils/TanstackQueryProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -31,6 +32,9 @@ export const useCreateProject = ({ agencyId }: { agencyId: string }) => {
     },
     onSuccess(data, variables, context) {
       toast.success('Le projet a été créé avec succès');
+      queryClient.invalidateQueries({
+        queryKey: ['agency'],
+      });
       router.push(`/settings/projects/${data.id}`);
     },
   });

@@ -1,3 +1,4 @@
 export * from './common/server';
-export * from './project/ProjectCard';
+export * from './agency/agency-projects/ProjectCard';
 export * from './ticket/Ticket';
+export * from './agency/agency-projects/ProjectTicketsList';

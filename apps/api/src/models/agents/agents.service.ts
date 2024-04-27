@@ -9,7 +9,6 @@ import { UsersService } from '../users/users.service';
 import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
-import { generateRandomPassword } from 'src/utils/generateRandomPassword';
 import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 
@@ -37,7 +36,8 @@ export class AgentsService {
   async createUserAgent(body: CreateAgentDTO, id: string) {
     const createUserBody: AuthenticationSignupDto = {
       email: body.email,
-      password: generateRandomPassword(),
+      password: body.password,
+      // password: generateRandomPassword(),
       first_name: body.first_name,
       last_name: body.last_name,
     };
@@ -53,6 +53,11 @@ export class AgentsService {
 
     const agent = this.agentRepository.create({
       user: updatedUser,
+      agency_groups: [
+        {
+          id: body.agency_group_id,
+        },
+      ],
     });
 
     return this.agentRepository.save(agent);

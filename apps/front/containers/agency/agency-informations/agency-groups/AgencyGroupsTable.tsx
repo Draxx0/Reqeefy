@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/server.index';
 import { useGetAgencyGroups } from '@/hooks';
 import { Agency } from '@reqeefy/types';
 import { agencyGroupsColumns } from '../../../../components/agency/agency-groups/AgencyGroupsColumns';
+import { CreateAgencyGroupForm } from '@/components/agency';
 
 export const AgencyGroupsTable = ({ agency }: { agency: Agency }) => {
   const {
@@ -14,7 +15,7 @@ export const AgencyGroupsTable = ({ agency }: { agency: Agency }) => {
   } = useGetAgencyGroups({ agency });
 
   //! create data table skeleton
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || !agencyGroups) return <div>Loading...</div>;
 
   return (
     <div className="space-y-4">
@@ -23,13 +24,10 @@ export const AgencyGroupsTable = ({ agency }: { agency: Agency }) => {
         size="small"
         description="Gérer les groupes d'agents de votre agence. Pôle communication, commercial, développement, etc."
       />
-      {agencyGroups && (
-        <DataTable
-          columns={agencyGroupsColumns}
-          data={agencyGroups}
-          isAccessible
-        />
-      )}
+
+      <DataTable columns={agencyGroupsColumns} data={agencyGroups}>
+        <CreateAgencyGroupForm agency={agency} />
+      </DataTable>
     </div>
   );
 };

@@ -9,9 +9,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '../client.index';
+} from '../../client.index';
 import Multiselect from 'multiselect-react-dropdown';
-import { Input, Textarea } from '../server.index';
+import { Input, Textarea } from '../../server.index';
 import { useEffect, useState } from 'react';
 import { useGetAgents } from '@/hooks/user';
 import { Agency } from '@reqeefy/types';
@@ -32,12 +32,6 @@ export const CreateProjectForm = ({ agency }: { agency: Agency }) => {
     const agents_ids = selectedList.map((agent) => agent.value);
     form.setValue('agents_referents_ids', agents_ids as never[]);
   };
-
-  useEffect(() => {
-    console.log(form.getValues());
-
-    console.log(form.formState.isSubmitting);
-  }, [form.watch()]);
 
   return (
     <Form {...form}>

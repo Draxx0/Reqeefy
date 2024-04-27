@@ -1,11 +1,11 @@
-import { Belanosima, Nunito_Sans } from 'next/font/google';
+import { Montserrat, Nunito_Sans } from 'next/font/google';
 
-const belanosima = Belanosima({
+const montserrat = Montserrat({
   weight: ['400', '700'],
   style: ['normal'],
   display: 'swap',
   subsets: ['latin'],
-  variable: '--font-belanosima',
+  variable: '--font-montserrat',
 });
 
 const nunito_Sans = Nunito_Sans({
@@ -17,7 +17,7 @@ const nunito_Sans = Nunito_Sans({
 });
 
 const fonts = {
-  belanosima,
+  montserrat,
   nunito_Sans,
 };
 

@@ -50,7 +50,7 @@ const DialogContent = React.forwardRef<
           width={256}
           height={256}
           alt="lignes de couleurs"
-          className="absolute right-0 bottom-0 pointer-events-none select-none"
+          className="absolute right-0 bottom-0 -z-10 pointer-events-none select-none"
         />
         <div className="p-6 max-w-5xl mx-auto">{children}</div>
       </div>
@@ -69,7 +69,7 @@ const DialogHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      'flex flex-col space-y-1.5 text-center sm:text-left',
+      'flex flex-col items-center mb-8 space-y-1.5 text-center sm:text-left',
       className
     )}
     {...props}
@@ -98,7 +98,7 @@ const DialogTitle = React.forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={cn(
-      'text-lg font-semibold leading-none tracking-tight',
+      'text-xl font-semibold leading-none tracking-tight',
       className
     )}
     {...props}
@@ -112,7 +112,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn('text-sm text-muted-foreground', className)}
+    className={cn('text-sm text-gray-900', className)}
     {...props}
   />
 ));

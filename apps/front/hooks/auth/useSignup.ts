@@ -19,7 +19,6 @@ export const useSignup = () => {
     resolver: zodResolver(registerSchema),
     defaultValues: {
       name: undefined,
-      agency_groups: ['dev'],
       description: undefined,
       email: undefined,
       first_name: undefined,

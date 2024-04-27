@@ -135,26 +135,6 @@ export const SignupForm = () => {
               />
               <FormField
                 control={form.control}
-                name="agency_groups"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-lg font-bold">
-                      Définir les postes de l’entreprise
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Développeur, Designer, etc."
-                        type="text"
-                        {...field}
-                        className="w-full"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>

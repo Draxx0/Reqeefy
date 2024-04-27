@@ -35,7 +35,10 @@ import { EyeOff, Lock } from 'lucide-react';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  isAccessible?: boolean;
+  isAccessible?: {
+    value: boolean;
+    message?: string;
+  };
   hasEmailFilter?: boolean;
   children?: React.ReactNode;
 }
@@ -43,7 +46,9 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  isAccessible,
+  isAccessible = {
+    value: true,
+  },
   hasEmailFilter = false,
   children,
 }: DataTableProps<TData, TValue>) {
@@ -73,19 +78,16 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className={`relative`}>
-      {!isAccessible && (
+      {!isAccessible.value && (
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex items-center gap-3">
             <Lock className="text-primary-700" />
-            <p className="text-lg text-center">
-              Veuillez d&apos;abord ajouter un premier projet avant d&apos;aller
-              plus loin.
-            </p>
+            <p className="text-lg text-center">{isAccessible.message}</p>
           </div>
         </div>
       )}
       <div
-        className={`space-y-4 ${!isAccessible ? 'blur-[10px] pointer-events-none select-none' : ''}`}
+        className={`space-y-4 ${!isAccessible.value ? 'blur-[10px] pointer-events-none select-none' : ''}`}
       >
         <div
           className={`flex w-full items-center ${!hasEmailFilter ? 'justify-end' : 'justify-between'}`}

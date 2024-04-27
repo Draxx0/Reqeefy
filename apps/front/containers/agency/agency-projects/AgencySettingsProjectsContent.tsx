@@ -63,8 +63,8 @@ export const AgencySettingsProjectsContent = ({
   });
 
   //! Should be updated to a skeleton loader & error message
-  if (isLoading) return <div>Loading...</div>;
-  if (isError || !projects) return <div>Error loading projects</div>;
+  if (isLoading || !projects) return <div>Loading...</div>;
+  if (isError) return <div>Error loading projects</div>;
 
   const totalPages = Math.ceil(projects.pagination.total / pageSize);
 

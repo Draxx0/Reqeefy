@@ -127,8 +127,10 @@ export const AgencySettingsInformationsContent = ({
         <div className="space-y-2">
           <h2 className="text-lg">Photo de profil</h2>
           <div className="flex gap-4">
-            <Button>Changer la photo</Button>
-            {!agency.agency_photo && (
+            <Button>
+              {agency.agency_photo ? 'Changer la' : 'Ajouter une'} photo
+            </Button>
+            {agency.agency_photo && (
               <Button variant={'destructive'}>Supprimer</Button>
             )}
           </div>

@@ -1,11 +1,11 @@
 import { API_PARAMS } from '@/constants';
-import { createAgencyCredentials } from '@/types/agency';
 import { authService } from '../auth/auth.service';
 import { Agency } from '@reqeefy/types';
 import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
 import { z } from 'zod';
+import { registerSchema } from '@/schemas';
 
-const create = async (data: createAgencyCredentials) => {
+const create = async (data: z.infer<typeof registerSchema>) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/agencies`,
     API_PARAMS.POST(data, '')

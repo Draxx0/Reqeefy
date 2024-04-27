@@ -1,9 +1,11 @@
-import { Message } from '../message/message';import { Project } from '../project/project';
+import { Timestamps } from '../common';
+import { Message } from '../message/message';
+import { Project } from '../project/project';
 import { Agent } from '../user/agent';
 import { Customer } from '../user/customer';
 import { TicketPriority, TicketStatus } from './enum';
 
-export interface Ticket {
+export interface Ticket extends Timestamps {
   id: string;
   title: string;
   subject: string;

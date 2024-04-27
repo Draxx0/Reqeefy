@@ -1,8 +1,8 @@
 import { Project } from '@reqeefy/types';
-import { Card, CardContent, CardFooter, CardHeader } from '../server.index';
+import { Card, CardContent, CardFooter, CardHeader } from '../../server.index';
 import { TicketSlash, User } from 'lucide-react';
 import Image from 'next/image';
-import { ButtonLink } from '../client.index';
+import { ButtonLink } from '../../client.index';
 
 export const ProjectCard = ({ project }: { project: Project }) => {
   return (

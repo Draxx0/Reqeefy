@@ -85,7 +85,7 @@ export const PaginationComponent = ({
           <PaginationNext
             onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
             className={
-              currentPage === totalPages
+              currentPage === totalPages || totalPages === 0
                 ? 'opacity-50 cursor-not-allowed pointer-events-none select-none'
                 : ''
             }

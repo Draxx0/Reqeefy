@@ -1,3 +1,5 @@
+import { Timestamps } from '../common';
+
 export type ViewMode = 'grid' | 'row';
 
-export interface UserPreferences {}
+export interface UserPreferences extends Timestamps {}

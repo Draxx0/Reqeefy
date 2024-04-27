@@ -20,12 +20,6 @@ const registerSchema = z.object({
       message: 'Veuillez entrer une URL valide',
     })
     .optional(),
-  agency_groups: z.array(z.string()).min(1, {
-    message: 'Veuillez choisir au moins un posts',
-  }),
-  // agency_groups: z.string().min(1, {
-  //   message: 'Veuillez choisir au moins un posts',
-  // }),
   description: z
     .string()
     .min(1, {

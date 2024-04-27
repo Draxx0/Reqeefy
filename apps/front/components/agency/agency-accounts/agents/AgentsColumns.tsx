@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/client.index';
+import { Badge } from '@/components/server.index';
 import { AgencyAgentTableData } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
 import {
@@ -83,6 +84,23 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
     id: 'Groupe',
     accessorKey: 'group',
     header: 'Groupe',
+    cell: ({ row }) => {
+      const agent = row.original;
+
+      console.log(agent);
+
+      return agent.groups.length > 0 ? (
+        <div className="flex items-center gap-2">
+          {agent.groups.map((group) => (
+            <Badge key={group.id} variant="outline">
+              {group.name}
+            </Badge>
+          ))}
+        </div>
+      ) : (
+        <span>Aucun</span>
+      );
+    },
   },
   {
     id: 'actions',

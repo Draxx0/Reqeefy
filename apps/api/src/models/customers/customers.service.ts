@@ -21,32 +21,22 @@ export class CustomersService {
     private readonly usersService: UsersService,
   ) {}
 
-  async create(body: CreateCustomerDto[], agencyId: string) {
-    const signedUsers = await Promise.all(
-      body.map(async (user) => {
-        return await this.authenticationService.signup(user);
-      }),
-    );
+  async create(body: CreateCustomerDto, agencyId: string) {
+    const signedUser = await this.authenticationService.signup(body);
 
-    const updatedUsers = await Promise.all(
-      signedUsers.map(async (user) => {
-        return await this.usersService.updateUserAndInsertAgencyRelation(
-          user,
-          agencyId,
-          'customer',
-        );
-      }),
-    );
+    const updatedUser =
+      await this.usersService.updateUserAndInsertAgencyRelation(
+        signedUser,
+        agencyId,
+        'customer',
+      );
 
-    const customers = updatedUsers.map((user) => {
-      return this.customerRepository.create({
-        user,
-      });
+    const customer = this.customerRepository.create({
+      user: updatedUser,
+      project: { id: body.project_id },
     });
 
-    return Promise.all(
-      customers.map((customer) => this.customerRepository.save(customer)),
-    );
+    return this.customerRepository.save(customer);
   }
 
   async findAll(

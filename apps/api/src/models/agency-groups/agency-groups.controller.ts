@@ -20,9 +20,9 @@ export class AgencyGroupsController {
     return this.agencyGroupsService.findAllByAgency(id);
   }
 
-  @Post()
+  @Post('/agency/:id')
   @Roles(...SUPERADMINS_PERMISSIONS)
-  create(@Body() createAgencyGroupDto: CreateAgencyGroupDTO) {
-    return this.agencyGroupsService.create(createAgencyGroupDto);
+  create(@Param('id') id: string, @Body() body: CreateAgencyGroupDTO) {
+    return this.agencyGroupsService.create(body, id);
   }
 }

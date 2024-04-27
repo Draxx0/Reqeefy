@@ -14,3 +14,4 @@ export * from './components/checkbox';
 export * from './components/dialog';
 export * from './components/accordion';
 export * from './components/paginationComponent';
+export * from './components/data-table';

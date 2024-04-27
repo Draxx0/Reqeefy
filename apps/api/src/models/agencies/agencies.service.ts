@@ -69,6 +69,10 @@ export class AgenciesService {
     return await this.agencyRepository
       .createQueryBuilder('agency')
       .leftJoinAndSelect('agency.users', 'users')
+      .leftJoinAndSelect('users.agent', 'agent')
+      .leftJoinAndSelect('agent.agency_groups', 'agent_groups')
+      .leftJoinAndSelect('users.customer', 'customer')
+      .leftJoinAndSelect('customer.project', 'project')
       .leftJoinAndSelect('agency.agency_photo', 'agency_photo')
       .leftJoinAndSelect('agency.agency_groups', 'agency_groups')
       .leftJoinAndSelect('agency.projects', 'projects')
@@ -86,7 +90,6 @@ export class AgenciesService {
       description,
       name,
       website_url,
-      agency_groups,
     } = body;
 
     const signedUser = await this.authenticationService.signup({
@@ -102,13 +105,6 @@ export class AgenciesService {
       name,
       website_url,
     });
-
-    const createdAgencyGroups = await this.createAgencyGroups(
-      agency_groups,
-      agency.id,
-    );
-
-    agency.agency_groups = createdAgencyGroups;
 
     await this.agencyRepository.save(agency);
 
@@ -138,10 +134,12 @@ export class AgenciesService {
   private async createAgencyGroups(agency_groups: string[], agencyId: string) {
     return await Promise.all(
       agency_groups.map((group_name) =>
-        this.agencyGroupsService.create({
-          name: group_name,
+        this.agencyGroupsService.create(
+          {
+            name: group_name,
+          },
           agencyId,
-        }),
+        ),
       ),
     );
   }

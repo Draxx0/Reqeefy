@@ -80,14 +80,22 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
     id: 'Projet',
     accessorKey: 'project',
     header: 'Projet',
+    cell: ({ row }) => {
+      const customer = row.original;
+
+      if (customer.project) {
+        return customer.project.name;
+      }
+
+      return 'Aucun';
+    },
   },
   {
     id: 'actions',
     cell: ({ row }) => {
       const customer = row.original;
 
-      console.log(customer);
-
+      console.log('customer', customer);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -112,7 +120,7 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
             {customer.project ? (
               <DropdownMenuItem>
                 <Link
-                  href={`/projects/${customer.project.id}`}
+                  href={`/settings/projects/${customer.project.id}`}
                   className='className="capitalize flex items-center gap-3'
                 >
                   Consulter le projet

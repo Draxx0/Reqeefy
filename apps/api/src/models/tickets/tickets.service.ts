@@ -88,6 +88,9 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('messages.user', 'user')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .leftJoinAndSelect('messages.upload_files', 'upload_files')
       .leftJoinAndSelect('ticket.project', 'project')
       .where('project.id = :projectId', { projectId });
 

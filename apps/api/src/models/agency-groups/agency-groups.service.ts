@@ -27,10 +27,10 @@ export class AgencyGroupsService {
     return this.agencyGroupRepository.findOneBy({ id });
   }
 
-  create(createAgencyGroupDto: CreateAgencyGroupDTO) {
+  create(body: CreateAgencyGroupDTO, agencyId: string) {
     const agencyGroup = this.agencyGroupRepository.create({
-      ...createAgencyGroupDto,
-      agency: { id: createAgencyGroupDto.agencyId },
+      ...body,
+      agency: { id: agencyId },
     });
 
     return this.agencyGroupRepository.save(agencyGroup);

@@ -20,6 +20,7 @@ export const NAV_BOTTOM_LINKS: Array<HeaderLink> = [
     path: '/settings',
     tooltipLabel: 'Paramètres',
     icon: Icons.settings,
+    needsPermissions: ['agent', 'distributor', 'superadmin'],
   },
   // {
   //   path: '/user-settings',

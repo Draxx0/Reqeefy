@@ -15,9 +15,11 @@ import { AgentQueries } from './queries/queries';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
 import { AddToAgencyGroupDTO } from './dto/add-to-agency-group.dto';
+import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('agents')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class AgentsController {
   constructor(private readonly agentsService: AgentsService) {}
 
@@ -29,13 +31,12 @@ export class AgentsController {
   }
 
   @Post('/agency/:id')
+  @Roles(...SUPERADMINS_PERMISSIONS)
   async createUsersAgent(
-    @Body() body: CreateAgentDTO[],
+    @Body() body: CreateAgentDTO,
     @Param('id') id: string,
   ) {
-    return await Promise.all(
-      body.map((agent) => this.agentsService.createUserAgent(agent, id)),
-    );
+    return await this.agentsService.createUserAgent(body, id);
   }
 
   @Post('/user/:id')
