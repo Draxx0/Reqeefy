@@ -45,6 +45,9 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('messages.user', 'user')
+      .leftJoinAndSelect('messages.upload_files', 'upload_files')
+      .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('ticket.project', 'project')
       .where('project.agency = :agencyId', { agencyId });
 
@@ -52,7 +55,8 @@ export class TicketsService {
       query.where('ticket.title LIKE :search', { search: `%${search}%` });
     }
 
-    if (distributed) {
+    if (typeof distributed === 'boolean') {
+      console.log('distributed', distributed);
       query.andWhere('ticket.distributed = :distributed', { distributed });
     }
 
@@ -89,8 +93,8 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.messages', 'messages')
       .leftJoinAndSelect('messages.user', 'user')
-      .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('messages.upload_files', 'upload_files')
+      .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('ticket.project', 'project')
       .where('project.id = :projectId', { projectId });
 

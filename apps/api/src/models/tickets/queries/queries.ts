@@ -1,4 +1,5 @@
 import { IsBoolean, IsIn, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { PaginateQueries } from 'src/models/common/queries/pagination.queries';
 
 export class TicketQueries extends PaginateQueries {
@@ -16,5 +17,10 @@ export class TicketQueries extends PaginateQueries {
 
   @IsOptional()
   @IsBoolean()
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  })
   distributed?: boolean;
 }

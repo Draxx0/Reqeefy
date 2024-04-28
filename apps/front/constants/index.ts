@@ -1,6 +1,6 @@
 export * from './agency/agency';
 export * from './agent/agent';
-export * from './api';
+export * from './pagination';
 export * from './app.urls';
 export * from './header.links';
 export * from './tanstackQuery';

@@ -37,7 +37,7 @@ export class UsersController {
     @Param('id') id: string,
     @Body() body: UpdateUserDto,
     @Req() req: UserRequest,
-  ): Promise<TokenObject> {
+  ) {
     return await this.usersService.updateUserProfile({
       userId: id,
       req,

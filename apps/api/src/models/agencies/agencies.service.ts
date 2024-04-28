@@ -80,7 +80,9 @@ export class AgenciesService {
       .getOne();
   }
 
-  async createWithNewUser(body: CreateAgencyWithNewUserDto) {
+  async createWithNewUser(
+    body: CreateAgencyWithNewUserDto,
+  ): Promise<UserEntity> {
     const {
       email,
       first_name,
@@ -119,10 +121,12 @@ export class AgenciesService {
 
     await this.userRepository.save(updatedUser);
 
-    return await this.authenticationService.signin({
+    const user = await this.authenticationService.signin({
       email,
       password,
     });
+
+    return user;
   }
 
   async update(id: string, body: Partial<AgencyEntity>) {

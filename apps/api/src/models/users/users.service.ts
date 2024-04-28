@@ -69,6 +69,7 @@ export class UsersService {
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('user.agent', 'agent')
       .leftJoinAndSelect('user.customer', 'customer')
+      .leftJoinAndSelect('customer.project', 'project')
       .leftJoinAndSelect('user.agency', 'agency')
       .leftJoinAndSelect('user.messages', 'messages')
       .leftJoinAndSelect('user.preferences', 'preferences')
@@ -94,7 +95,6 @@ export class UsersService {
       .getOne();
 
     if (!user) {
-      console.log('User not found');
       throw new HttpException('User not found', 404);
     }
 
@@ -150,6 +150,10 @@ export class UsersService {
 
     const updatedUser = await this.updateSelectedOne(user, body);
 
-    return await this.jwtUtilsService.generateJwtToken(updatedUser);
+    return await this.jwtUtilsService.generateJwtToken({
+      email: updatedUser.email,
+      id: updatedUser.id,
+      role: updatedUser.role,
+    });
   }
 }

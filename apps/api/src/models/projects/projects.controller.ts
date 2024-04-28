@@ -40,7 +40,6 @@ export class ProjectsController {
     @Query() queries: ProjectQueries,
     @Param('id') id: string,
   ) {
-    console.log('request project');
     return await this.projectsService.findAllByAgency(queries, id);
   }
 

@@ -32,7 +32,6 @@ export const useUserSettings = () => {
       return await userService.updateUserProfile({
         userId: user.id,
         data,
-        token: authService.getToken(),
       });
     },
     onError: (error) => {

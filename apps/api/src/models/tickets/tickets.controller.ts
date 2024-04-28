@@ -20,6 +20,7 @@ import { MessagesService } from '../messages/messages.service';
 import { UsersService } from '../users/users.service';
 import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
+import { DISTRIBUTORS_PERMISSIONS, Roles } from 'src/decorator/roles.decorator';
 
 @Controller('tickets')
 @UseGuards(JwtAuthGuard)
@@ -37,7 +38,6 @@ export class TicketsController {
     @Param('id') id: string,
     @Req() req: UserRequest,
   ) {
-    console.log(req.user.id);
     const user = await this.usersService.findOneById(req.user.id);
 
     if (!user.customer) {
@@ -89,30 +89,9 @@ export class TicketsController {
     return this.ticketsService.findOneById(id);
   }
 
-  @Put(':id')
-  async distribute(
-    @Param('id') id: string,
-    @Body() body: DistributeTicketDTO,
-    @Req() req: UserRequest,
-  ) {
-    if (!req.user) throw new HttpException('Unauthorized', 401);
-
-    const user = await this.usersService.findOneById(req.user.id);
-
-    if (!user.agent) {
-      throw new HttpException(
-        'Unauthorized, customers aren"t authorize to distribute',
-        401,
-      );
-    }
-
-    if (user.role === 'agent') {
-      throw new HttpException(
-        'Unauthorized, only distributors and superadmin can distribute',
-        401,
-      );
-    }
-
+  @Put(':id/distribute')
+  @Roles(...DISTRIBUTORS_PERMISSIONS)
+  async distribute(@Param('id') id: string, @Body() body: DistributeTicketDTO) {
     return this.ticketsService.distribute(id, body);
   }
 }

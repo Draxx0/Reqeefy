@@ -6,6 +6,7 @@ import {
   Post,
   Put,
   Query,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { AgenciesService } from './agencies.service';
@@ -15,10 +16,14 @@ import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { AgencyEntity } from './entities/agency.entity';
+import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
 
 @Controller('agencies')
 export class AgenciesController {
-  constructor(private readonly agenciesService: AgenciesService) {}
+  constructor(
+    private readonly agenciesService: AgenciesService,
+    private readonly jwtUtilsService: JwtUtilsService,
+  ) {}
 
   // DEV ENDPOINT
   @Get()
@@ -35,8 +40,33 @@ export class AgenciesController {
   }
 
   @Post()
-  createWithNewUser(@Body() createAgencyDto: CreateAgencyWithNewUserDto) {
-    return this.agenciesService.createWithNewUser(createAgencyDto);
+  async createWithNewUser(
+    @Res({ passthrough: true }) response,
+    @Body() createAgencyDto: CreateAgencyWithNewUserDto,
+  ) {
+    const agencyFounder =
+      await this.agenciesService.createWithNewUser(createAgencyDto);
+
+    const { access_token, refresh_token } =
+      await this.jwtUtilsService.generateJwtToken({
+        id: agencyFounder.id,
+        email: agencyFounder.email,
+        role: agencyFounder.role,
+      });
+
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      token: access_token,
+      cookieName: 'ACCESS_TOKEN',
+    });
+
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      token: refresh_token,
+      cookieName: 'REFRESH_TOKEN',
+    });
+
+    return agencyFounder;
   }
 
   @Put(':id')

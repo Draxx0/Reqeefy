@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { TokenObject } from 'src/common/types/api';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import { UsersService } from 'src/models/users/users.service';
 import { Repository } from 'typeorm';
@@ -23,7 +22,7 @@ export class AuthenticationService {
   async signin({
     email,
     password,
-  }: AuthenticationSigninDto): Promise<TokenObject> {
+  }: AuthenticationSigninDto): Promise<UserEntity> {
     const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
@@ -39,7 +38,8 @@ export class AuthenticationService {
 
     delete user.password;
 
-    return await this.jwtUtilsService.generateJwtToken(user);
+    // return await this.jwtUtilsService.generateJwtToken(user);
+    return user;
   }
 
   async signup(body: AuthenticationSignupDto): Promise<UserEntity> {
@@ -62,5 +62,19 @@ export class AuthenticationService {
 
     const createdUser = this.userRepository.create(newUser);
     return await this.userRepository.save(createdUser);
+  }
+
+  async logout(response) {
+    response.cookie('ACCESS_TOKEN', '', {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() - 1000),
+    });
+    response.cookie('REFRESH_TOKEN', '', {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() - 1000),
+    });
+    return { message: 'Signout successful' };
   }
 }

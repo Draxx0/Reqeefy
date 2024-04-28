@@ -40,7 +40,6 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     );
   }
 
-  console.log(project.customers);
   return (
     <section className="space-y-12">
       <Breadcrumb>

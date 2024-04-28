@@ -9,6 +9,7 @@ import { UsersModule } from '../users/users.module';
 import { AgentsModule } from '../agents/agents.module';
 import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
 import { UserEntity } from '../users/entities/user.entity';
+import { JwtUtilsModule } from 'src/authentication/jwt/jwt-utils.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UserEntity } from '../users/entities/user.entity';
     PaginationModule,
     AgencyGroupsModule,
     UsersModule,
+    JwtUtilsModule,
   ],
   controllers: [AgenciesController],
   providers: [AgenciesService],

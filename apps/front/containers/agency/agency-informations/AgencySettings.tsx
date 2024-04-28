@@ -9,6 +9,7 @@ export const AgencySettings = () => {
 
   if (isLoading) return <AgencySettingsLoader />;
 
+  console.log('agency', agency);
   return (
     agency && (
       <section className="space-y-12">

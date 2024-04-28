@@ -1,50 +1,78 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { UserRequest } from 'src/common/types/api';
 import { UserPreferencesService } from 'src/models/user-preferences/user-preferences.service';
 import { AuthenticationService } from './authentication.service';
-import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { LocalGuard } from '../guards/local.guard';
-import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
 import { JwtUtilsService } from './jwt/jwt-utils.service';
-import { UsersService } from 'src/models/users/users.service';
 
 @Controller('auth')
 export class AuthenticationController {
   constructor(
     private authenticationService: AuthenticationService,
-    private userPreferencesService: UserPreferencesService,
-    private usersService: UsersService,
-    private jwtUtilsService: JwtUtilsService,
+    private readonly userPreferencesService: UserPreferencesService,
+    private readonly jwtUtilsService: JwtUtilsService,
   ) {}
 
   @Post('signin')
   @UseGuards(LocalGuard)
-  async signin(@Req() req: UserRequest) {
+  async signin(@Req() req: UserRequest, @Res({ passthrough: true }) response) {
+    const { access_token, refresh_token } =
+      await this.jwtUtilsService.generateJwtToken(req.user);
+
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      token: access_token,
+      cookieName: 'ACCESS_TOKEN',
+    });
+
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      token: refresh_token,
+      cookieName: 'REFRESH_TOKEN',
+    });
+
     return req.user;
   }
 
-  @Post('signup')
-  async signup(@Body() authenticationSignupDto: AuthenticationSignupDto) {
-    const user = await this.authenticationService.signup(
-      authenticationSignupDto,
-    );
+  // @Post('signup')
+  // async signup(
+  //   @Body() authenticationSignupDto: AuthenticationSignupDto,
+  //   @Res({ passthrough: true }) response,
+  // ) {
+  //   const user = await this.authenticationService.signup(
+  //     authenticationSignupDto,
+  //   );
 
-    await this.userPreferencesService.create(user.id, {
-      viewMode: 'grid',
-    });
+  //   await this.userPreferencesService.create(user.id, {
+  //     viewMode: 'grid',
+  //   });
 
-    return await this.authenticationService.signin({
-      email: authenticationSignupDto.email,
-      password: authenticationSignupDto.password,
-    });
-  }
+  //   // Should be moved on anoteher endpoint ? bcz if i create a user using this endpoint i'm going to be logged as him
+  //   const { access_token, refresh_token } =
+  //     await this.authenticationService.signin({
+  //       email: authenticationSignupDto.email,
+  //       password: authenticationSignupDto.password,
+  //     });
 
-  @UseGuards(RefreshJwtAuthGuard)
-  @Post('refresh')
-  async refresh(@Req() req: UserRequest) {
-    const user = await this.usersService.findOneById(req.user.id);
-    return await this.jwtUtilsService.refreshJwtToken(user);
+  //   await this.jwtUtilsService.setResponseCookies({
+  //     response,
+  //     token: access_token,
+  //     cookieName: 'ACCESS_TOKEN',
+  //   });
+
+  //   await this.jwtUtilsService.setResponseCookies({
+  //     response,
+  //     token: refresh_token,
+  //     cookieName: 'REFRESH_TOKEN',
+  //   });
+
+  //   return user;
+  // }
+
+  @Get('signout')
+  async signout(@Res({ passthrough: true }) response) {
+    return await this.authenticationService.logout(response);
   }
 
   @Get('status')

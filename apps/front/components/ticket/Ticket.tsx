@@ -13,6 +13,19 @@ import {
 import { MessageCircle, Paperclip } from 'lucide-react';
 import { useMemo } from 'react';
 import { formatDate } from '@/utils';
+import Link from 'next/link';
+import {
+  Button,
+  ButtonLink,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '../client.index';
+import { DistributeTicketForm } from './DistributeTicketForm';
+import { useAuthStore } from '@/stores';
 
 type Props = {
   ticket: TicketType;
@@ -20,7 +33,7 @@ type Props = {
 };
 
 export const Ticket = ({ ticket, hasBadge = false }: Props) => {
-  console.log(ticket);
+  const user = useAuthStore((state) => state.user);
 
   const ticketFilesCount = useMemo(() => {
     return ticket.messages.reduce(
@@ -31,10 +44,8 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
 
   const lastMessage = ticket.messages[ticket.messages.length - 1];
 
-  console.log(lastMessage);
-
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md relative border min-h-[300px]">
+    <div className="bg-white p-6 rounded-lg hover:shadow-primary-500 transition ease-in-out duration-300 shadow-md relative border min-h-[300px]">
       <div
         className={`absolute left-0 top-0 ${lastMessage.readed ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tl-lg rounded-bl-lg`}
       ></div>
@@ -128,6 +139,32 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
                 </TooltipProvider>
               ))}
             </div>
+          </div>
+
+          <Separator />
+
+          <div className="flex gap-4 justify-end">
+            {!ticket.distributed && user?.role !== 'customer' && (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="gap-3">Distribuer</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader className="mb-4">
+                    <DialogTitle className="text-2xl">Distribuer</DialogTitle>
+                    <DialogDescription className="text-gray-900">
+                      Veuillez sélectionner un groupe pour distribuer la
+                      discussion.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DistributeTicketForm ticketId={ticket.id} />
+                </DialogContent>
+              </Dialog>
+            )}
+
+            <ButtonLink href={`/tickets/${ticket.id}`}>
+              Voir la discussion
+            </ButtonLink>
           </div>
         </div>
       </div>
