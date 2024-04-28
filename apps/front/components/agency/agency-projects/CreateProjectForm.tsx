@@ -12,7 +12,7 @@ import {
 } from '../../client.index';
 import Multiselect from 'multiselect-react-dropdown';
 import { Input, Textarea } from '../../server.index';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useGetAgents } from '@/hooks/user';
 import { Agency } from '@reqeefy/types';
 

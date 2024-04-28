@@ -13,6 +13,8 @@ export const useGetAgency = () => {
     queryFn: async () => {
       if (!user?.agency) return null;
 
+      console.log('processing');
+
       return await agencyService.get(user.agency.id);
     },
     staleTime: 1000 * 60 * 60,

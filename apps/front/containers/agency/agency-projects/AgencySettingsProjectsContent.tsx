@@ -18,7 +18,7 @@ import {
 import { AgencySettingsProjectsList } from './AgencySettingsProjectsList';
 import { ArrowDownUp, GitBranchPlus, TriangleAlert } from 'lucide-react';
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
-import { SortOrderType, sortOrderValues } from '@/constants';
+import { SMALL_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
 import { useEffect } from 'react';
 
 export const AgencySettingsProjectsContent = ({
@@ -41,12 +41,6 @@ export const AgencySettingsProjectsContent = ({
     throttleMs: 1000,
   });
 
-  useEffect(() => {
-    if (searchTerm) console.log(searchTerm);
-  }, [searchTerm]);
-
-  const pageSize = 6;
-
   const {
     data: projects,
     isLoading,
@@ -55,7 +49,7 @@ export const AgencySettingsProjectsContent = ({
     agency,
     queryParams: {
       page: currentPage,
-      limit_per_page: pageSize,
+      limit_per_page: SMALL_PAGE_SIZE,
       search: searchTerm,
       sort_by: 'created_at',
       sort_order: sortOrder,
@@ -66,7 +60,7 @@ export const AgencySettingsProjectsContent = ({
   if (isLoading || !projects) return <div>Loading...</div>;
   if (isError) return <div>Error loading projects</div>;
 
-  const totalPages = Math.ceil(projects.pagination.total / pageSize);
+  const totalPages = Math.ceil(projects.pagination.total / SMALL_PAGE_SIZE);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

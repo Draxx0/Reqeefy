@@ -30,15 +30,18 @@ export const useSignup = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof registerSchema>) => {
+      console.log('data', data);
       return await agencyService.create(data);
     },
     onError: (error) => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
-      const { user, access_token } = data;
+      // const { user, access_token } = data;
+      // setUser(user);
+      // setAccessToken(access_token);
+      const user = data;
       setUser(user);
-      setAccessToken(access_token);
       toast(`${`Bienvenue sur Reqeefy ${user.first_name} 👋`.toUpperCase()}`, {
         closeButton: true,
         description:

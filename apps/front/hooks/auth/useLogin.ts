@@ -30,9 +30,11 @@ export const useLogin = () => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
-      const { user, access_token } = data;
+      // const { user, access_token } = data;
+      // setUser(user);
+      // setAccessToken(access_token);
+      const user = data;
       setUser(user);
-      setAccessToken(access_token);
       router.push('/');
     },
   });
