@@ -4,3 +4,6 @@ export * from './distribution/DistributionTicketsList';
 export * from './tickets/GeneralTicketsList';
 export * from './tickets/customer/CustomerTicketsList';
 export * from './tickets/agent/AgentTicketsList';
+export * from './ticket/TicketPageContent';
+export * from './ticket/message/TicketMessage';
+export * from './ticket/message/TicketMessageContainer';

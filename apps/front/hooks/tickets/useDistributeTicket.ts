@@ -3,14 +3,15 @@
 import { distributeTicketSchema } from '@/schemas';
 import { ticketsService } from '@/services';
 import { renderErrorToast } from '@/utils';
-import { queryClient } from '@/utils/TanstackQueryProvider';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
 export const useDistributeTicket = ({ ticketId }: { ticketId: string }) => {
+  const queryClient = useQueryClient();
+
   const form = useForm({
     resolver: zodResolver(distributeTicketSchema),
     mode: 'onChange',

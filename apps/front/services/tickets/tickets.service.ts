@@ -61,9 +61,20 @@ const distribute = async (
   }
 };
 
+const getOne = async (ticketId: string): Promise<Ticket> => {
+  try {
+    return await api.get(`/tickets/${ticketId}`);
+  } catch (error) {
+    throw new Error(
+      'Une erreur est survenue lors de la récupération du ticket.'
+    );
+  }
+};
+
 export const ticketsService = {
   getAllByProject,
   getAllByAgency,
   create,
+  getOne,
   distribute,
 };

@@ -125,6 +125,7 @@ export class TicketsService {
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.messages', 'messages')
       .leftJoinAndSelect('messages.user', 'user')
+      .leftJoinAndSelect('messages.upload_files', 'upload_files')
       .leftJoinAndSelect('ticket.customers', 'customers')
       .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')

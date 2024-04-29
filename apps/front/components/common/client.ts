@@ -15,3 +15,6 @@ export * from './components/dialog';
 export * from './components/accordion';
 export * from './components/paginationComponent';
 export * from './components/data-table';
+export * from './components/wysiwyg';
+export * from './components/toggle';
+export * from './components/toggle-group';
