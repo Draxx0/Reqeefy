@@ -1,5 +1,4 @@
-import {
-  Avatar,
+import {  Avatar,
   AvatarFallback,
   AvatarImage,
   Separator,
@@ -24,7 +23,7 @@ export const TicketMessage = ({ message }: { message: Message }) => {
                   alt={`Photo de l'utilisateur ${message.user.first_name} ${message.user.last_name}`}
                   className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
                 />
-                <AvatarFallback className="w-full h-full text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
+                <AvatarFallback className="w-full h-full uppercase text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
                   {message.user.first_name[0] + message.user.last_name[0]}
                 </AvatarFallback>
               </Avatar>

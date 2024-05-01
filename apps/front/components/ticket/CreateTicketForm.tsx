@@ -1,6 +1,4 @@
-'use client';
-
-import { useCreateTicket } from '@/hooks';
+'use client';import { useCreateTicket } from '@/hooks';
 import {
   Button,
   Form,
@@ -9,6 +7,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  Wysywig,
 } from '../client.index';
 import { Input } from '../server.index';
 
@@ -47,21 +46,30 @@ export const CreateTicketForm = ({ projectId }: { projectId: string }) => {
             <FormItem>
               <FormLabel className="text-lg font-bold">Votre message</FormLabel>
               <FormControl>
-                {/* TIPTAP || QUILL ? WYSIWYG EDITOR */}
+                <Wysywig
+                  autofocus={false}
+                  placeholder="Ecrire mon premier message"
+                  onChange={(content) => field.onChange(content)}
+                  isSubmit={form.formState.isSubmitSuccessful}
+                >
+                  <></>
+                </Wysywig>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div className="w-full justify-end flex">
+          <Button
+            type="submit"
+            className="w-fit"
+            disabled={!form.formState.isValid}
+            isLoading={isPending}
+          >
+            Envoyer
+          </Button>
+        </div>
         {/* ADD DOCUMENT ATTACHED */}
-        <Button
-          type="submit"
-          className="w-fit"
-          disabled={!form.formState.isValid}
-          isLoading={isPending}
-        >
-          Envoyer
-        </Button>
       </form>
     </Form>
   );

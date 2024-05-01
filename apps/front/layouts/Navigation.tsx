@@ -1,5 +1,4 @@
-'use client';
-import {
+'use client';import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -116,9 +115,8 @@ export const Navigation = () => {
                         src={user.avatar?.path}
                         alt={`Avatar de ${user.first_name} ${user.last_name}`}
                       />
-                      <AvatarFallback>
-                        {user.first_name[0].toUpperCase() +
-                          user.last_name[0].toUpperCase()}
+                      <AvatarFallback className="uppercase">
+                        {user.first_name[0] + user.last_name[0]}
                       </AvatarFallback>
                     </Avatar>
                   </Link>

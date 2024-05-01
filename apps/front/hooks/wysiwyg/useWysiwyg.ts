@@ -1,14 +1,14 @@
-import { WysiwygParams } from '@/types';
-import { mergeAttributes, useEditor } from '@tiptap/react';
+import { WysiwygParams } from '@/types';import { mergeAttributes, useEditor } from '@tiptap/react';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Underline } from '@tiptap/extension-underline';
 import { StarterKit } from '@tiptap/starter-kit';
 import { Heading } from '@tiptap/extension-heading';
+import { useEffect } from 'react';
 
 export const useWysiwyg = ({
   wysiwygParams,
 }: {
-  wysiwygParams: Omit<WysiwygParams, 'wysiwygClassName'>;
+  wysiwygParams: WysiwygParams;
 }) => {
   const editor = useEditor({
     extensions: [
@@ -47,7 +47,7 @@ export const useWysiwyg = ({
     ],
     editorProps: {
       attributes: {
-        class: 'p-4 min-h-[200px] rounded-md border border-primary-500',
+        class: 'p-4 min-h-[200px] rounded-md border border-primary-700',
         // class:
         //   'focus:outline-none min-h-[96px] max-h-[250px] overflow-y-scroll border border-input bg-transparent px-3 py-2 text-sm shadow-sm rounded-md',
       },
@@ -60,7 +60,16 @@ export const useWysiwyg = ({
     autofocus: wysiwygParams.autofocus,
   });
 
-  const clearEditor = () => editor?.commands.clearContent();
+  const clearEditor = () => {
+    editor?.commands.clearContent();
+    wysiwygParams.setCharacterCount(0);
+  };
 
-  return { editor, clearEditor };
+  useEffect(() => {
+    if (wysiwygParams.isSubmit) {
+      clearEditor();
+    }
+  }, [wysiwygParams.isSubmit]);
+
+  return { editor };
 };

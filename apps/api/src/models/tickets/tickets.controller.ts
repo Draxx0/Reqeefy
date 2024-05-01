@@ -19,7 +19,6 @@ import { UserRequest } from 'src/common/types/api';
 import { MessagesService } from '../messages/messages.service';
 import { UsersService } from '../users/users.service';
 import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
-import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 import { DISTRIBUTORS_PERMISSIONS, Roles } from 'src/decorator/roles.decorator';
 
 @Controller('tickets')
@@ -29,7 +28,6 @@ export class TicketsController {
     private readonly ticketsService: TicketsService,
     private readonly messagesService: MessagesService,
     private readonly usersService: UsersService,
-    private readonly agencyGroupsService: AgencyGroupsService,
   ) {}
 
   @Post('/project/:id')
@@ -46,6 +44,8 @@ export class TicketsController {
         401,
       );
     }
+
+    console.log('dto', createTicketDto);
 
     return this.ticketsService.create(createTicketDto, id, user.id);
   }

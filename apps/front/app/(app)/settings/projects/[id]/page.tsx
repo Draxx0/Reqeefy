@@ -1,5 +1,4 @@
 'use client';
-
 import { Button } from '@/components/client.index';
 import {
   Avatar,
@@ -72,7 +71,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                         alt={`Photo de l'agent ${agent.user.first_name} ${agent.user.last_name}`}
                         className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
                       />
-                      <AvatarFallback className="w-full h-full text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
+                      <AvatarFallback className="w-full uppercase h-full text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
                         {agent.user.first_name[0] + agent.user.last_name[0]}
                       </AvatarFallback>
                     </Avatar>

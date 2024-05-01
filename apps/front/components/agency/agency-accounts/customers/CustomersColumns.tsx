@@ -1,6 +1,4 @@
-'use client';
-
-import {
+'use client';import {
   Button,
   ButtonLink,
   Checkbox,
@@ -11,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/client.index';
+import { Badge } from '@/components/server.index';
 import { AgencyCustomerTableData } from '@/types';
 import { ColumnDef } from '@tanstack/react-table';
 import {
@@ -84,7 +83,11 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
       const customer = row.original;
 
       if (customer.project) {
-        return customer.project.name;
+        return (
+          <Badge variant="outline" className="capitalize">
+            {customer.project.name}
+          </Badge>
+        );
       }
 
       return 'Aucun';

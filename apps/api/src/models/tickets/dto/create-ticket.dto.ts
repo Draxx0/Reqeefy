@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { MessageEntity } from 'src/models/messages/entities/message.entity';
 
 export class CreateTicketDto {
   @IsNotEmpty()
@@ -7,7 +6,8 @@ export class CreateTicketDto {
   title: string;
 
   @IsNotEmpty()
-  message: MessageEntity;
+  @IsString()
+  message: string;
 
   // UPLOAD FILE
 }

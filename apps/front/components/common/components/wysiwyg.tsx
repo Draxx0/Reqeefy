@@ -1,5 +1,4 @@
 'use client';
-
 import { useWysiwyg } from '@/hooks/wysiwyg/useWysiwyg';
 import { WysiwygParams } from '@/types';
 import { Editor, EditorContent } from '@tiptap/react';
@@ -28,23 +27,20 @@ const Wysywig = ({
   autofocus,
   placeholder,
   onChange,
+  isSubmit,
   children,
-  onSubmit,
 }: PropsWithChildren<Omit<WysiwygParams, 'setCharacterCount'>>) => {
   const [characterCount, setCharacterCount] = useState(0);
 
-  const { editor, clearEditor } = useWysiwyg({
+  const { editor } = useWysiwyg({
     wysiwygParams: {
       autofocus,
       placeholder,
       onChange,
+      isSubmit,
       setCharacterCount,
     },
   });
-
-  useEffect(() => {
-    console.log('submit effect');
-  }, [onSubmit]);
 
   if (!editor) {
     return <div>Loading...</div>;
@@ -58,7 +54,7 @@ const Wysywig = ({
 
       <div className="flex justify-end">
         <span className="text-sm text-gray-900">
-          {characterCount} characters
+          {characterCount} caractères
         </span>
       </div>
 

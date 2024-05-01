@@ -1,5 +1,4 @@
 'use client';
-
 import { createTicketSchema } from '@/schemas';
 import { ticketsService } from '@/services';
 import { renderErrorToast } from '@/utils';
@@ -18,7 +17,7 @@ export const useCreateTicket = ({ projectId }: { projectId: string }) => {
     resolver: zodResolver(createTicketSchema),
     defaultValues: {
       title: '',
-      message: 'Default message test',
+      message: '',
       // upload_files
     },
   });

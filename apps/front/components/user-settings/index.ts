@@ -1,1 +1,1 @@
-export * from './UserSettingsForm';
+export * from './userSettingsForm';

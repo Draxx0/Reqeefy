@@ -1,6 +1,4 @@
-'use client';
-
-import {
+'use client';import {
   Button,
   CreateTicketForm,
   Dialog,
@@ -117,11 +115,13 @@ export const CustomerTicketsList = () => {
             ))}
           </div>
 
-          <PaginationComponent
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          {totalPages > 1 ? (
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          ) : null}
         </>
       ) : (
         <div>Aucune discussion trouvée</div>

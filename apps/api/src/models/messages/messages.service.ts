@@ -23,12 +23,8 @@ export class MessagesService {
     return this.messageRepository.save(message);
   }
 
-  createOnTicket(
-    createMessageDto: CreateMessageDto,
-    ticket: TicketEntity,
-    userId: string,
-  ) {
-    const cleanedContent = sanitize(createMessageDto.content);
+  createOnTicket(content: string, ticket: TicketEntity, userId: string) {
+    const cleanedContent = sanitize(content);
 
     const message = this.messageRepository.create({
       content: cleanedContent,

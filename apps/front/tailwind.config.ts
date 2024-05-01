@@ -1,6 +1,4 @@
-import type { Config } from 'tailwindcss';
-
-const config = {
+import type { Config } from 'tailwindcss';const config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -60,26 +58,10 @@ const config = {
           DEFAULT: 'hsl(var(--destructive))',
           foreground: 'hsl(var(--destructive-foreground))',
         },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
-      },
-      fontFamily: {
-        nunitoSans: ['Nunito Sans', 'sans-serif'],
-        belanosima: ['Belanosima', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',

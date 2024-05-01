@@ -13,7 +13,6 @@ import {
 import { MessageCircle, Paperclip } from 'lucide-react';
 import { useMemo } from 'react';
 import { formatDate } from '@/utils';
-import Link from 'next/link';
 import {
   Button,
   ButtonLink,
@@ -43,8 +42,6 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
   }, [ticket.messages]);
 
   const lastMessage = ticket.messages[0];
-
-  console.log('last message', ticket);
 
   return (
     <div className="bg-white p-6 rounded-lg hover:shadow-primary-500 transition ease-in-out duration-300 shadow-md relative border min-h-[300px]">
@@ -82,7 +79,7 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
                       alt={`Photo de l'utiliateur ${lastMessage.user.first_name} ${lastMessage.user.last_name}`}
                       className="h-full w-full group-hover:opacity-50 transition duration-300 ease-in-out"
                     />
-                    <AvatarFallback className="w-full h-full text-xs flex items-center justify-center group-hover:opacity-50 transition duration-300 ease-in-out">
+                    <AvatarFallback className="w-full h-full uppercase text-xs flex items-center justify-center group-hover:opacity-50 transition duration-300 ease-in-out">
                       {lastMessage.user.first_name[0] +
                         lastMessage.user.last_name[0]}
                     </AvatarFallback>

@@ -1,5 +1,4 @@
 'use client';
-
 import {
   Button,
   Checkbox,
@@ -88,8 +87,6 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
     header: 'Groupe',
     cell: ({ row }) => {
       const agent = row.original;
-
-      console.log(agent);
 
       return agent.groups.length > 0 ? (
         <div className="flex items-center gap-2">

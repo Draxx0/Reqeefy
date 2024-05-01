@@ -3,5 +3,5 @@ export interface WysiwygParams {
   placeholder: string;
   setCharacterCount: (count: number) => void;
   onChange: (content: string) => void;
-  onSubmit?: () => void;
+  isSubmit: boolean;
 }

@@ -1,5 +1,4 @@
 'use client';
-
 import { Agency } from '@reqeefy/types';
 import { useMemo } from 'react';
 import { AgencySettingsInformationsForm } from './AgencySettingsInformationsForm';
@@ -119,7 +118,7 @@ export const AgencySettingsInformationsContent = ({
             alt={`Photo de l'agence ${agency.name}`}
             className="h-48 w-48 rounded-lg"
           />
-          <AvatarFallback className="w-full rounded-lg h-full text-2xl flex items-center justify-center">
+          <AvatarFallback className="w-full uppercase rounded-lg h-full text-2xl flex items-center justify-center">
             {agency.name[0]}
           </AvatarFallback>
         </Avatar>

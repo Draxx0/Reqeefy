@@ -1,6 +1,4 @@
-import { z } from 'zod';
-
-const createTicketSchema = z.object({
+import { z } from 'zod';const createTicketSchema = z.object({
   title: z.string().min(1, {
     message: 'Veuillez entrer un sujet de discussion',
   }),

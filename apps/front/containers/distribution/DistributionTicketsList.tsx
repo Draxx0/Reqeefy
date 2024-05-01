@@ -1,5 +1,4 @@
 'use client';
-
 import { useGetDistributionTickets } from '@/hooks';
 import { Ticket } from '../../components/ticket/Ticket';
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
@@ -52,7 +51,7 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
     <>
       <div className="grid grid-cols-4 gap-8">
         {tickets.data.map((ticket) => (
-          <Ticket key={ticket.id} ticket={ticket} />
+          <Ticket key={ticket.id} ticket={ticket} hasBadge />
         ))}
       </div>
 

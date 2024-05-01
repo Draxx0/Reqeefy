@@ -1,6 +1,4 @@
-'use client';
-
-import {
+'use client';import {
   Button,
   Form,
   FormControl,
@@ -27,6 +25,7 @@ export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
               <FormItem>
                 <FormControl>
                   <Wysywig
+                    isSubmit={form.formState.isSubmitSuccessful}
                     autofocus={true}
                     placeholder="Répondre..."
                     onChange={(content) => field.onChange(content)}
