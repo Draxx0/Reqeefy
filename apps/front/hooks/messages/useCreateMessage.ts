@@ -1,7 +1,7 @@
 'use client';
 
-import { createTicketSchema } from '@/schemas';
-import { ticketsService } from '@/services';
+import { createTicketMessageSchema } from '@/schemas';
+import { messagesService } from '@/services';
 import { renderErrorToast } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -10,32 +10,32 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
-export const useCreateTicket = ({ projectId }: { projectId: string }) => {
-  const queryClient = useQueryClient();
+export const useCreateMessage = ({ ticketId }: { ticketId: string }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm({
-    resolver: zodResolver(createTicketSchema),
+    resolver: zodResolver(createTicketMessageSchema),
     defaultValues: {
-      title: '',
-      message: 'Default message test',
+      content: '',
       // upload_files
     },
   });
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: z.infer<typeof createTicketSchema>) => {
-      return await ticketsService.create(data, projectId);
+    mutationFn: async (data: z.infer<typeof createTicketMessageSchema>) => {
+      return await messagesService.create(data, ticketId);
     },
     onError: (error) => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
-      toast.success('La discussion a été créé avec succès');
+      toast.success('Message envoyé avec succès');
+      form.reset();
+      // router.refresh();
       queryClient.invalidateQueries({
-        queryKey: ['projects', projectId, 'tickets'],
+        queryKey: ['tickets'],
       });
-      router.push(`/tickets/${data.id}`);
     },
   });
 

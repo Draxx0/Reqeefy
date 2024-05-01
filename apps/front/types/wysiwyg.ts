@@ -1,5 +1,7 @@
 export interface WysiwygParams {
   autofocus: boolean;
   placeholder: string;
-  wysiwygClassName: string;
+  setCharacterCount: (count: number) => void;
+  onChange: (content: string) => void;
+  onSubmit?: () => void;
 }

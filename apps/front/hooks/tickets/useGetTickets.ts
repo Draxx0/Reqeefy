@@ -14,13 +14,7 @@ export const useGetTickets = ({
   const { user } = useAuthStore();
 
   const query = useQuery({
-    queryKey: [
-      'projects',
-      projectId,
-      'tickets',
-      queryParams.page,
-      queryParams.sort_order,
-    ],
+    queryKey: ['projects', 'tickets', queryParams.page, queryParams.sort_order],
     queryFn: async () => {
       //! should be improved...
       if (!projectId) throw new Error('Project ID is required');

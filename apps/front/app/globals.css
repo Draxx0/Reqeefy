@@ -86,16 +86,17 @@ h6 {
   outline: none;
 }
 
-.ProseMirror {
-  min-height: inherit;
-}
-
 .tiptap p.is-editor-empty:first-child::before {
   color: #adb5bd;
   content: attr(data-placeholder);
   float: left;
   height: 0;
   pointer-events: none;
+}
+
+.tiptap ul {
+  list-style: disc !important;
+  padding-left: 10px;
 }
 
 /* MULTI SELECT REACT LIBRARY CSS OVERWRITES */

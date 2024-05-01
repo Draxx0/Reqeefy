@@ -40,7 +40,7 @@ const getAllByAgency = async (
 const create = async (
   data: z.infer<typeof createTicketSchema>,
   projectId: string
-) => {
+): Promise<Ticket> => {
   try {
     return await api.post(`/tickets/project/${projectId}`, data);
   } catch (error) {

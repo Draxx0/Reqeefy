@@ -12,7 +12,8 @@ import {
 import { useGetTicket } from '@/hooks/tickets/useGetTicket';
 import { formatDate } from '@/utils';
 import { TicketMessageContainer } from './message/TicketMessageContainer';
-import { Wysywig } from '@/components/client.index';
+import { Lock } from 'lucide-react';
+import { TicketMessageSendForm } from '@/components/client.index';
 
 export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
   const { data: ticket, isLoading, isError } = useGetTicket({ ticketId });
@@ -59,19 +60,24 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
             <TicketMessageContainer key={message.id} message={message} />
           ))}
           <div className="w-full ">
-            <Wysywig
-              wysiwygParams={{
-                autofocus: true,
-                placeholder: 'Répondre...',
-                wysiwygClassName:
-                  'p-4 min-h-[200px] rounded-md border border-primary-500',
-              }}
-            />
+            {ticket.distributed ? (
+              <TicketMessageSendForm ticketId={ticketId} />
+            ) : (
+              <div className="p-4 flex justify-center items-center min-h-[200px] rounded-md border border-primary-500">
+                <div className="flex items-center gap-2">
+                  <Lock className="w-5 h-5 text-primary-700" />
+                  <p className="text-gray-900">
+                    Veuillez attendre la distribution cette discussion à notre
+                    équipe de support.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="space-y-8 flex-1"></div>
+      <div className="space-y-8 flex-1">Ticket infos side</div>
     </div>
   );
 };

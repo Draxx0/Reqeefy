@@ -42,7 +42,9 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
     );
   }, [ticket.messages]);
 
-  const lastMessage = ticket.messages[ticket.messages.length - 1];
+  const lastMessage = ticket.messages[0];
+
+  console.log('last message', ticket);
 
   return (
     <div className="bg-white p-6 rounded-lg hover:shadow-primary-500 transition ease-in-out duration-300 shadow-md relative border min-h-[300px]">
@@ -62,7 +64,7 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
           <p className="text-xl">{ticket.title}</p>
 
           <div
-            className="line-clamp-5 text-gray-900"
+            className="line-clamp-1 text-gray-900"
             dangerouslySetInnerHTML={{
               __html: lastMessage.content,
             }}
@@ -114,7 +116,8 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
             </div>
 
             <div className="flex -space-x-4 items-center">
-              {ticket.messages.map((message) => (
+              {/* Update here to concatene the users on the ticket customer & agents */}
+              {/* {ticket.messages.map((message) => (
                 <TooltipProvider key={message.id} delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -137,17 +140,19 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              ))}
+              ))} */}
             </div>
           </div>
 
           <Separator />
 
-          <div className="flex gap-4 justify-end">
+          <div className="flex gap-2 justify-end flex-wrap">
             {!ticket.distributed && user?.role !== 'customer' && (
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="gap-3">Distribuer</Button>
+                  <Button size={'sm'} className="gap-3">
+                    Distribuer
+                  </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                   <DialogHeader className="mb-4">
@@ -162,7 +167,7 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
               </Dialog>
             )}
 
-            <ButtonLink href={`/tickets/${ticket.id}`}>
+            <ButtonLink size={'sm'} href={`/tickets/${ticket.id}`}>
               Voir la discussion
             </ButtonLink>
           </div>
