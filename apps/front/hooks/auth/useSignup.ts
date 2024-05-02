@@ -1,5 +1,4 @@
 'use client';
-
 import { registerSchema } from '@/schemas';
 import { agencyService } from '@/services';
 import { useAuthStore } from '@/stores';
@@ -13,7 +12,7 @@ import { z } from 'zod';
 
 export const useSignup = () => {
   const router = useRouter();
-  const { setUser, setAccessToken } = useAuthStore();
+  const { setUser } = useAuthStore();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -37,22 +36,11 @@ export const useSignup = () => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
-      // const { user, access_token } = data;
-      // setUser(user);
-      // setAccessToken(access_token);
-      const user = data;
-      setUser(user);
-      toast(`${`Bienvenue sur Reqeefy ${user.first_name} 👋`.toUpperCase()}`, {
+      setUser(data);
+      toast(`${`Bienvenue sur Reqeefy ${data.first_name} 👋`.toUpperCase()}`, {
         closeButton: true,
         description:
           'Vous avez désormais accès à votre espace personnel, commencez par créer le compte de vos agents ou encore créer votre premier projet client !',
-        action: {
-          label: 'Voir mon espace',
-          onClick: () => router.push('/dashboard'),
-          actionButtonStyle: {
-            backgroundColor: '#7489fe',
-          },
-        },
         classNames: {
           toast: 'border-primary-700 border-2 flex flex-col',
         },

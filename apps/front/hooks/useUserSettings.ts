@@ -1,5 +1,4 @@
 'use client';
-
 import { userSettingsSchema } from '@/schemas';
 import { authService, userService } from '@/services';
 import { useAuthStore } from '@/stores';
@@ -12,7 +11,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 
 export const useUserSettings = () => {
-  const { user, setUser, setAccessToken } = useAuthStore();
+  const { user, setUser } = useAuthStore();
   const router = useRouter();
 
   if (!user) {
@@ -41,7 +40,6 @@ export const useUserSettings = () => {
     },
     onSuccess({ access_token, user }, variables, context) {
       setUser(user);
-      setAccessToken(access_token);
 
       toast.success('Profil mis à jour', {
         duration: 5000,

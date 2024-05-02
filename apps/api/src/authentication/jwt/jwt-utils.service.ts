@@ -41,16 +41,17 @@ export class JwtUtilsService {
 
   async setResponseCookies({
     response,
-    token,
+    data,
     cookieName,
   }: {
     response: any;
-    token: string;
+    data: string;
     cookieName: string;
   }) {
-    response.cookie(cookieName, token, {
+    response.cookie(cookieName, data, {
       httpOnly: true,
       secure: true,
+      sameSite: 'lax',
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
     });
   }

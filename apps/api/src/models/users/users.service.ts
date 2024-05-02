@@ -140,7 +140,7 @@ export class UsersService {
     //! Should be replaced by a guard
     const user = await this.findOneById(userId);
 
-    if (user.id !== req.user.id && req.user.role !== 'superadmin') {
+    if (user.id !== req.user.id || req.user.role !== 'superadmin') {
       throw new UnauthorizedException(
         HttpStatus.UNAUTHORIZED,
         'You are not authorized to update this user',
@@ -150,10 +150,6 @@ export class UsersService {
 
     const updatedUser = await this.updateSelectedOne(user, body);
 
-    return await this.jwtUtilsService.generateJwtToken({
-      email: updatedUser.email,
-      id: updatedUser.id,
-      role: updatedUser.role,
-    });
+    return await this.jwtUtilsService.generateJwtToken(updatedUser);
   }
 }

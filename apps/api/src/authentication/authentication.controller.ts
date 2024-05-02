@@ -1,16 +1,14 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { UserRequest } from 'src/common/types/api';
-import { UserPreferencesService } from 'src/models/user-preferences/user-preferences.service';
-import { AuthenticationService } from './authentication.service';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { LocalGuard } from '../guards/local.guard';
+import { AuthenticationService } from './authentication.service';
 import { JwtUtilsService } from './jwt/jwt-utils.service';
 
 @Controller('auth')
 export class AuthenticationController {
   constructor(
     private authenticationService: AuthenticationService,
-    private readonly userPreferencesService: UserPreferencesService,
     private readonly jwtUtilsService: JwtUtilsService,
   ) {}
 
@@ -22,13 +20,13 @@ export class AuthenticationController {
 
     await this.jwtUtilsService.setResponseCookies({
       response,
-      token: access_token,
+      data: access_token,
       cookieName: 'ACCESS_TOKEN',
     });
 
     await this.jwtUtilsService.setResponseCookies({
       response,
-      token: refresh_token,
+      data: refresh_token,
       cookieName: 'REFRESH_TOKEN',
     });
 

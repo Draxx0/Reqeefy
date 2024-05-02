@@ -1,5 +1,4 @@
 'use client';
-
 import { loginSchema } from '@/schemas';
 import { authService } from '@/services';
 import { useAuthStore } from '@/stores';
@@ -12,7 +11,7 @@ import { z } from 'zod';
 
 export const useLogin = () => {
   const router = useRouter();
-  const { setUser, setAccessToken } = useAuthStore();
+  const { setUser } = useAuthStore();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -32,9 +31,7 @@ export const useLogin = () => {
     onSuccess(data, variables, context) {
       // const { user, access_token } = data;
       // setUser(user);
-      // setAccessToken(access_token);
-      const user = data;
-      setUser(user);
+      setUser(data);
       router.push('/');
     },
   });
