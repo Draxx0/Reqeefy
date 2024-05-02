@@ -56,13 +56,13 @@ export class AgenciesController {
 
     await this.jwtUtilsService.setResponseCookies({
       response,
-      token: access_token,
+      data: access_token,
       cookieName: 'ACCESS_TOKEN',
     });
 
     await this.jwtUtilsService.setResponseCookies({
       response,
-      token: refresh_token,
+      data: refresh_token,
       cookieName: 'REFRESH_TOKEN',
     });
 
