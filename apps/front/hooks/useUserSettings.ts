@@ -1,5 +1,4 @@
-'use client';
-import { userSettingsSchema } from '@/schemas';
+'use client';import { userSettingsSchema } from '@/schemas';
 import { authService, userService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
@@ -38,7 +37,7 @@ export const useUserSettings = () => {
 
       renderErrorToast(error.message);
     },
-    onSuccess({ access_token, user }, variables, context) {
+    onSuccess({ user }, variables, context) {
       setUser(user);
 
       toast.success('Profil mis à jour', {

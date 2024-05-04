@@ -1,4 +1,5 @@
-import { WysiwygParams } from '@/types';import { mergeAttributes, useEditor } from '@tiptap/react';
+import { WysiwygParams } from '@/types';
+import { mergeAttributes, useEditor } from '@tiptap/react';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Underline } from '@tiptap/extension-underline';
 import { StarterKit } from '@tiptap/starter-kit';
@@ -47,7 +48,7 @@ export const useWysiwyg = ({
     ],
     editorProps: {
       attributes: {
-        class: 'p-4 min-h-[200px] rounded-md border border-primary-700',
+        class: 'p-4 min-h-[200px] rounded-md border border-gray-700',
         // class:
         //   'focus:outline-none min-h-[96px] max-h-[250px] overflow-y-scroll border border-input bg-transparent px-3 py-2 text-sm shadow-sm rounded-md',
       },

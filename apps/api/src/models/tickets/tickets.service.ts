@@ -133,6 +133,7 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.customers', 'customers')
       .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
+      .leftJoinAndSelect('support_agents.user', 'support_agent_user')
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.project', 'project')
       .leftJoinAndSelect('ticket.agency_groups', 'agency_groups')
@@ -200,7 +201,7 @@ export class TicketsService {
     const agents =
       await this.agentsService.findAllByAgencyGroups(agency_groups);
 
-    return this.ticketRepository.save({
+    return await this.ticketRepository.save({
       ...ticket,
       distributed: true,
       agency_groups,

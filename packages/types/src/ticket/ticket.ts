@@ -13,8 +13,7 @@ export interface Ticket extends Timestamps {
   priority: TicketPriority;
   messages: Array<Message>;
   support_agents: Array<Agent>;
-  referent_agents: Array<Agent>;
-  customers: Array<Customer> | null;
+  customers: Array<Customer>;
   project: Project;
   distributed: boolean;
 }

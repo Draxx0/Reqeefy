@@ -1,6 +1,9 @@
 'use client';
-
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Badge,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -8,15 +11,40 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
   Separator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from '@/components/server.index';
 import { useGetTicket } from '@/hooks/tickets/useGetTicket';
 import { formatDate } from '@/utils';
 import { TicketMessageContainer } from './message/TicketMessageContainer';
 import { Lock } from 'lucide-react';
 import { TicketMessageSendForm } from '@/components/client.index';
+import { useMemo } from 'react';
 
 export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
   const { data: ticket, isLoading, isError } = useGetTicket({ ticketId });
+
+  const ticketUsers = useMemo(() => {
+    if (!ticket) return [];
+    return [
+      ...ticket.customers.map((customer) => ({
+        id: customer.id,
+        avatar: customer.user.avatar,
+        first_name: customer.user.first_name,
+        last_name: customer.user.last_name,
+        role: 'Client',
+      })),
+      ...ticket.support_agents.map((supportAgent) => ({
+        id: supportAgent.id,
+        avatar: supportAgent.user.avatar,
+        first_name: supportAgent.user.first_name,
+        last_name: supportAgent.user.last_name,
+        role: 'Agent',
+      })),
+    ];
+  }, [ticket]);
 
   if (isLoading || !ticket) {
     return <div>Loading...</div>;
@@ -28,8 +56,34 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
     );
   }
 
+  console.log(ticket);
+
+  const status: {
+    label: string;
+    tooltipLabel: string;
+    variant: 'open_ticket' | 'pending_ticket' | 'archived_ticket';
+  } =
+    ticket.status === 'open'
+      ? {
+          label: 'Ouvert',
+          tooltipLabel: 'La discussion est en attente de la réponse du client.',
+          variant: 'open_ticket',
+        }
+      : ticket.status === 'pending'
+        ? {
+            label: 'En attente',
+            tooltipLabel:
+              "La discussion est en attente de la réponse d'un agent.",
+            variant: 'pending_ticket',
+          }
+        : {
+            label: 'Archivé',
+            tooltipLabel: 'La discussion a était archivé.',
+            variant: 'archived_ticket',
+          };
+
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between gap-12">
       <div className="space-y-8 w-9/12">
         <Breadcrumb>
           <BreadcrumbList>
@@ -77,7 +131,67 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
         </div>
       </div>
 
-      <div className="space-y-8 flex-1">Ticket infos side</div>
+      <div className="space-y-12 flex-1 sticky top-4 h-fit">
+        <div className="space-y-4">
+          <h2 className="font-bold text-xl">Status</h2>
+          <Separator />
+
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="w-fit h-fit">
+                  <Badge
+                    className="uppercase cursor-pointer"
+                    variant={status.variant}
+                  >
+                    {status.label}
+                  </Badge>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent align="center" side="left">
+                <p>{status.tooltipLabel}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="font-bold text-xl">Participants</h2>
+          <Separator />
+
+          <div className="flex items-center -space-x-4">
+            {ticketUsers.map((user) => (
+              <TooltipProvider key={user.id} delayDuration={100}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
+                      <AvatarImage
+                        src={user.avatar?.path}
+                        alt={`Photo de l'user ${user.first_name} ${user.last_name}`}
+                        className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
+                      />
+                      <AvatarFallback className="w-full uppercase h-full text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
+                        {user.first_name[0] + user.last_name[0]}
+                      </AvatarFallback>
+                    </Avatar>
+                  </TooltipTrigger>
+                  <TooltipContent align="center" side="top">
+                    <p>
+                      {user.first_name} {user.last_name} -{' '}
+                      <span className="font-semibold">{user.role}</span>
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <h2 className="font-bold text-xl">Pièces jointes</h2>
+          <Separator />
+        </div>
+      </div>
     </div>
   );
 };
