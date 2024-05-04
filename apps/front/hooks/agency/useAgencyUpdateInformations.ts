@@ -1,3 +1,5 @@
+'use client';
+
 import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
 import { agencyService } from '@/services';
 import { renderErrorToast } from '@/utils';

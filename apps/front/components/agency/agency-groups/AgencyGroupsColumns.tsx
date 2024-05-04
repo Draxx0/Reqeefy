@@ -1,5 +1,4 @@
 'use client';
-
 import {
   Button,
   Checkbox,
@@ -76,8 +75,6 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const customer = row.original;
-
-      console.log(customer);
 
       return (
         <DropdownMenu>

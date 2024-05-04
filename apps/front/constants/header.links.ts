@@ -1,5 +1,4 @@
-import { Icons } from '@/components/server.index';
-import { HeaderLink } from '@/types/header';
+import { Icons } from '@/components/server.index';import { HeaderLink } from '@/types/header';
 
 export const NAV_TOP_LINKS: Array<HeaderLink> = [
   {
@@ -20,7 +19,7 @@ export const NAV_BOTTOM_LINKS: Array<HeaderLink> = [
     path: '/settings',
     tooltipLabel: 'Paramètres',
     icon: Icons.settings,
-    needsPermissions: ['agent', 'distributor', 'superadmin'],
+    needsPermissions: ['superadmin'],
   },
   // {
   //   path: '/user-settings',

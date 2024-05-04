@@ -1,1 +1,1 @@
-export default function TicketPage() {}
+export default async function TicketPage() {}

@@ -1,5 +1,4 @@
-'use client';
-import { registerSchema } from '@/schemas';
+'use client';import { registerSchema } from '@/schemas';
 import { agencyService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
@@ -29,7 +28,6 @@ export const useSignup = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof registerSchema>) => {
-      console.log('data', data);
       return await agencyService.create(data);
     },
     onError: (error) => {

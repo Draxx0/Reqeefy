@@ -1,10 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
+import { useQuery } from '@tanstack/react-query';import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
 import { useAuthStore } from '@/stores';
 import { ticketsService } from '@/services';
 import { TicketsQueryParams } from '@/types';
 
-export const useGetTickets = ({
+export const useGetTicketsByProject = ({
   projectId,
   queryParams,
 }: {

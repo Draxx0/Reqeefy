@@ -1,7 +1,6 @@
-import { UserSettingsForm } from '@/components/client.index';
-import { PageHeader, Separator } from '@/components/server.index';
+import { UserSettingsForm } from '@/components/client.index';import { PageHeader } from '@/components/server.index';
 
-export default function UserSettingsPage() {
+export default async function UserSettingsPage() {
   return (
     <section className="space-y-12">
       <PageHeader

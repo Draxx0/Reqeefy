@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   Button,
   CreateTicketForm,
   Dialog,
@@ -11,7 +12,7 @@
 } from '@/components/client.index';
 import { Input, PageHeader, Ticket } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
-import { useGetTickets } from '@/hooks';
+import { useGetTicketsByProject } from '@/hooks';
 import { useAuthStore } from '@/stores';
 import { ArrowDownUp, MessageCircle } from 'lucide-react';
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
@@ -32,7 +33,7 @@ export const CustomerTicketsList = () => {
     data: tickets,
     isLoading,
     isError,
-  } = useGetTickets({
+  } = useGetTicketsByProject({
     projectId: user?.customer?.project.id,
     queryParams: {
       page: currentPage,

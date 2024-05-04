@@ -1,5 +1,4 @@
-'use client';
-import {
+'use client';import {
   Button,
   Checkbox,
   DropdownMenu,
@@ -88,16 +87,12 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
     cell: ({ row }) => {
       const agent = row.original;
 
-      return agent.groups.length > 0 ? (
-        <div className="flex items-center gap-2">
-          {agent.groups.map((group) => (
-            <Badge key={group.id} variant="outline">
-              {group.name}
-            </Badge>
-          ))}
-        </div>
+      console.log(agent);
+
+      return agent.group ? (
+        <Badge variant={'outline'}>{agent.group.name}</Badge>
       ) : (
-        <span>Aucun</span>
+        <Badge variant="outline">Non assigné</Badge>
       );
     },
   },

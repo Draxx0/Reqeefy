@@ -68,6 +68,7 @@ export class UsersService {
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('user.agent', 'agent')
+      .leftJoinAndSelect('agent.agency_group', 'agency_group')
       .leftJoinAndSelect('user.customer', 'customer')
       .leftJoinAndSelect('customer.project', 'project')
       .leftJoinAndSelect('user.agency', 'agency')

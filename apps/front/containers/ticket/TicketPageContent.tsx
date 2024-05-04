@@ -19,8 +19,8 @@ import {
 import { useGetTicket } from '@/hooks/tickets/useGetTicket';
 import { formatDate } from '@/utils';
 import { TicketMessageContainer } from './message/TicketMessageContainer';
-import { Lock } from 'lucide-react';
-import { TicketMessageSendForm } from '@/components/client.index';
+import { Lock, Pen } from 'lucide-react';
+import { ButtonLink, TicketMessageSendForm } from '@/components/client.index';
 import { useMemo } from 'react';
 
 export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
@@ -108,6 +108,15 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
         </div>
 
         <Separator />
+
+        <ButtonLink
+          href="#message"
+          variant={'ghost'}
+          className="gap-3 font-medium text-primary-700"
+        >
+          <span>Ecrire un message</span>
+          <Pen className="w-4 h-4" />
+        </ButtonLink>
 
         <div>
           {ticket.messages.map((message) => (

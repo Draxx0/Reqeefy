@@ -70,7 +70,7 @@ export class AgenciesService {
       .createQueryBuilder('agency')
       .leftJoinAndSelect('agency.users', 'users')
       .leftJoinAndSelect('users.agent', 'agent')
-      .leftJoinAndSelect('agent.agency_groups', 'agent_groups')
+      .leftJoinAndSelect('agent.agency_group', 'agent_group')
       .leftJoinAndSelect('users.customer', 'customer')
       .leftJoinAndSelect('customer.project', 'project')
       .leftJoinAndSelect('agency.agency_photo', 'agency_photo')

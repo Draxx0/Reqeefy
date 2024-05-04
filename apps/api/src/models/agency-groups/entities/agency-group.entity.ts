@@ -7,6 +7,7 @@ import {
   Entity,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -20,7 +21,7 @@ export class AgencyGroupEntity extends TimestampEntity {
 
   // RELATIONS
 
-  @ManyToMany(() => AgentEntity, (agent) => agent.agency_groups, {
+  @OneToMany(() => AgentEntity, (agent) => agent.agency_group, {
     onDelete: 'CASCADE',
   })
   agents: AgentEntity[];

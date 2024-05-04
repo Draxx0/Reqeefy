@@ -16,7 +16,7 @@ export const useGetAgents = ({ agency }: { agency: Agency }) => {
       last_name: userAsAgent.last_name,
       email: userAsAgent.email,
       role: userAsAgent.role,
-      groups: userAsAgent.agent?.agency_groups || [],
+      group: userAsAgent.agent?.agency_group,
     }));
   }, [agency.users]);
 

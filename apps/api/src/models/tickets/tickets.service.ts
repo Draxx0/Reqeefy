@@ -37,6 +37,7 @@ export class TicketsService {
       sort_by = 'created_at',
       sort_order = 'DESC',
       distributed = false,
+      agency_group_name,
     } = queries;
 
     const query = this.ticketRepository
@@ -45,6 +46,7 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('ticket.agency_groups', 'ticket_agency_groups')
       .leftJoinAndSelect('messages.user', 'user')
       .leftJoinAndSelect('messages.upload_files', 'upload_files')
       .leftJoinAndSelect('user.avatar', 'avatar')
@@ -52,11 +54,24 @@ export class TicketsService {
       .where('project.agency = :agencyId', { agencyId });
 
     if (search) {
-      query.where('ticket.title LIKE :search', { search: `%${search}%` });
+      query.andWhere('ticket.title LIKE :search', { search: `%${search}%` });
+    }
+
+    if (agency_group_name) {
+      const agencyGroup = await this.agencyGroupRepository.findOne({
+        where: { name: agency_group_name, agency: { id: agencyId } },
+      });
+
+      if (!agencyGroup) {
+        throw new HttpException('Agency group not found', HttpStatus.NOT_FOUND);
+      }
+
+      query.andWhere('ticket_agency_groups.id = :agencyGroupId', {
+        agencyGroupId: agencyGroup.id,
+      });
     }
 
     if (typeof distributed === 'boolean') {
-      console.log('distributed', distributed);
       query.andWhere('ticket.distributed = :distributed', { distributed });
     }
 
@@ -198,8 +213,12 @@ export class TicketsService {
       body.agent_groups_ids,
     );
 
+    console.log('agency_groups', agency_groups);
+
     const agents =
       await this.agentsService.findAllByAgencyGroups(agency_groups);
+
+    console.log('agents', agents);
 
     return await this.ticketRepository.save({
       ...ticket,

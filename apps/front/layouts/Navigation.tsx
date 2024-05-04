@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -42,8 +43,6 @@ export const Navigation = () => {
   };
 
   if (!user) return null;
-
-  console.log('user', user);
 
   return (
     <header className="w-[5vw] h-screen fixed top-0 bg-white border-r border-gray-700">

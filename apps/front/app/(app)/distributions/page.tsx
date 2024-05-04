@@ -1,6 +1,4 @@
-'use client';
-
-// Watch out page does not be client component find a way to update it
+'use client';// Watch out page this does not be client component find a way to update it
 
 import { PageHeader } from '@/components/server.index';
 import { DistributionTicketsList } from '@/containers';

@@ -1,5 +1,4 @@
 'use client';
-
 import { useGetAgency } from '@/hooks';
 import { AgencySettingsLoader } from '../../loaders/AgencySettingsLoader';
 import { AgencySettingsInformationsContent } from './AgencySettingsInformationsContent';
@@ -9,7 +8,6 @@ export const AgencySettings = () => {
 
   if (isLoading) return <AgencySettingsLoader />;
 
-  console.log('agency', agency);
   return (
     agency && (
       <section className="space-y-12">

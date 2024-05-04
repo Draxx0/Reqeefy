@@ -1,6 +1,4 @@
-'use client';
-
-import { useAuthStore } from '@/stores';
+'use client';import { useAuthStore } from '@/stores';
 import { CustomerTicketsList } from './customer/CustomerTicketsList';
 import { AgentTicketsList } from './agent/AgentTicketsList';
 

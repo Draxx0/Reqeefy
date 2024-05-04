@@ -1,5 +1,4 @@
 'use client';
-
 import {
   CreateAgentForm,
   DataTable,
@@ -11,6 +10,8 @@ import { Agency } from '@reqeefy/types';
 
 export const AgentsDataTable = ({ agency }: { agency: Agency }) => {
   const agents = useGetAgents({ agency });
+
+  console.log('AGENTS', agents);
   return (
     <div className="space-y-4">
       <PageHeader

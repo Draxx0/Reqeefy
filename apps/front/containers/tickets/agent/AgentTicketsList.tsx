@@ -1,6 +1,61 @@
-import { PageHeader } from '@/components/server.index';
+'use client';import { Button, PaginationComponent } from '@/components/client.index';
+import { Input, PageHeader, Ticket } from '@/components/server.index';
+import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
+import { useGetTicketsByAgency } from '@/hooks';
+import { useAuthStore } from '@/stores';
+import { ArrowDownUp } from 'lucide-react';
+import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
 
 export const AgentTicketsList = () => {
+  const user = useAuthStore((state) => state.user);
+
+  console.log(user);
+
+  const [currentPage, setCurrentPage] = useQueryState(
+    'page',
+    parseAsInteger.withDefault(1)
+  );
+
+  const [sortOrder, setSortOrder] = useQueryState<SortOrderType>(
+    'sort_order',
+    parseAsStringLiteral(sortOrderValues).withDefault('DESC')
+  );
+
+  const {
+    data: tickets,
+    isLoading,
+    isError,
+  } = useGetTicketsByAgency({
+    agencyId: user?.agency?.id,
+    queryParams: {
+      page: currentPage,
+      limit_per_page: LARGE_PAGE_SIZE,
+      sort_by: 'created_at',
+      sort_order: sortOrder,
+      distributed: true,
+      agency_group_name: user?.agent?.agency_group
+        ? user.agent.agency_group.name
+        : undefined,
+    },
+  });
+
+  if (!user?.agent) return null;
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError || !tickets) {
+    return <div>Error...</div>;
+  }
+
+  const totalPages = Math.ceil(tickets.pagination.total / LARGE_PAGE_SIZE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);
+  };
+
   return (
     <section className="space-y-12">
       <PageHeader
@@ -8,6 +63,47 @@ export const AgentTicketsList = () => {
         description="Répondez aux questions des clients et aidez-les à résoudre leurs problèmes !"
         hasSeparator
       />
+
+      <div className="flex justify-between items-center">
+        <Input
+          searchInput
+          type="text"
+          placeholder="Recherche..."
+          // value={searchTerm}
+          // onChange={(event) => setSearchTerm(event.target.value)}
+        />
+
+        <div className="flex justify-end gap-3">
+          <Button
+            variant={'ghost'}
+            className="flex gap-2 items-center border border-gray-700"
+            onClick={() => setSortOrder(sortOrder === 'ASC' ? 'DESC' : 'ASC')}
+          >
+            <span>{sortOrder === 'ASC' ? 'Plus anciens' : 'Plus récents'}</span>
+            <ArrowDownUp className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+
+      {tickets.data && tickets.data.length > 0 ? (
+        <>
+          <div className="grid grid-cols-4 gap-8">
+            {tickets.data.map((ticket) => (
+              <Ticket key={ticket.id} ticket={ticket} />
+            ))}
+          </div>
+
+          {totalPages > 1 ? (
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          ) : null}
+        </>
+      ) : (
+        <div>Aucune discussion trouvée</div>
+      )}
     </section>
   );
 };

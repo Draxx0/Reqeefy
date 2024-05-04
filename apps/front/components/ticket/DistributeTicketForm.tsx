@@ -1,5 +1,4 @@
 'use client';
-
 import { useDistributeTicket, useGetAgencyGroups } from '@/hooks';
 import {
   Button,
@@ -12,7 +11,7 @@ import {
 } from '../client.index';
 import Multiselect from 'multiselect-react-dropdown';
 import { useAuthStore } from '@/stores';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const DistributeTicketForm = ({ ticketId }: { ticketId: string }) => {
   const user = useAuthStore((state) => state.user);
@@ -38,10 +37,6 @@ export const DistributeTicketForm = ({ ticketId }: { ticketId: string }) => {
     const agency_group_ids = selectedList.map((group) => group.value);
     form.setValue('agent_groups_ids', agency_group_ids as never[]);
   };
-
-  useEffect(() => {
-    console.log(form.getValues());
-  }, [form.watch()]);
 
   return (
     <Form {...form}>

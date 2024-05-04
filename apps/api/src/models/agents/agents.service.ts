@@ -53,11 +53,7 @@ export class AgentsService {
 
     const agent = this.agentRepository.create({
       user: updatedUser,
-      agency_groups: [
-        {
-          id: body.agency_group_id,
-        },
-      ],
+      agency_group: { id: body.agency_group_id },
     });
 
     return this.agentRepository.save(agent);
@@ -89,7 +85,7 @@ export class AgentsService {
     const query = this.agentRepository
       .createQueryBuilder('agent')
       .leftJoinAndSelect('agent.user', 'user')
-      .leftJoinAndSelect('agent.agency_groups', 'agency_groups');
+      .leftJoinAndSelect('agent.agency_group', 'agency_group');
 
     if (search) {
       query.where(
@@ -118,7 +114,7 @@ export class AgentsService {
     const agent = await this.agentRepository
       .createQueryBuilder('agent')
       .leftJoinAndSelect('agent.user', 'user')
-      .leftJoinAndSelect('agent.agency_groups', 'agency_groups')
+      .leftJoinAndSelect('agent.agency_group', 'agency_group')
       .where('agent.id = :id', { id })
       .getOne();
 
@@ -148,8 +144,8 @@ export class AgentsService {
       .leftJoinAndSelect('agent.user', 'user');
 
     const agents = await query
-      .leftJoin('agent.agency_groups', 'agency_groups')
-      .where('agency_groups.id IN (:...ids)', {
+      .leftJoin('agent.agency_group', 'agency_group')
+      .where('agency_group.id IN (:...ids)', {
         ids: agencyGroup.map((group) => group.id),
       })
       .getMany();
@@ -168,7 +164,7 @@ export class AgentsService {
 
     await this.agentRepository.save({
       ...agent,
-      agency_groups: [...agent.agency_groups, agencyGroup],
+      agency_group: agencyGroup,
     });
   }
 }

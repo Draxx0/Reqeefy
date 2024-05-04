@@ -8,6 +8,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -23,11 +24,10 @@ export class AgentEntity extends TimestampEntity {
   @JoinColumn()
   user: UserEntity;
 
-  @ManyToMany(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agents, {
+  @ManyToOne(() => AgencyGroupEntity, (agencyGroup) => agencyGroup.agents, {
     cascade: ['insert', 'update'],
   })
-  @JoinTable()
-  agency_groups: AgencyGroupEntity[];
+  agency_group: AgencyGroupEntity;
 
   @ManyToMany(() => ProjectEntity, (project) => project.agents_referents, {
     nullable: true,

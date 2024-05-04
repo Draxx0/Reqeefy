@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   Button,
   ButtonLink,
   Checkbox,
@@ -97,8 +98,6 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
     id: 'actions',
     cell: ({ row }) => {
       const customer = row.original;
-
-      console.log('customer', customer);
       return (
         <DropdownMenu>
           <DropdownMenuTrigger>

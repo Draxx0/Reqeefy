@@ -1,5 +1,4 @@
 import { AgencySettingsAccount } from '@/containers';
-
-export default function AgencyAccountsSettingsPage() {
+export default async function AgencyAccountsSettingsPage() {
   return <AgencySettingsAccount />;
 }

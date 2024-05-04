@@ -1,5 +1,4 @@
 import { GeneralTicketsList } from '@/containers';
-
-export default function TicketsPage() {
+export default async function TicketsPage() {
   return <GeneralTicketsList />;
 }

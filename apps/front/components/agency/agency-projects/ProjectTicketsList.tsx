@@ -1,13 +1,12 @@
-import { Frown } from 'lucide-react';
-import { Ticket } from '../../server.index';
-import { useGetTickets } from '@/hooks';
+import { Frown } from 'lucide-react';import { Ticket } from '../../server.index';
+import { useGetTicketsByProject } from '@/hooks';
 
 export const ProjectTicketsList = ({ projectId }: { projectId: string }) => {
   const {
     data: tickets,
     isLoading,
     isError,
-  } = useGetTickets({
+  } = useGetTicketsByProject({
     projectId,
     queryParams: { page: 1, sort_order: 'DESC' },
   });

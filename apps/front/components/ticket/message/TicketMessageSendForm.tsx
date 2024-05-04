@@ -15,7 +15,7 @@ export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
   });
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-12" id="message">
       <Form {...form}>
         <form onSubmit={onSubmit} className="space-y-8">
           <FormField
@@ -26,7 +26,7 @@ export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
                 <FormControl>
                   <Wysywig
                     isSubmit={form.formState.isSubmitSuccessful}
-                    autofocus={true}
+                    autofocus={false}
                     placeholder="Répondre..."
                     onChange={(content) => field.onChange(content)}
                   >

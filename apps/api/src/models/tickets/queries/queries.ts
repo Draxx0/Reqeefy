@@ -16,6 +16,10 @@ export class TicketQueries extends PaginateQueries {
   sort_order?: 'ASC' | 'DESC';
 
   @IsOptional()
+  @IsString()
+  agency_group_name?: string;
+
+  @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => {
     if (value === 'true') return true;
