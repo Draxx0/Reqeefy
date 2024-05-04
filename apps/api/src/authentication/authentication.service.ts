@@ -75,6 +75,11 @@ export class AuthenticationService {
       secure: true,
       expires: new Date(Date.now() - 1000),
     });
+    response.cookie('USER_DATA', '', {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() - 1000),
+    });
     return { message: 'Signout successful' };
   }
 }

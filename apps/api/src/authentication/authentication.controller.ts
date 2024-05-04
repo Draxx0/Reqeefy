@@ -30,6 +30,12 @@ export class AuthenticationController {
       cookieName: 'REFRESH_TOKEN',
     });
 
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      data: JSON.stringify(req.user),
+      cookieName: 'USER_DATA',
+    });
+
     return req.user;
   }
 
@@ -76,6 +82,7 @@ export class AuthenticationController {
   @Get('status')
   @UseGuards(JwtAuthGuard)
   async status(@Req() req: UserRequest) {
+    console.log(req.user);
     return req.user;
   }
 }

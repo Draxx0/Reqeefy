@@ -66,6 +66,12 @@ export class AgenciesController {
       cookieName: 'REFRESH_TOKEN',
     });
 
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      data: JSON.stringify(agencyFounder),
+      cookieName: 'USER_DATA',
+    });
+
     return agencyFounder;
   }
 

@@ -45,7 +45,7 @@ export class JwtUtilsService {
     cookieName,
   }: {
     response: any;
-    data: string;
+    data: string | object;
     cookieName: string;
   }) {
     response.cookie(cookieName, data, {
