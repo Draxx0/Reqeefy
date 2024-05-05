@@ -1,5 +1,4 @@
-'use client';
-import {
+'use client';import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -175,7 +174,7 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
                   <TooltipTrigger asChild>
                     <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
                       <AvatarImage
-                        src={user.avatar?.path}
+                        src={user.avatar?.file_url}
                         alt={`Photo de l'user ${user.first_name} ${user.last_name}`}
                         className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
                       />

@@ -5,14 +5,15 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './entities/user.entity';
-import { DeleteResult, Repository } from 'typeorm';
-import { UserQueries } from './queries/queries';
-import { PaginationService } from '../common/models/pagination/pagination.service';
 import { PaginatedData, UserRole } from '@reqeefy/types';
-import { TokenObject, UserRequest } from 'src/common/types/api';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
+import { UserRequest } from 'src/common/types/api';
+import { DeleteResult, Repository } from 'typeorm';
+import { PaginationService } from '../common/models/pagination/pagination.service';
+import { UploadFilesService } from '../upload-files/upload-files.service';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserEntity } from './entities/user.entity';
+import { UserQueries } from './queries/queries';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +23,7 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
     // SERVICES
     private readonly paginationService: PaginationService,
+    private readonly uploadFilesService: UploadFilesService,
     private jwtUtilsService: JwtUtilsService,
   ) {}
 
@@ -133,15 +135,17 @@ export class UsersService {
     userId,
     req,
     body,
+    res,
   }: {
     userId: string;
     req: UserRequest;
     body: UpdateUserDto;
-  }): Promise<TokenObject> {
+    res;
+  }): Promise<UserEntity> {
     //! Should be replaced by a guard
     const user = await this.findOneById(userId);
 
-    if (user.id !== req.user.id || req.user.role !== 'superadmin') {
+    if (user.id !== req.user.id) {
       throw new UnauthorizedException(
         HttpStatus.UNAUTHORIZED,
         'You are not authorized to update this user',
@@ -149,8 +153,37 @@ export class UsersService {
     }
     //!
 
-    const updatedUser = await this.updateSelectedOne(user, body);
+    console.log('trying to update user his own profile');
 
-    return await this.jwtUtilsService.generateJwtToken(updatedUser);
+    if (body.avatar) {
+      if (user.avatar) {
+        await this.uploadFilesService.delete(user.avatar.id);
+      }
+
+      const newUserAvatar = await this.uploadFilesService.createUserFile(
+        {
+          file_name: body.avatar.file_name,
+          file_url: body.avatar.file_url,
+        },
+        user.id,
+      );
+
+      body.avatar = {
+        file_name: newUserAvatar.file_name,
+        file_url: newUserAvatar.file_url,
+      };
+    }
+
+    const update = await this.userRepository.save({
+      ...user,
+      ...body,
+    });
+
+    // get the user from findOneById to get the joined relations
+    const updatedUser = await this.findOneByEmail(update.email);
+
+    console.log('updatedUser', updatedUser);
+
+    return await this.jwtUtilsService.reauthenticateUser(updatedUser, res);
   }
 }

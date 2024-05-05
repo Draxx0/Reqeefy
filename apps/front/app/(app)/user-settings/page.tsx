@@ -1,4 +1,4 @@
-import { UserSettingsForm } from '@/components/client.index';import { PageHeader } from '@/components/server.index';
+import { UserSettingsForm, UserUploadAvatar } from '@/components/client.index';import { PageHeader } from '@/components/server.index';
 
 export default async function UserSettingsPage() {
   return (
@@ -9,7 +9,11 @@ export default async function UserSettingsPage() {
         hasSeparator
       />
 
-      <div className="max-w-3xl">
+      <div className="max-w-3xl space-y-12">
+        <PageHeader title="Avatar" size="small" hasSeparator />
+        <UserUploadAvatar />
+
+        <PageHeader title="Compte" size="small" hasSeparator />
         <UserSettingsForm />
       </div>
     </section>

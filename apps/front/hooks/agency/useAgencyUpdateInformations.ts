@@ -1,6 +1,4 @@
-'use client';
-
-import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
+'use client';import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
 import { agencyService } from '@/services';
 import { renderErrorToast } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -36,6 +34,7 @@ export const useAgencyUpdateInformations = ({ agency }: { agency: Agency }) => {
       queryClient.invalidateQueries({
         queryKey: ['agency'],
       });
+      form.reset();
     },
   });
 

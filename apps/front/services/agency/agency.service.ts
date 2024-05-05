@@ -1,5 +1,4 @@
-import { Agency } from '@reqeefy/types';
-import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
+import { Agency } from '@reqeefy/types';import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
 import { z } from 'zod';
 import { registerSchema } from '@/schemas';
 import { api } from '@/services';

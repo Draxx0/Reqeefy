@@ -19,7 +19,7 @@ export const TicketMessage = ({ message }: { message: Message }) => {
             <TooltipTrigger asChild>
               <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
                 <AvatarImage
-                  src={message.user.avatar?.path}
+                  src={message.user.avatar?.file_url}
                   alt={`Photo de l'utilisateur ${message.user.first_name} ${message.user.last_name}`}
                   className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
                 />
@@ -55,16 +55,16 @@ export const TicketMessage = ({ message }: { message: Message }) => {
             {message.upload_files.map((file) => (
               <div key={file.id} className="shadow-md">
                 <Image
-                  src={file.path}
-                  alt={file.name}
+                  src={file.file_url}
+                  alt={file.file_name}
                   width={32}
                   height={32}
                   className="rounded-t-md"
                 />
 
                 <div className="space-y-2 bg-gray-900 rounded-b-md">
-                  <p>{file.name}</p>
-                  <small>{file.size}</small>
+                  <p>{file.file_name}</p>
+                  {/* <small>{file.}</small> */}
                 </div>
               </div>
             ))}

@@ -8,29 +8,19 @@ export const AgencySettings = () => {
 
   if (isLoading) return <AgencySettingsLoader />;
 
+  if (isError || !agency)
+    return (
+      <div>
+        Une erreur est survenue lors de la récupération des informations de
+        l&apos;agence.
+      </div>
+    );
+
+  console.log(agency);
+
   return (
-    agency && (
-      <section className="space-y-12">
-        <AgencySettingsInformationsContent agency={agency} />
-
-        {/* <div className="space-y-6">
-          <AgencySettingsTabs>
-            <>
-              <AgencySettingsTabs.AgencyContent>
-                <AgencySettingsInformationsContent agency={agency} />
-              </AgencySettingsTabs.AgencyContent>
-
-              <AgencySettingsTabs.AccountContent>
-                <AgencySettingsAccountContent agency={agency} />
-              </AgencySettingsTabs.AccountContent>
-
-              <AgencySettingsTabs.ProjectContent>
-                <AgencySettingsProjectsContent agency={agency} />
-              </AgencySettingsTabs.ProjectContent>
-            </>
-          </AgencySettingsTabs>
-        </div> */}
-      </section>
-    )
+    <section className="space-y-12">
+      <AgencySettingsInformationsContent agency={agency} />
+    </section>
   );
 };

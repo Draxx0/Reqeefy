@@ -1,5 +1,4 @@
-'use client';
-import {
+'use client';import {
   Button,
   CreateTicketForm,
   Dialog,
@@ -28,6 +27,8 @@ export const CustomerTicketsList = () => {
     'sort_order',
     parseAsStringLiteral(sortOrderValues).withDefault('DESC')
   );
+
+  console.log('USER', user);
 
   const {
     data: tickets,

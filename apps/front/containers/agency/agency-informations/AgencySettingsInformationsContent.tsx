@@ -1,5 +1,4 @@
-'use client';
-import { Agency } from '@reqeefy/types';
+'use client';import { Agency } from '@reqeefy/types';
 import { useMemo } from 'react';
 import { AgencySettingsInformationsForm } from './AgencySettingsInformationsForm';
 import {
@@ -20,12 +19,14 @@ import {
 } from '../../../components/server.index';
 import { FolderGit2, Pickaxe, User } from 'lucide-react';
 import { AgencyGroupsTable } from './agency-groups/AgencyGroupsTable';
+import { AgencyUploadPhoto } from './AgencyUploadPhoto';
 
 export const AgencySettingsInformationsContent = ({
   agency,
 }: {
   agency: Agency;
 }) => {
+  // Move this logic to a hook ?
   const customersCount = useMemo(() => {
     if (!agency)
       return `Une erreur est survenue lors de la récupération des clients.`;
@@ -111,34 +112,7 @@ export const AgencySettingsInformationsContent = ({
         </Alert>
       </div>
 
-      <div className="flex items-center gap-12">
-        <Avatar className="w-20 h-20 rounded-xl">
-          <AvatarImage
-            src={agency.agency_photo?.path}
-            alt={`Photo de l'agence ${agency.name}`}
-            className="h-48 w-48 rounded-lg"
-          />
-          <AvatarFallback className="w-full uppercase rounded-lg h-full text-2xl flex items-center justify-center">
-            {agency.name[0]}
-          </AvatarFallback>
-        </Avatar>
-
-        <div className="space-y-2">
-          <h2 className="text-lg">Photo de profil</h2>
-          <div className="flex gap-4">
-            <Button>
-              {agency.agency_photo ? 'Changer la' : 'Ajouter une'} photo
-            </Button>
-            {agency.agency_photo && (
-              <Button variant={'destructive'}>Supprimer</Button>
-            )}
-          </div>
-          <p className=" text-xs text-gray-900">
-            Nous supportons les formats JPG, PNG d&apos;une taille maximale de
-            10Mo.
-          </p>
-        </div>
-      </div>
+      <AgencyUploadPhoto agency={agency} />
 
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">

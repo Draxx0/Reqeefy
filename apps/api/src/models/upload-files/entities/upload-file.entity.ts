@@ -3,6 +3,7 @@ import { ProjectEntity } from 'src/models/projects/entities/project.entity';
 import { MessageEntity } from 'src/models/messages/entities/message.entity';
 import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -15,6 +16,12 @@ import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
 export class UploadFileEntity extends TimestampEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  file_name: string;
+
+  @Column()
+  file_url: string;
 
   // RELATIONS
 

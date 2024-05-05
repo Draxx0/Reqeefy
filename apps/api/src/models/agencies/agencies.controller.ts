@@ -15,8 +15,8 @@ import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
-import { AgencyEntity } from './entities/agency.entity';
 import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
+import { UpdateAgencyDTO } from './dto/update-agency.dto';
 
 @Controller('agencies')
 export class AgenciesController {
@@ -78,10 +78,7 @@ export class AgenciesController {
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(...SUPERADMINS_PERMISSIONS)
-  update(
-    @Param('id') id: string,
-    @Body() updateAgencyDto: Partial<AgencyEntity>,
-  ) {
+  update(@Param('id') id: string, @Body() updateAgencyDto: UpdateAgencyDTO) {
     return this.agenciesService.update(id, updateAgencyDto);
   }
 }

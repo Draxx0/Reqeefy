@@ -1,26 +1,56 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUploadFileDto } from './dto/create-upload-file.dto';
-import { UpdateUploadFileDto } from './dto/update-upload-file.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UploadFileEntity } from './entities/upload-file.entity';
+import {
+  CreateAgencyUploadFileDto,
+  CreateUserUploadFileDto,
+} from './dto/create-upload-file.dto';
 
 @Injectable()
 export class UploadFilesService {
-  create(createUploadFileDto: CreateUploadFileDto) {
-    return 'This action adds a new uploadFile';
+  constructor(
+    @InjectRepository(UploadFileEntity)
+    private readonly uploadFileRepository: Repository<UploadFileEntity>,
+  ) {}
+
+  createAgencyFile(createAgencyUploadFileDto: CreateAgencyUploadFileDto) {
+    const { file_name, file_url, agencyId } = createAgencyUploadFileDto;
+
+    const uploadFile = this.uploadFileRepository.create({
+      file_name,
+      file_url,
+      agency: { id: agencyId },
+    });
+
+    return this.uploadFileRepository.save(uploadFile);
   }
 
-  findAll() {
-    return `This action returns all uploadFiles`;
+  createUserFile(
+    createUserUploadFileDto: CreateUserUploadFileDto,
+    userId: string,
+  ) {
+    const { file_name, file_url } = createUserUploadFileDto;
+
+    const uploadFile = this.uploadFileRepository.create({
+      file_name,
+      file_url,
+      user: { id: userId },
+    });
+
+    return this.uploadFileRepository.save(uploadFile);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} uploadFile`;
+  async findOneById(id: string) {
+    const uploadFile = await this.uploadFileRepository
+      .createQueryBuilder('uploadFile')
+      .where('uploadFile.id = :id', { id })
+      .getOne();
+
+    return uploadFile;
   }
 
-  update(id: number, updateUploadFileDto: UpdateUploadFileDto) {
-    return `This action updates a #${id} uploadFile`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} uploadFile`;
+  delete(id: string) {
+    return this.uploadFileRepository.delete({ id });
   }
 }

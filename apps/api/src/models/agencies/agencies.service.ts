@@ -10,6 +10,8 @@ import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
 import { AgencyEntity } from './entities/agency.entity';
 import { AgencyQueries } from './queries/queries';
 import { UserEntity } from '../users/entities/user.entity';
+import { UpdateAgencyDTO } from './dto/update-agency.dto';
+import { UploadFilesService } from '../upload-files/upload-files.service';
 
 @Injectable()
 export class AgenciesService {
@@ -24,6 +26,7 @@ export class AgenciesService {
     private readonly usersService: UsersService,
     private readonly agencyGroupsService: AgencyGroupsService,
     private readonly agentService: AgentsService,
+    private readonly uploadFilesService: UploadFilesService,
     private readonly paginationService: PaginationService,
   ) {}
 
@@ -129,10 +132,33 @@ export class AgenciesService {
     return user;
   }
 
-  async update(id: string, body: Partial<AgencyEntity>) {
-    await this.agencyRepository.update(id, body);
+  async update(id: string, body: UpdateAgencyDTO) {
+    const agency = await this.findOneById(id);
 
-    return await this.findOneById(id);
+    if (body.agency_photo) {
+      if (agency.agency_photo) {
+        await this.uploadFilesService.delete(agency.agency_photo.id);
+      }
+
+      const newAgencyPhoto = await this.uploadFilesService.createAgencyFile({
+        agencyId: agency.id,
+        file_name: body.agency_photo.file_name,
+        file_url: body.agency_photo.file_url,
+      });
+
+      body.agency_photo = {
+        agencyId: agency.id,
+        file_name: newAgencyPhoto.file_name,
+        file_url: newAgencyPhoto.file_url,
+      };
+    }
+
+    const updatedAgency = await this.agencyRepository.save({
+      ...agency,
+      ...body,
+    });
+
+    return updatedAgency;
   }
 
   private async createAgencyGroups(agency_groups: string[], agencyId: string) {

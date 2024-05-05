@@ -9,6 +9,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  buttonVariants,
 } from '@/components/client.index';
 import { Badge } from '@/components/server.index';
 import { AgencyCustomerTableData } from '@/types';
@@ -101,10 +102,14 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <Button variant="ghost" type="button" className="h-8 w-8 p-0">
+            <div
+              className={buttonVariants({
+                variant: 'ghost',
+              })}
+            >
               <span className="sr-only">Ouvrir le menu</span>
               <MoreHorizontal className="h-4 w-4" />
-            </Button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>

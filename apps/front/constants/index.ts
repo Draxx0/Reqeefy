@@ -5,3 +5,4 @@ export * from './app.urls';
 export * from './header.links';
 export * from './tanstackQuery';
 export * from './queryParams';
+export * from './supabase/bucket-folder';

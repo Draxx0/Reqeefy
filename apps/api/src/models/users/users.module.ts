@@ -5,12 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { PaginationModule } from '../common/models/pagination/pagination.module';
 import { JwtUtilsModule } from 'src/authentication/jwt/jwt-utils.module';
+import { UploadFilesModule } from '../upload-files/upload-files.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserEntity]),
     PaginationModule,
     JwtUtilsModule,
+    UploadFilesModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

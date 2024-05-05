@@ -1,6 +1,4 @@
-'use client';
-
-import {
+'use client';import {
   ColumnDef,
   flexRender,
   SortingState,
@@ -28,6 +26,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  buttonVariants,
 } from '@/components/client.index';
 import { useState } from 'react';
 import { EyeOff, Lock } from 'lucide-react';
@@ -109,10 +108,15 @@ export function DataTable<TData, TValue>({
             {children}
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <Button variant="ghost" className="ml-auto">
+                <div
+                  className={buttonVariants({
+                    variant: 'ghost',
+                    className: 'ml-auto outline-none',
+                  })}
+                >
                   Filtrer les colonnes
                   <EyeOff className="ml-2 h-4 w-4" />
-                </Button>
+                </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {table

@@ -10,6 +10,7 @@ import { AgentsModule } from '../agents/agents.module';
 import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
 import { UserEntity } from '../users/entities/user.entity';
 import { JwtUtilsModule } from 'src/authentication/jwt/jwt-utils.module';
+import { UploadFilesModule } from '../upload-files/upload-files.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtUtilsModule } from 'src/authentication/jwt/jwt-utils.module';
     PaginationModule,
     AgencyGroupsModule,
     UsersModule,
+    UploadFilesModule,
     JwtUtilsModule,
   ],
   controllers: [AgenciesController],

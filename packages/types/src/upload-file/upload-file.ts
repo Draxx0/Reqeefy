@@ -1,8 +1,5 @@
-import { Timestamps } from '../common';
-
-export interface UploadFile extends Timestamps {
+import { Timestamps } from '../common';export interface UploadFile extends Timestamps {
   id: string;
-  name: string;
-  size: number;
-  path: string;
+  file_name: string;
+  file_url: string;
 }

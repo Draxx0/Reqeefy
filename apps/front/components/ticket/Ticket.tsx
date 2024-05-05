@@ -1,4 +1,5 @@
-import { Ticket as TicketType } from '@reqeefy/types';import {
+import { Ticket as TicketType } from '@reqeefy/types';
+import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -77,7 +78,7 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
                 <TooltipTrigger asChild>
                   <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
                     <AvatarImage
-                      src={lastMessage.user.avatar?.path}
+                      src={lastMessage.user.avatar?.file_url}
                       alt={`Photo de l'utiliateur ${lastMessage.user.first_name} ${lastMessage.user.last_name}`}
                       className="h-full w-full group-hover:opacity-50 transition duration-300 ease-in-out"
                     />

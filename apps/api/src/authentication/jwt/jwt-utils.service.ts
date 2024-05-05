@@ -39,6 +39,30 @@ export class JwtUtilsService {
     };
   }
 
+  async reauthenticateUser(user: UserEntity, response) {
+    const { access_token, refresh_token } = await this.generateJwtToken(user);
+
+    await this.setResponseCookies({
+      data: access_token,
+      cookieName: 'ACCESS_TOKEN',
+      response,
+    });
+
+    await this.setResponseCookies({
+      data: refresh_token,
+      cookieName: 'REFRESH_TOKEN',
+      response,
+    });
+
+    await this.setResponseCookies({
+      data: JSON.stringify(user),
+      cookieName: 'USER_DATA',
+      response,
+    });
+
+    return user;
+  }
+
   async setResponseCookies({
     response,
     data,

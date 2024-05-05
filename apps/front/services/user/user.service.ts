@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { userSettingsSchema } from '@/schemas';
-import { TokenObject } from '@reqeefy/types';
+import { User } from '@reqeefy/types';
 import { api } from '@/services';
 
 const updateUserProfile = async ({
@@ -9,7 +9,8 @@ const updateUserProfile = async ({
 }: {
   userId: string;
   data: z.infer<typeof userSettingsSchema>;
-}): Promise<TokenObject> => {
+}): Promise<User> => {
+  console.log('data', data);
   try {
     return api.put(`/users/${userId}`, data);
   } catch (error) {

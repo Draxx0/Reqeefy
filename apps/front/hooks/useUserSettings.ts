@@ -13,6 +13,8 @@ export const useUserSettings = () => {
   const { user, setUser } = useAuthStore();
   const router = useRouter();
 
+  console.log('user', user);
+
   if (!user) {
     throw new Error('User not found');
   }

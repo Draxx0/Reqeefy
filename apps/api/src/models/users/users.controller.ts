@@ -8,6 +8,7 @@ import {
   Put,
   Body,
   Req,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserEntity } from './entities/user.entity';
@@ -16,7 +17,7 @@ import { PaginatedData } from '@reqeefy/types';
 import { UserQueries } from './queries/queries';
 import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { TokenObject, UserRequest } from 'src/common/types/api';
+import { UserRequest } from 'src/common/types/api';
 import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 
@@ -37,11 +38,14 @@ export class UsersController {
     @Param('id') id: string,
     @Body() body: UpdateUserDto,
     @Req() req: UserRequest,
+    @Res({ passthrough: true }) res,
   ) {
+    console.log('body', body);
     return await this.usersService.updateUserProfile({
       userId: id,
       req,
       body,
+      res,
     });
   }
 
