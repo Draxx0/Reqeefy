@@ -1,5 +1,4 @@
-'use client';
-import { loginSchema } from '@/schemas';
+'use client';import { loginSchema } from '@/schemas';
 import { authService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
@@ -23,14 +22,13 @@ export const useLogin = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof loginSchema>) => {
-      return await authService.login(data, '');
+      return await authService.login(data);
     },
     onError: (error) => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
-      // const { user, access_token } = data;
-      // setUser(user);
+      // @ts-ignore
       setUser(data);
       router.push('/');
     },

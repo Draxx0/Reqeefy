@@ -35,12 +35,10 @@ export const useUserSettings = () => {
       });
     },
     onError: (error) => {
-      console.error('ERROR', error);
-
       renderErrorToast(error.message);
     },
-    onSuccess({ user }, variables, context) {
-      setUser(user);
+    onSuccess(data, variables, context) {
+      setUser(data);
 
       toast.success('Profil mis à jour', {
         duration: 5000,

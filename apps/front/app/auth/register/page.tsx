@@ -1,5 +1,11 @@
-import { ButtonLink, SignupForm } from '@/components/client.index';
-import { STATIC_PATHS } from '@/constants';
+import { ButtonLink, SignupForm } from '@/components/client.index';import { STATIC_PATHS } from '@/constants';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Reqeefy | Inscription',
+  description:
+    'Créez votre agence et commencez à gérer vos requêtes clients en quelques clics.',
+};
 
 export default function AuthRegisterPage() {
   return (

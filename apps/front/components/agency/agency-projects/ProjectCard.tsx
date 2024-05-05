@@ -1,5 +1,4 @@
-import { Project } from '@reqeefy/types';
-import { Card, CardContent, CardFooter, CardHeader } from '../../server.index';
+import { Project } from '@reqeefy/types';import { Card, CardContent, CardFooter, CardHeader } from '../../server.index';
 import { TicketSlash, User } from 'lucide-react';
 import Image from 'next/image';
 import { ButtonLink } from '../../client.index';
@@ -10,7 +9,7 @@ export const ProjectCard = ({ project }: { project: Project }) => {
       <CardHeader className="p-4">
         {project.photo_url ? (
           <Image
-            src={project.photo_url.path}
+            src={project.photo_url.file_url}
             width={300}
             height={200}
             alt={`Photo du projet ${project.name}`}

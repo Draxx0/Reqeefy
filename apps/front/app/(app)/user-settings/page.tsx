@@ -1,4 +1,11 @@
-import { UserSettingsForm, UserUploadAvatar } from '@/components/client.index';import { PageHeader } from '@/components/server.index';
+import { UserSettingsForm, UserUploadAvatar } from '@/components/client.index';
+import { PageHeader } from '@/components/server.index';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Reqeefy | Informations personnelles',
+  description: 'Modifier vos informations personnelles ici.',
+};
 
 export default async function UserSettingsPage() {
   return (

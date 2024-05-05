@@ -1,5 +1,4 @@
-import { PaginatedData, Project } from '@reqeefy/types';
-import { ProjectsQueryParams } from '@/types';
+import { PaginatedData, Project } from '@reqeefy/types';import { ProjectsQueryParams } from '@/types';
 import { z } from 'zod';
 import { createProjectSchema } from '@/schemas';
 import { buildUrlWithQueryParams } from '@/utils';
@@ -34,7 +33,7 @@ const getOne = async (projectId: string): Promise<Project> => {
 const create = async (
   data: z.infer<typeof createProjectSchema>,
   agencyId: string
-) => {
+): Promise<Project> => {
   try {
     return await api.post(`/projects/agency/${agencyId}`, data);
   } catch (error) {

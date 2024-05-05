@@ -28,8 +28,6 @@ export const CustomerTicketsList = () => {
     parseAsStringLiteral(sortOrderValues).withDefault('DESC')
   );
 
-  console.log('USER', user);
-
   const {
     data: tickets,
     isLoading,

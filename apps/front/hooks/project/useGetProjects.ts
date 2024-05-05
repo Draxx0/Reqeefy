@@ -1,16 +1,15 @@
-import { useQuery } from '@tanstack/react-query';
-import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
+import { useQuery } from '@tanstack/react-query';import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
 import { useAuthStore } from '@/stores';
 import { Agency } from '@reqeefy/types';
 import { projectsService } from '@/services';
-import { ProjectQueryParams } from '@/types';
+import { ProjectsQueryParams } from '@/types';
 
 export const useGetProjects = ({
   agency,
   queryParams,
 }: {
   agency: Agency;
-  queryParams: ProjectQueryParams;
+  queryParams: ProjectsQueryParams;
 }) => {
   const { user } = useAuthStore();
 

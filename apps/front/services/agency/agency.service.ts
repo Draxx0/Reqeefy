@@ -1,9 +1,9 @@
-import { Agency } from '@reqeefy/types';import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
+import { Agency, User } from '@reqeefy/types';import { agencyInformationsSchema } from '@/schemas/agency/agencyInformations.schemas';
 import { z } from 'zod';
 import { registerSchema } from '@/schemas';
 import { api } from '@/services';
 
-const create = async (data: z.infer<typeof registerSchema>) => {
+const create = async (data: z.infer<typeof registerSchema>): Promise<User> => {
   try {
     return await api.post('/agencies', data);
   } catch (error) {

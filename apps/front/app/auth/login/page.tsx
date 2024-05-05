@@ -1,5 +1,11 @@
 import { ButtonLink, LoginForm } from '@/components/client.index';
 import { STATIC_PATHS } from '@/constants';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Reqeefy | Connexion',
+  description: 'Connectez-vous à votre compte.',
+}
 
 export default function AuthLoginPage() {
   return (

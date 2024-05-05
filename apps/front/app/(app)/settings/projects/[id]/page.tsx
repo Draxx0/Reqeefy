@@ -20,6 +20,8 @@ import {
 import { useGetProject } from '@/hooks/project/useGetProject';
 import { ArrowDownUp } from 'lucide-react';
 
+//! PAGE SHOULD BE SERVER COMPONENT
+
 export default function ProjectPage({ params }: { params: { id: string } }) {
   const {
     data: project,
@@ -67,7 +69,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                   <TooltipTrigger asChild>
                     <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
                       <AvatarImage
-                        src={agent.user.avatar?.path}
+                        src={agent.user.avatar?.file_url}
                         alt={`Photo de l'agent ${agent.user.first_name} ${agent.user.last_name}`}
                         className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
                       />
@@ -96,7 +98,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
                   <TooltipTrigger asChild>
                     <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
                       <AvatarImage
-                        src={customer.user.avatar?.path}
+                        src={customer.user.avatar?.file_url}
                         alt={`Photo de l'agent ${customer.user.first_name} ${customer.user.last_name}`}
                         className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
                       />
