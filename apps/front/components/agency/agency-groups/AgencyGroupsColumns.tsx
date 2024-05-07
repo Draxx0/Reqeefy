@@ -11,6 +11,7 @@ import {
   buttonVariants,
 } from '@/components/client.index';
 import { AgencyGroupTableData } from '@/types';
+import { CheckedState } from '@radix-ui/react-checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Pen, Trash, Users } from 'lucide-react';
 

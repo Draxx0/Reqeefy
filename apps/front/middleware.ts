@@ -2,7 +2,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const publicRoutes = ['/auth/register', '/auth/login'];
-const privateRoutes = ['/tickets', '/distributions', '/user-settings'];
+const privateRoutes = [
+  '/tickets',
+  '/distributions',
+  '/user-settings',
+  '/notifications',
+];
 
 const superadminRoutes = [
   '/settings',

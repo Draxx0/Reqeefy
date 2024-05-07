@@ -1,4 +1,5 @@
-'use client';import { userSettingsSchema } from '@/schemas';
+'use client';
+import { userSettingsSchema } from '@/schemas';
 import { authService, userService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
@@ -12,8 +13,6 @@ import { z } from 'zod';
 export const useUserSettings = () => {
   const { user, setUser } = useAuthStore();
   const router = useRouter();
-
-  console.log('user', user);
 
   if (!user) {
     throw new Error('User not found');

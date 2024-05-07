@@ -7,3 +7,4 @@ export * from './tickets/agent/AgentTicketsList';
 export * from './ticket/TicketPageContent';
 export * from './ticket/message/TicketMessage';
 export * from './ticket/message/TicketMessageContainer';
+export * from './notifications';

@@ -10,7 +10,9 @@ export const TicketMessageContainer = ({ message }: { message: Message }) => {
         <span className="bg-gray-700 h-full w-1"></span>
       </div>
       <div className="space-y-4 mb-12 w-full">
-        <span className="text-gray-900">{formatDate(message.created_at)}</span>
+        <span className="text-gray-900 relative bottom-1.5">
+          {formatDate(message.created_at)}
+        </span>
         <TicketMessage message={message} />
       </div>
     </div>

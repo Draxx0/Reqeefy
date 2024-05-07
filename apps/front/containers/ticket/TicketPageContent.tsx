@@ -1,4 +1,6 @@
-'use client';import {
+'use client';
+
+import {
   Avatar,
   AvatarFallback,
   AvatarImage,

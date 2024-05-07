@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -19,18 +20,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/server.index';
-import { NAV_BOTTOM_LINKS, NAV_TOP_LINKS } from '@/constants';
-import { useLogOut } from '@/hooks/auth/useLogOut';
+import { LARGE_PAGE_SIZE, STATIC_PATHS } from '@/constants';
+import { useLogOut } from '@/hooks';
 import { cn } from '@/lib';
 import { useAuthStore } from '@/stores';
+import { hasDistributorPermissions, hasSuperAdminPermissions } from '@/utils';
+import { Bell, Settings, Shuffle, TicketSlash } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { agencyService, ticketsService } from '@/services';
 
 export const Navigation = () => {
   const { user } = useAuthStore();
   const pathname = usePathname();
   const { handleLogOut } = useLogOut();
+  const queryClient = useQueryClient();
 
   const isActive = (link: string) => link === pathname;
 
@@ -54,10 +60,102 @@ export const Navigation = () => {
             height={38}
           />
           <ul className="space-y-4 w-fit">
-            {NAV_TOP_LINKS.map((link, index) =>
+            <li className="active:translate-y-1 transition ease-in-out">
+              <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={STATIC_PATHS.TICKETS}
+                      className={linkClasses(STATIC_PATHS.TICKETS)}
+                    >
+                      <TicketSlash />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent align="center" side="right">
+                    <p>Discussions</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </li>
+            {hasDistributorPermissions(user.role) && (
+              <li
+                className="active:translate-y-1 transition ease-in-out"
+                onMouseEnter={async () => {
+                  if (!user || !user.agency) return;
+
+                  await queryClient.prefetchQuery({
+                    queryKey: [
+                      'distribution',
+                      user.agency.id,
+                      'tickets',
+                      1,
+                      'DESC',
+                    ],
+                    queryFn: async () => {
+                      return await ticketsService.getAllByAgency(
+                        user.agency!.id,
+                        {
+                          page: 1,
+                          limit_per_page: LARGE_PAGE_SIZE,
+                          sort_by: 'created_at',
+                          sort_order: 'DESC',
+                          distributed: false,
+                        }
+                      );
+                    },
+                  });
+                }}
+              >
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                        href={STATIC_PATHS.DISTRIBUTIONS}
+                        className={linkClasses(STATIC_PATHS.DISTRIBUTIONS)}
+                      >
+                        <Shuffle />
+                      </Link>
+                    </TooltipTrigger>
+                    <TooltipContent align="center" side="right">
+                      <p>Distribution</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </li>
+            )}
+            <li className="active:translate-y-1 transition ease-in-out">
+              <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={STATIC_PATHS.NOTIFICATIONS}
+                      className={`${linkClasses(STATIC_PATHS.NOTIFICATIONS)}`}
+                    >
+                      <div className="relative">
+                        <div className="size-2.5 bg-primary-700 rounded-full flex items-center justify-center absolute -top-1 -right-1">
+                          <div
+                            className="
+                           size-2 bg-primary-900  rounded-full animate-ping
+                          "
+                          ></div>
+                        </div>
+                        <Bell />
+                      </div>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent align="center" side="right">
+                    <p>Notifications</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </li>
+            {/* {NAV_TOP_LINKS.map((link, index) =>
               link.needsPermissions &&
               !link.needsPermissions.includes(user.role) ? null : (
-                <li key={index}>
+                <li
+                  className="active:translate-y-1 transition ease-in-out"
+                  key={index}
+                >
                   <TooltipProvider delayDuration={100}>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -75,15 +173,49 @@ export const Navigation = () => {
                   </TooltipProvider>
                 </li>
               )
-            )}
+            )} */}
           </ul>
         </div>
 
         <ul className="space-y-4 w-fit">
-          {NAV_BOTTOM_LINKS.map((link, index) =>
+          {hasSuperAdminPermissions(user.role) && (
+            <li
+              className="active:translate-y-1 transition ease-in-out"
+              onMouseEnter={async () => {
+                await queryClient.prefetchQuery({
+                  queryKey: ['agency'],
+                  queryFn: async () => {
+                    if (!user || !user.agency) return null;
+                    return await agencyService.get(user.agency.id);
+                  },
+                });
+              }}
+            >
+              <TooltipProvider delayDuration={100}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={STATIC_PATHS.SETTINGS}
+                      className={linkClasses(STATIC_PATHS.SETTINGS)}
+                    >
+                      <Settings />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent align="center" side="right">
+                    <p>Paramètres d&apos;agence</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </li>
+          )}
+
+          {/* {NAV_BOTTOM_LINKS.map((link, index) =>
             link.needsPermissions &&
             !link.needsPermissions.includes(user.role) ? null : (
-              <li key={index}>
+              <li
+                key={index}
+                className="active:translate-y-1 transition ease-in-out"
+              >
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -98,15 +230,15 @@ export const Navigation = () => {
                 </TooltipProvider>
               </li>
             )
-          )}
+          )} */}
 
-          <li>
+          <li className="active:translate-y-1 transition ease-in-out">
             <TooltipProvider delayDuration={100}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
-                    href="/user-settings"
-                    className={linkClasses('/user-settings')}
+                    href={STATIC_PATHS.USER_SETTINGS}
+                    className={linkClasses(STATIC_PATHS.USER_SETTINGS)}
                   >
                     <Avatar className="h-full w-full">
                       <AvatarImage
@@ -129,7 +261,7 @@ export const Navigation = () => {
           <li>
             <TooltipProvider delayDuration={100}>
               <Tooltip>
-                <TooltipTrigger className="hover:bg-gray-500 cursor-pointer p-2 inline-flex justify-center border-2 border-transparent rounded-md transition-all ease-in-out duration-300">
+                <TooltipTrigger className="hover:bg-gray-500 active:translate-y-1 cursor-pointer p-2 inline-flex justify-center border-2 border-transparent rounded-md transition-all ease-in-out duration-300">
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Icons.logout />

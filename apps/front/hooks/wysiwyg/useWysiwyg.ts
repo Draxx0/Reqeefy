@@ -34,7 +34,7 @@ export const useWysiwyg = ({
           return [
             `h${level}`,
             mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              // @ts-expect-error
+              // @ts-ignore
               class: `${classes[level]}`,
             }),
             0,
