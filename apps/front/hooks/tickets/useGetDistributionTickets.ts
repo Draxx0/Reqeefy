@@ -22,7 +22,10 @@ export const useGetDistributionTickets = ({
       queryParams.sort_order,
     ],
     queryFn: async () => {
-      return await ticketsService.getAllByAgency(agencyId, queryParams);
+      return await ticketsService.getAllToDistributeByAgency(
+        agencyId,
+        queryParams
+      );
     },
     staleTime: 1000 * 60 * 60,
     enabled: !!user && !!agencyId,

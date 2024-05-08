@@ -124,6 +124,19 @@ export class AgentsService {
     return agent;
   }
 
+  async findOneByUserId(userId: string) {
+    try {
+      return await this.agentRepository
+        .createQueryBuilder('agent')
+        .leftJoinAndSelect('agent.user', 'user')
+        .leftJoinAndSelect('agent.projects_referents', 'projects_referents')
+        .where('user.id = :userId', { userId })
+        .getOne();
+    } catch (error) {
+      throw new HttpException('Agent not found', HttpStatus.NOT_FOUND);
+    }
+  }
+
   async findAllByIds(ids: string[]) {
     const query = this.agentRepository
       .createQueryBuilder('agent')

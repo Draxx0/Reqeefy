@@ -1,5 +1,6 @@
 'use client';
 
+import { STATIC_PATHS } from '@/constants';
 import { createProjectSchema } from '@/schemas';
 import { projectsService } from '@/services';
 import { renderErrorToast } from '@/utils';
@@ -35,7 +36,7 @@ export const useCreateProject = ({ agencyId }: { agencyId: string }) => {
       queryClient.invalidateQueries({
         queryKey: ['agency'],
       });
-      router.push(`/settings/projects/${data.id}`);
+      router.push(`${STATIC_PATHS.PROJECTS_SETTINGS}/${data.id}`);
     },
   });
 

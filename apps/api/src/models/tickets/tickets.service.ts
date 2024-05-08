@@ -29,16 +29,21 @@ export class TicketsService {
     private readonly agentsService: AgentsService,
   ) {}
 
-  async findAllByAgency(queries: TicketQueries, agencyId: string) {
+  async findAllDistributedByAgency(
+    queries: TicketQueries,
+    agencyId: string,
+    userId: string,
+  ) {
     const {
       page = 1,
       limit_per_page = 10,
       search,
       sort_by = 'created_at',
       sort_order = 'DESC',
-      distributed = false,
       agency_group_name,
     } = queries;
+
+    const user = await this.agentsService.findOneByUserId(userId);
 
     const query = this.ticketRepository
       .createQueryBuilder('ticket')
@@ -46,15 +51,25 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.messages', 'messages')
-      .leftJoinAndSelect('ticket.agency_groups', 'ticket_agency_groups')
+      .leftJoinAndSelect('ticket.agency_groups', 'agency_groups')
       .leftJoinAndSelect('messages.user', 'user')
       .leftJoinAndSelect('messages.upload_files', 'upload_files')
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('ticket.project', 'project')
-      .where('project.agency = :agencyId', { agencyId });
+      .leftJoinAndSelect('project.agents_referents', 'agents_referents')
+      .where('project.agency = :agencyId', { agencyId })
+      .andWhere('ticket.distributed = :distributed', { distributed: true });
 
     if (search) {
       query.andWhere('ticket.title LIKE :search', { search: `%${search}%` });
+    }
+
+    const projectIds = user.projects_referents.map((project) => project.id);
+    const conditions = [];
+
+    if (projectIds.length > 0) {
+      conditions.push('project.id IN (:...projects)');
+      query.setParameter('projects', projectIds);
     }
 
     if (agency_group_name) {
@@ -66,14 +81,50 @@ export class TicketsService {
         throw new HttpException('Agency group not found', HttpStatus.NOT_FOUND);
       }
 
-      query.andWhere('ticket_agency_groups.id = :agencyGroupId', {
-        agencyGroupId: agencyGroup.id,
-      });
+      conditions.push('agency_groups.id = :agencyGroupId');
+      query.setParameter('agencyGroupId', agencyGroup.id);
     }
 
-    if (typeof distributed === 'boolean') {
-      query.andWhere('ticket.distributed = :distributed', { distributed });
+    if (conditions.length > 0) {
+      query.andWhere(`(${conditions.join(' OR ')})`);
     }
+
+    const [tickets, total] = await query
+      .skip((page - 1) * limit_per_page)
+      .orderBy(`ticket.${sort_by}`, sort_order)
+      .take(limit_per_page)
+      .getManyAndCount();
+
+    tickets.forEach((ticket) => ticket.sortMessages());
+
+    return this.paginationService.paginate<TicketEntity>({
+      page,
+      total,
+      limit_per_page,
+      data: tickets,
+    });
+  }
+
+  async findAllToDistributeByAgency(queries: TicketQueries, agencyId: string) {
+    const {
+      page = 1,
+      limit_per_page = 10,
+      sort_by = 'created_at',
+      sort_order = 'DESC',
+    } = queries;
+
+    const query = this.ticketRepository
+      .createQueryBuilder('ticket')
+      .leftJoinAndSelect('ticket.customers', 'customers')
+      .leftJoinAndSelect('ticket.support_agents', 'support_agents')
+      .leftJoinAndSelect('ticket.subject', 'subject')
+      .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('messages.user', 'user')
+      .leftJoinAndSelect('messages.upload_files', 'upload_files')
+      .leftJoinAndSelect('user.avatar', 'avatar')
+      .leftJoinAndSelect('ticket.project', 'project')
+      .where('project.agency = :agencyId', { agencyId })
+      .andWhere('ticket.distributed = :distributed', { distributed: false });
 
     const [tickets, total] = await query
       .skip((page - 1) * limit_per_page)
@@ -98,7 +149,6 @@ export class TicketsService {
       search,
       sort_by = 'created_at',
       sort_order = 'DESC',
-      distributed,
     } = queries;
 
     const query = this.ticketRepository
@@ -111,14 +161,11 @@ export class TicketsService {
       .leftJoinAndSelect('messages.upload_files', 'upload_files')
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('ticket.project', 'project')
-      .where('project.id = :projectId', { projectId });
+      .where('project.id = :projectId', { projectId })
+      .andWhere('ticket.distributed = :distributed', { distributed: true });
 
     if (search) {
       query.where('ticket.title LIKE :search', { search: `%${search}%` });
-    }
-
-    if (distributed) {
-      query.andWhere('ticket.distributed = :distributed', { distributed });
     }
 
     const [tickets, total] = await query
@@ -154,6 +201,7 @@ export class TicketsService {
       .leftJoinAndSelect('support_agent_user.avatar', 'support_agent_avatar')
       .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.project', 'project')
+      .leftJoinAndSelect('project.agents_referents', 'agents_referents')
       .leftJoinAndSelect('ticket.agency_groups', 'agency_groups')
       .where('ticket.id = :id', { id })
       .getOne();
@@ -216,12 +264,13 @@ export class TicketsService {
       body.agent_groups_ids,
     );
 
-    console.log('agency_groups', agency_groups);
-
-    const agents =
+    const agentsFromAgencyGroupsSelected =
       await this.agentsService.findAllByAgencyGroups(agency_groups);
 
-    console.log('agents', agents);
+    const agents = [
+      ...agentsFromAgencyGroupsSelected,
+      ...ticket.project.agents_referents,
+    ];
 
     return await this.ticketRepository.save({
       ...ticket,

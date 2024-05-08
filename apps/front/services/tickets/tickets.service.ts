@@ -21,11 +21,27 @@ const getAllByProject = async (
   }
 };
 
-const getAllByAgency = async (
+const getAllDistributedByAgency = async (
   agencyId: string,
   queryParams: TicketsQueryParams
 ): Promise<PaginatedData<Ticket>> => {
   const apiUrl = `/tickets/agency/${agencyId}`;
+  const url = buildUrlWithQueryParams(apiUrl, queryParams);
+
+  try {
+    return await api.get(url);
+  } catch (error) {
+    throw new Error(
+      'Une erreur est survenue lors de la récupération des tickets.'
+    );
+  }
+};
+
+const getAllToDistributeByAgency = async (
+  agencyId: string,
+  queryParams: TicketsQueryParams
+): Promise<PaginatedData<Ticket>> => {
+  const apiUrl = `/tickets/agency/${agencyId}/to-distribute`;
   const url = buildUrlWithQueryParams(apiUrl, queryParams);
 
   try {
@@ -73,7 +89,8 @@ const getOne = async (ticketId: string): Promise<Ticket> => {
 
 export const ticketsService = {
   getAllByProject,
-  getAllByAgency,
+  getAllDistributedByAgency,
+  getAllToDistributeByAgency,
   create,
   getOne,
   distribute,

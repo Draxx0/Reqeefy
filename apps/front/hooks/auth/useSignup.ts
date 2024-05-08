@@ -1,4 +1,6 @@
-'use client';import { registerSchema } from '@/schemas';
+'use client';
+import { STATIC_PATHS } from '@/constants';
+import { registerSchema } from '@/schemas';
 import { agencyService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
@@ -46,7 +48,7 @@ export const useSignup = () => {
           gap: '1rem',
         },
       });
-      router.push('/');
+      router.push(STATIC_PATHS.TICKETS);
     },
   });
 

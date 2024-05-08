@@ -1,5 +1,6 @@
-import { Frown } from 'lucide-react';import { Ticket } from '../../server.index';
+import { Ticket } from '../../server.index';
 import { useGetTicketsByProject } from '@/hooks';
+import { EmptyTickets } from '@/containers';
 
 export const ProjectTicketsList = ({ projectId }: { projectId: string }) => {
   const {
@@ -30,9 +31,6 @@ export const ProjectTicketsList = ({ projectId }: { projectId: string }) => {
       ))}
     </div>
   ) : (
-    <div className="justify-center flex items-center gap-2">
-      <p>Aucun ticket pour ce projet...</p>
-      <Frown className="w-4 h-4" />
-    </div>
+    <EmptyTickets />
   );
 };

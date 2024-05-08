@@ -9,6 +9,7 @@ import {
   Req,
   HttpException,
   Put,
+  Request,
 } from '@nestjs/common';
 import { TicketsService } from './tickets.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
@@ -19,7 +20,11 @@ import { UserRequest } from 'src/common/types/api';
 import { MessagesService } from '../messages/messages.service';
 import { UsersService } from '../users/users.service';
 import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
-import { DISTRIBUTORS_PERMISSIONS, Roles } from 'src/decorator/roles.decorator';
+import {
+  CUSTOMERS_PERMISSIONS,
+  DISTRIBUTORS_PERMISSIONS,
+  Roles,
+} from 'src/decorator/roles.decorator';
 
 @Controller('tickets')
 @UseGuards(JwtAuthGuard)
@@ -31,23 +36,13 @@ export class TicketsController {
   ) {}
 
   @Post('/project/:id')
+  @Roles(...CUSTOMERS_PERMISSIONS)
   async create(
     @Body() createTicketDto: CreateTicketDto,
     @Param('id') id: string,
     @Req() req: UserRequest,
   ) {
-    const user = await this.usersService.findOneById(req.user.id);
-
-    if (!user.customer) {
-      throw new HttpException(
-        "You cannot create a ticket if you aren't customer",
-        401,
-      );
-    }
-
-    console.log('dto', createTicketDto);
-
-    return this.ticketsService.create(createTicketDto, id, user.id);
+    return this.ticketsService.create(createTicketDto, id, req.user.id);
   }
 
   @Post(':id/messages')
@@ -56,8 +51,6 @@ export class TicketsController {
     @Param('id') id: string,
     @Req() req: UserRequest,
   ) {
-    if (!req.user) throw new HttpException('Unauthorized', 401);
-
     const user = await this.usersService.findOneById(req.user.id);
 
     const ticket = await this.ticketsService.findOneById(id);
@@ -75,8 +68,24 @@ export class TicketsController {
   }
 
   @Get('agency/:id')
-  findAllByAgency(@Param('id') id: string, @Query() queries: TicketQueries) {
-    return this.ticketsService.findAllByAgency(queries, id);
+  findAllByAgency(
+    @Param('id') id: string,
+    @Query() queries: TicketQueries,
+    @Request() req: UserRequest,
+  ) {
+    return this.ticketsService.findAllDistributedByAgency(
+      queries,
+      id,
+      req.user.id,
+    );
+  }
+
+  @Get('agency/:id/to-distribute')
+  findAllToDistribute(
+    @Param('id') id: string,
+    @Query() queries: TicketQueries,
+  ) {
+    return this.ticketsService.findAllToDistributeByAgency(queries, id);
   }
 
   @Get('project/:id')

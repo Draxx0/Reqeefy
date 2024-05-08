@@ -1,4 +1,6 @@
-'use client';import { loginSchema } from '@/schemas';
+'use client';
+import { STATIC_PATHS } from '@/constants';
+import { loginSchema } from '@/schemas';
 import { authService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
@@ -30,7 +32,7 @@ export const useLogin = () => {
     onSuccess(data, variables, context) {
       // @ts-ignore
       setUser(data);
-      router.push('/');
+      router.push(STATIC_PATHS.TICKETS);
     },
   });
 

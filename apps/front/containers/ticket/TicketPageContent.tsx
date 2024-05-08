@@ -23,6 +23,7 @@ import { TicketMessageContainer } from './message/TicketMessageContainer';
 import { Lock, Pen } from 'lucide-react';
 import { ButtonLink, TicketMessageSendForm } from '@/components/client.index';
 import { useMemo } from 'react';
+import { STATIC_PATHS } from '@/constants';
 
 export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
   const { data: ticket, isLoading, isError } = useGetTicket({ ticketId });
@@ -89,7 +90,9 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/">Discussions</BreadcrumbLink>
+              <BreadcrumbLink href={STATIC_PATHS.TICKETS}>
+                Discussions
+              </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>

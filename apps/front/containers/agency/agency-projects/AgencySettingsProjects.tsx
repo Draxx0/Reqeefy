@@ -1,6 +1,6 @@
 'use client';
 
-import { AgencySettingsLoader } from '@/containers/loaders';
+import { AgencySettingsLoader } from '@/containers/loading-state';
 import { AgencySettingsProjectsContent } from './AgencySettingsProjectsContent';
 import { useGetAgency } from '@/hooks';
 

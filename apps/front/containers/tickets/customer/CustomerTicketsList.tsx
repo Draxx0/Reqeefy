@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   Button,
   CreateTicketForm,
   Dialog,
@@ -11,6 +12,7 @@
 } from '@/components/client.index';
 import { Input, PageHeader, Ticket } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
+import { EmptyTickets } from '@/containers/empty-state';
 import { useGetTicketsByProject } from '@/hooks';
 import { useAuthStore } from '@/stores';
 import { ArrowDownUp, MessageCircle } from 'lucide-react';
@@ -124,7 +126,7 @@ export const CustomerTicketsList = () => {
           ) : null}
         </>
       ) : (
-        <div>Aucune discussion trouvée</div>
+        <EmptyTickets />
       )}
     </section>
   );

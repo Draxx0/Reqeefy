@@ -92,14 +92,13 @@ export const Navigation = () => {
                       'DESC',
                     ],
                     queryFn: async () => {
-                      return await ticketsService.getAllByAgency(
+                      return await ticketsService.getAllToDistributeByAgency(
                         user.agency!.id,
                         {
                           page: 1,
                           limit_per_page: LARGE_PAGE_SIZE,
                           sort_by: 'created_at',
                           sort_order: 'DESC',
-                          distributed: false,
                         }
                       );
                     },
@@ -149,31 +148,6 @@ export const Navigation = () => {
                 </Tooltip>
               </TooltipProvider>
             </li>
-            {/* {NAV_TOP_LINKS.map((link, index) =>
-              link.needsPermissions &&
-              !link.needsPermissions.includes(user.role) ? null : (
-                <li
-                  className="active:translate-y-1 transition ease-in-out"
-                  key={index}
-                >
-                  <TooltipProvider delayDuration={100}>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Link
-                          href={link.path}
-                          className={linkClasses(link.path)}
-                        >
-                          <link.icon />
-                        </Link>
-                      </TooltipTrigger>
-                      <TooltipContent align="center" side="right">
-                        <p>{link.tooltipLabel}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </li>
-              )
-            )} */}
           </ul>
         </div>
 
@@ -208,30 +182,6 @@ export const Navigation = () => {
               </TooltipProvider>
             </li>
           )}
-
-          {/* {NAV_BOTTOM_LINKS.map((link, index) =>
-            link.needsPermissions &&
-            !link.needsPermissions.includes(user.role) ? null : (
-              <li
-                key={index}
-                className="active:translate-y-1 transition ease-in-out"
-              >
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Link href={link.path} className={linkClasses(link.path)}>
-                        <link.icon />
-                      </Link>
-                    </TooltipTrigger>
-                    <TooltipContent align="center" side="right">
-                      <p>{link.tooltipLabel}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </li>
-            )
-          )} */}
-
           <li className="active:translate-y-1 transition ease-in-out">
             <TooltipProvider delayDuration={100}>
               <Tooltip>

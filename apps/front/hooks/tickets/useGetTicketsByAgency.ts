@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query';import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
+import { useQuery } from '@tanstack/react-query';
+import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
 import { useAuthStore } from '@/stores';
 import { ticketsService } from '@/services';
 import { TicketsQueryParams } from '@/types';
@@ -17,7 +18,10 @@ export const useGetTicketsByAgency = ({
     queryFn: async () => {
       //! should be improved...
       if (!agencyId) throw new Error('Agency ID is required');
-      return await ticketsService.getAllByAgency(agencyId, queryParams);
+      return await ticketsService.getAllDistributedByAgency(
+        agencyId,
+        queryParams
+      );
     },
     staleTime: 1000 * 60 * 60,
     enabled: !!user && !!agencyId,

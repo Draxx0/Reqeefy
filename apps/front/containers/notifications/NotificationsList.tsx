@@ -13,7 +13,7 @@ export const NotificationsList = () => {
         <MessageCircle className="text-primary-700 w-6 h-6" />
         <div className="space-y-2">
           <AlertTitle className="font-semibold mb-3">
-            Nouvelle discussions !{' '}
+            Nouvelle discussion !{' '}
             <small className="text-gray-900">- Mardi 7 Mai 2024 à 21h22</small>
           </AlertTitle>
           <AlertDescription className="text-gray-900">

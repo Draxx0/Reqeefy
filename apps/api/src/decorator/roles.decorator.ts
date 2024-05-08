@@ -13,3 +13,5 @@ export const DISTRIBUTORS_PERMISSIONS: UserRole[] = [
   'distributor',
 ];
 export const SUPERADMINS_PERMISSIONS: UserRole[] = ['superadmin'];
+
+export const CUSTOMERS_PERMISSIONS: UserRole[] = ['customer'];

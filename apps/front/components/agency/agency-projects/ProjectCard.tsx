@@ -1,7 +1,9 @@
-import { Project } from '@reqeefy/types';import { Card, CardContent, CardFooter, CardHeader } from '../../server.index';
+import { Project } from '@reqeefy/types';
+import { Card, CardContent, CardFooter, CardHeader } from '../../server.index';
 import { TicketSlash, User } from 'lucide-react';
 import Image from 'next/image';
 import { ButtonLink } from '../../client.index';
+import { STATIC_PATHS } from '@/constants';
 
 export const ProjectCard = ({ project }: { project: Project }) => {
   return (
@@ -43,7 +45,7 @@ export const ProjectCard = ({ project }: { project: Project }) => {
         <small>{project.description}</small>
       </CardContent>
       <CardFooter className="justify-end">
-        <ButtonLink href={`/settings/projects/${project.id}`}>
+        <ButtonLink href={`${STATIC_PATHS.PROJECTS_SETTINGS}/${project.id}`}>
           Voir le projet
         </ButtonLink>
       </CardFooter>

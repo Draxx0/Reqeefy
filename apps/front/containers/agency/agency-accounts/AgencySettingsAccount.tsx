@@ -2,7 +2,7 @@
 
 import { useGetAgency } from '@/hooks';
 import { AgencySettingsAccountContent } from '@/components/client.index';
-import { AgencySettingsLoader } from '../../loaders/AgencySettingsLoader';
+import { AgencySettingsLoader } from '../../loading-state/AgencySettingsLoader';
 
 export const AgencySettingsAccount = () => {
   const { data: agency, isLoading, isError } = useGetAgency();

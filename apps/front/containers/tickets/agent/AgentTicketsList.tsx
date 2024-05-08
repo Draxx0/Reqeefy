@@ -1,6 +1,8 @@
-'use client';import { Button, PaginationComponent } from '@/components/client.index';
+'use client';
+import { Button, PaginationComponent } from '@/components/client.index';
 import { Input, PageHeader, Ticket } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
+import { EmptyTickets } from '@/containers/empty-state';
 import { useGetTicketsByAgency } from '@/hooks';
 import { useAuthStore } from '@/stores';
 import { ArrowDownUp } from 'lucide-react';
@@ -32,7 +34,6 @@ export const AgentTicketsList = () => {
       limit_per_page: LARGE_PAGE_SIZE,
       sort_by: 'created_at',
       sort_order: sortOrder,
-      distributed: true,
       agency_group_name: user?.agent?.agency_group
         ? user.agent.agency_group.name
         : undefined,
@@ -102,7 +103,7 @@ export const AgentTicketsList = () => {
           ) : null}
         </>
       ) : (
-        <div>Aucune discussion trouvée</div>
+        <EmptyTickets />
       )}
     </section>
   );

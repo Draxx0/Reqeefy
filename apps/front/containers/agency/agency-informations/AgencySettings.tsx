@@ -1,6 +1,6 @@
 'use client';
 import { useGetAgency } from '@/hooks';
-import { AgencySettingsLoader } from '../../loaders/AgencySettingsLoader';
+import { AgencySettingsLoader } from '../../loading-state/AgencySettingsLoader';
 import { AgencySettingsInformationsContent } from './AgencySettingsInformationsContent';
 
 export const AgencySettings = () => {

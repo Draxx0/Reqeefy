@@ -1,5 +1,6 @@
 'use client';
 
+import { STATIC_PATHS } from '@/constants';
 import { authService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { useQueryClient } from '@tanstack/react-query';
@@ -12,7 +13,7 @@ export const useLogOut = () => {
 
   const handleLogOut = async () => {
     await authService.logout();
-    router.push('/auth/login');
+    router.push(STATIC_PATHS.LOGIN);
 
     setTimeout(() => {
       setUser(null);

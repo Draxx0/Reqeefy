@@ -12,6 +12,7 @@ import {
   buttonVariants,
 } from '@/components/client.index';
 import { Badge } from '@/components/server.index';
+import { STATIC_PATHS } from '@/constants';
 import { AgencyCustomerTableData } from '@/types';
 import { CheckedState } from '@radix-ui/react-checkbox';
 import { ColumnDef } from '@tanstack/react-table';
@@ -128,7 +129,7 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
             {customer.project ? (
               <DropdownMenuItem>
                 <Link
-                  href={`/settings/projects/${customer.project.id}`}
+                  href={`${STATIC_PATHS.PROJECTS_SETTINGS}/${customer.project.id}`}
                   className='className="capitalize flex items-center gap-3'
                 >
                   Consulter le projet

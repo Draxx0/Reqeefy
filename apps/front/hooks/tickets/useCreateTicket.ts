@@ -1,4 +1,5 @@
 'use client';
+import { STATIC_PATHS } from '@/constants';
 import { createTicketSchema } from '@/schemas';
 import { ticketsService } from '@/services';
 import { renderErrorToast } from '@/utils';
@@ -30,7 +31,9 @@ export const useCreateTicket = ({ projectId }: { projectId: string }) => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
-      toast.success('La discussion a été créé avec succès');
+      toast.success(
+        'La discussion a été créé avec succès, votre demande sera bientôt distribuée à notre équipe.'
+      );
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'tickets'],
       });

@@ -3,6 +3,8 @@ export const STATIC_PATHS = {
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
   SETTINGS: '/settings',
+  ACCOUNTS_SETTINGS: '/settings/accounts',
+  PROJECTS_SETTINGS: '/settings/projects',
   USER_SETTINGS: '/user-settings',
   DISTRIBUTIONS: '/distributions',
   CONFIDENTIALITY: '/confidentiality',

@@ -25,13 +25,13 @@ import {
 } from '../client.index';
 import { DistributeTicketForm } from './DistributeTicketForm';
 import { useAuthStore } from '@/stores';
+import { STATIC_PATHS } from '@/constants';
 
 type Props = {
   ticket: TicketType;
-  hasBadge?: boolean;
 };
 
-export const Ticket = ({ ticket, hasBadge = false }: Props) => {
+export const Ticket = ({ ticket }: Props) => {
   const user = useAuthStore((state) => state.user);
 
   const ticketFilesCount = useMemo(() => {
@@ -52,13 +52,11 @@ export const Ticket = ({ ticket, hasBadge = false }: Props) => {
         className={`absolute right-0 top-0 ${lastMessage.readed ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tr-lg rounded-br-lg`}
       ></div>
       <div className="flex flex-col gap-3 h-full justify-between">
-        {hasBadge && (
-          <div className="w-full flex justify-end">
-            <Badge className="w-fit uppercase" variant={'outline'}>
-              {ticket.project.name}
-            </Badge>
-          </div>
-        )}
+        <div className="w-full flex justify-end">
+          <Badge className="w-fit uppercase" variant={'outline'}>
+            {ticket.project.name}
+          </Badge>
+        </div>
 
         <div className="space-y-4">
           <p className="text-xl">{ticket.title}</p>

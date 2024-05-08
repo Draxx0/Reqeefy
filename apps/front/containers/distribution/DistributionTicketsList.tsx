@@ -4,6 +4,7 @@ import { Ticket } from '../../components/ticket/Ticket';
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
 import { PaginationComponent } from '@/components/client.index';
+import { EmptyTickets } from '../empty-state';
 
 export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
   const [currentPage, setCurrentPage] = useQueryState(
@@ -27,7 +28,6 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
       limit_per_page: LARGE_PAGE_SIZE,
       sort_by: 'created_at',
       sort_order: sortOrder,
-      distributed: false,
     },
   });
 
@@ -48,10 +48,10 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
   };
 
   return tickets.data && tickets.data.length > 0 ? (
-    <>
+    <div>
       <div className="grid grid-cols-4 gap-8">
         {tickets.data.map((ticket) => (
-          <Ticket key={ticket.id} ticket={ticket} hasBadge />
+          <Ticket key={ticket.id} ticket={ticket} />
         ))}
       </div>
 
@@ -60,9 +60,9 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
-    </>
+    </div>
   ) : (
     // Create visual for no ticket found
-    <div>Aucun ticket trouvé</div>
+    <EmptyTickets />
   );
 };

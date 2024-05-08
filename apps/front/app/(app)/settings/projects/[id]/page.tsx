@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/server.index';
+import { STATIC_PATHS } from '@/constants';
 import { useGetProject } from '@/hooks/project/useGetProject';
 import { ArrowDownUp } from 'lucide-react';
 
@@ -46,7 +47,9 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/settings/projects">Projets</BreadcrumbLink>
+            <BreadcrumbLink href={STATIC_PATHS.PROJECTS_SETTINGS}>
+              Projets
+            </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
