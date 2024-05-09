@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 export const useWysiwyg = ({
   wysiwygParams,
 }: {
-  wysiwygParams: WysiwygParams;
+  wysiwygParams: Omit<WysiwygParams, 'setValue'>;
 }) => {
   const editor = useEditor({
     extensions: [
@@ -28,8 +28,8 @@ export const useWysiwyg = ({
             ? node.attrs.level
             : this.options.levels[0];
           const classes = {
-            1: 'text-xl font-bold',
-            2: 'text-lg font-bold',
+            1: 'text-xl font-bold text-xl',
+            2: 'text-lg font-bold text-lg',
           };
           return [
             `h${level}`,
@@ -49,8 +49,6 @@ export const useWysiwyg = ({
     editorProps: {
       attributes: {
         class: 'p-4 min-h-[200px] rounded-md border border-gray-700',
-        // class:
-        //   'focus:outline-none min-h-[96px] max-h-[250px] overflow-y-scroll border border-input bg-transparent px-3 py-2 text-sm shadow-sm rounded-md',
       },
     },
     injectCSS: true,

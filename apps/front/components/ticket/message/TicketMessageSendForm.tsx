@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   Button,
   Form,
   FormControl,
@@ -8,11 +9,16 @@
   Wysywig,
 } from '@/components/client.index';
 import { useCreateMessage } from '@/hooks';
+import { useEffect } from 'react';
 
 export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
   const { form, isPending, onSubmit } = useCreateMessage({
     ticketId: ticketId,
   });
+
+  useEffect(() => {
+    console.log('uploaded files in rhf', form.getValues('uploadedFiles'));
+  }, [form.watch('uploadedFiles')]);
 
   return (
     <div className="space-y-12" id="message">
@@ -25,6 +31,7 @@ export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
               <FormItem>
                 <FormControl>
                   <Wysywig
+                    setValue={form.setValue}
                     isSubmit={form.formState.isSubmitSuccessful}
                     autofocus={false}
                     placeholder="Répondre..."

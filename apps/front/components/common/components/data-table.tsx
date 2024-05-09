@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   ColumnDef,
   flexRender,
   SortingState,
@@ -110,8 +111,8 @@ export function DataTable<TData, TValue>({
               <DropdownMenuTrigger>
                 <div
                   className={buttonVariants({
-                    variant: 'ghost',
-                    className: 'ml-auto outline-none',
+                    variant: 'outline',
+                    className: 'ml-auto',
                   })}
                 >
                   Filtrer les colonnes

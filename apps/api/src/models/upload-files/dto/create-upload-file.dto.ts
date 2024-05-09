@@ -18,3 +18,11 @@ export class CreateUserUploadFileDto {
   @IsString()
   file_url: string;
 }
+
+export class CreateMessageUploadFileDto {
+  @IsString()
+  fileName: string;
+
+  @IsString()
+  publicUrl: string;
+}

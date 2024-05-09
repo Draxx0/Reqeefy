@@ -1,4 +1,5 @@
-import {  Avatar,
+import {
+  Avatar,
   AvatarFallback,
   AvatarImage,
   Separator,
@@ -51,20 +52,23 @@ export const TicketMessage = ({ message }: { message: Message }) => {
         <>
           <Separator />
 
-          <div className="space-y-4">
+          <div className="flex gap-4">
             {message.upload_files.map((file) => (
-              <div key={file.id} className="shadow-md">
-                <Image
-                  src={file.file_url}
-                  alt={file.file_name}
-                  width={32}
-                  height={32}
-                  className="rounded-t-md"
-                />
+              <div key={file.id}>
+                <div className="relative h-24 w-48">
+                  <Image
+                    src={file.file_url}
+                    alt={file.file_name}
+                    layout="fill"
+                    objectFit="cover"
+                    objectPosition="center"
+                    className="rounded-t-md"
+                  />
+                </div>
 
-                <div className="space-y-2 bg-gray-900 rounded-b-md">
-                  <p>{file.file_name}</p>
-                  {/* <small>{file.}</small> */}
+                <div className="space-y-2 bg-gray-200 rounded-b-md p-2">
+                  <p className="text-xs">{file.file_name}</p>
+                  {/* INSERT FILE SIZE  */}
                 </div>
               </div>
             ))}

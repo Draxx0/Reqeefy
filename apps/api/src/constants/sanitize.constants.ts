@@ -18,15 +18,15 @@ const ALLOWED_TAGS = [
 
 export const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
   allowedTags: ALLOWED_TAGS,
-  allowedAttributes: {
-    a: ['href'],
-    img: [
-      'src',
-      {
-        name: 'target',
-        values: ['_blank'],
-      },
-    ],
-  },
+  // allowedAttributes: {
+  //   a: ['href'],
+  //   img: [
+  //     'src',
+  //     {
+  //       name: 'target',
+  //       values: ['_blank'],
+  //     },
+  //   ],
+  // },
   allowedSchemes: ['http', 'https'],
 };

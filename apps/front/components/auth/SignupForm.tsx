@@ -121,6 +121,9 @@ export const SignupForm = () => {
                     <FormLabel className="text-lg font-bold">
                       Lien vers votre site web
                     </FormLabel>
+                    <small className="text-gray-900 text-xs font-medium ml-2">
+                      (Optionnel)
+                    </small>
                     <FormControl>
                       <Input
                         placeholder="https://reqeefy.com"
@@ -141,6 +144,9 @@ export const SignupForm = () => {
                     <FormLabel className="text-lg font-bold">
                       Description brève de l’agence
                     </FormLabel>
+                    <small className="text-gray-900 text-xs font-medium ml-2">
+                      (Optionnel)
+                    </small>
                     <FormControl>
                       <Textarea {...field} className="w-full" />
                     </FormControl>

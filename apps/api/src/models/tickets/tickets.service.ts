@@ -212,6 +212,8 @@ export class TicketsService {
 
     ticket.sortMessages();
 
+    console.log('ticket', ticket.messages);
+
     return ticket;
   }
 

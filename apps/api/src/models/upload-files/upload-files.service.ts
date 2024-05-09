@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { UploadFileEntity } from './entities/upload-file.entity';
 import {
   CreateAgencyUploadFileDto,
+  CreateMessageUploadFileDto,
   CreateUserUploadFileDto,
 } from './dto/create-upload-file.dto';
 
@@ -22,6 +23,23 @@ export class UploadFilesService {
       file_url,
       agency: { id: agencyId },
     });
+
+    return this.uploadFileRepository.save(uploadFile);
+  }
+
+  createMessageFile(
+    CreateMessageUploadFileDto: CreateMessageUploadFileDto,
+    messageId: string,
+  ) {
+    const { fileName, publicUrl } = CreateMessageUploadFileDto;
+
+    const uploadFile = this.uploadFileRepository.create({
+      file_name: fileName,
+      file_url: publicUrl,
+      message: { id: messageId },
+    });
+
+    console.log('uploadFile', uploadFile);
 
     return this.uploadFileRepository.save(uploadFile);
   }

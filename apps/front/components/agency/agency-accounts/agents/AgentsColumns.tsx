@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -13,13 +12,11 @@ import {
 } from '@/components/client.index';
 import { Badge } from '@/components/server.index';
 import { AgencyAgentTableData } from '@/types';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import {
   ArrowUpDown,
   Bolt,
   Copy,
-  EyeOff,
   MoreHorizontal,
   Trash,
   Users,

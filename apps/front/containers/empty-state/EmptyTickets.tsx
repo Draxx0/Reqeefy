@@ -12,7 +12,7 @@ export const EmptyTickets = () => {
           alt="Empty"
         />
       </div>
-      <h2 className="text-lg font-bold">Aucune dicussions</h2>
+      <h2 className="text-lg font-bold">Aucune discussions</h2>
     </div>
   );
 };

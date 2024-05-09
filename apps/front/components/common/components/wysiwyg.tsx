@@ -5,13 +5,13 @@ import { Editor, EditorContent } from '@tiptap/react';
 import { ToggleGroup, ToggleGroupItem } from './toggle-group';
 import {
   BoldIcon,
+  CircleX,
   Command,
+  FileText,
   Heading1,
   Heading2,
-  Heading3,
   Italic,
   List,
-  Paperclip,
   StrikethroughIcon,
   UnderlineIcon,
 } from 'lucide-react';
@@ -21,16 +21,27 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from './tooltip';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { UploadAttachedFile } from '@/components/client.index';
+import Image from 'next/image';
+import { toast } from 'sonner';
 
 const Wysywig = ({
   autofocus,
   placeholder,
   onChange,
   isSubmit,
+  setValue,
   children,
 }: PropsWithChildren<Omit<WysiwygParams, 'setCharacterCount'>>) => {
   const [characterCount, setCharacterCount] = useState(0);
+  const [files, setFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
+  useEffect(() => {
+    console.log('SETTINGS NEW LOCAL FILS IN RHF', files);
+    setValue('uploadedFiles', files);
+  }, [files]);
 
   const { editor } = useWysiwyg({
     wysiwygParams: {
@@ -42,13 +53,52 @@ const Wysywig = ({
     },
   });
 
+  const handleFilesChange = useCallback(
+    (newFiles: File[]) => {
+      const filteredNewFiles = newFiles.filter(
+        (newFile) =>
+          !files.some(
+            (file) => file.name === newFile.name && file.size === newFile.size
+          )
+      );
+
+      if (filteredNewFiles.length > 0) {
+        const updatedFiles = [...files, ...filteredNewFiles];
+        setFiles(updatedFiles);
+
+        const newUrls = filteredNewFiles.map((file) =>
+          URL.createObjectURL(file)
+        );
+
+        setPreviewUrls([...previewUrls, ...newUrls]);
+
+        toast.success('Fichier(s) ajouté(s) avec succès');
+      }
+    },
+    [files, previewUrls]
+  );
+
+  const handleDeleteFile = useCallback(
+    (index: number) => {
+      URL.revokeObjectURL(previewUrls[index]);
+
+      const newFiles = files.filter((_, i) => i !== index);
+      const newPreviewUrls = previewUrls.filter((_, i) => i !== index);
+
+      setFiles(newFiles);
+      setPreviewUrls(newPreviewUrls);
+      toast.success('Fichier(s) supprimé(s) avec succès');
+    },
+    [files, previewUrls]
+  );
+
   if (!editor) {
     return <div>Loading...</div>;
   }
 
   return (
     <div className="bg-white border rounded-md shadow-md p-4 space-y-4">
-      <MenuBar editor={editor} />
+      <MenuBar editor={editor} handleFilesChange={handleFilesChange} />
 
       <EditorContent editor={editor} />
 
@@ -58,12 +108,30 @@ const Wysywig = ({
         </span>
       </div>
 
+      <div className="grid grid-cols-6 gap-6">
+        {previewUrls.map((url, index) => (
+          <ImagePreview
+            key={index}
+            previewUrl={url}
+            index={index}
+            file={files[index]}
+            onDelete={handleDeleteFile}
+          />
+        ))}
+      </div>
+
       <div className="flex justify-end">{children}</div>
     </div>
   );
 };
 
-const MenuBar = ({ editor }: { editor: Editor }) => {
+const MenuBar = ({
+  editor,
+  handleFilesChange,
+}: {
+  editor: Editor;
+  handleFilesChange: (files: File[]) => void;
+}) => {
   return (
     <div className="flex items-center gap-2 justify-between">
       <ToggleGroup type="multiple" variant={'default'}>
@@ -245,18 +313,50 @@ const MenuBar = ({ editor }: { editor: Editor }) => {
         </TooltipProvider>
       </ToggleGroup>
 
-      <TooltipProvider delayDuration={100}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Paperclip className="w-4 h-4 hover:text-primary-700 cursor-pointer transition ease-in-out duration-300" />
-          </TooltipTrigger>
-          <TooltipContent align="center" side="top" className="text-gray-900">
-            <div className="flex items-center gap-2">Joindre un fichier</div>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <UploadAttachedFile onFilesChange={handleFilesChange} />
     </div>
   );
 };
+
+const ImagePreview = ({
+  previewUrl,
+  index,
+  file,
+  onDelete,
+}: {
+  previewUrl: string;
+  index: number;
+  file: File;
+  onDelete: (index: number) => void;
+}) => (
+  <div className="relative h-32 w-full">
+    {file.type.includes('image') ? (
+      <Image
+        title={file.name}
+        src={previewUrl}
+        alt="Image"
+        layout="fill"
+        objectFit="cover"
+        className="border border-primary-900 rounded-md"
+        objectPosition="center"
+      />
+    ) : (
+      <div
+        title={file.name}
+        className="h-full w-full flex flex-col  gap-2 items-center border border-primary-900 justify-center bg-gray-200 rounded-md"
+      >
+        <FileText className="w-12 h-12 text-primary-900" />
+        <p className="text-xs line-clamp-1 w-full px-5">{file.name}</p>
+      </div>
+    )}
+    <button
+      onClick={() => onDelete(index)}
+      className="absolute -top-1 -right-1 active:translate-y-1 transition ease-in-out duration-300 bg-red-500 text-white p-1 rounded-full"
+      aria-label="Supprimer l'image"
+    >
+      <CircleX className="w-4 h-4" />
+    </button>
+  </div>
+);
 
 export { Wysywig };

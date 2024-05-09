@@ -1,4 +1,5 @@
-import type { Config } from 'tailwindcss';const config = {
+import type { Config } from 'tailwindcss';
+const config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -67,6 +68,13 @@ import type { Config } from 'tailwindcss';const config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      fontFamily: {
+        montserrat: 'var(--font-montserrat)',
+      },
+      backgroundImage: {
+        'gradient-main':
+          'linear-gradient(128.79deg, rgba(255,255,255,.3) 0, rgba(255,255,255,.15) 100%)',
       },
       keyframes: {
         'accordion-down': {
