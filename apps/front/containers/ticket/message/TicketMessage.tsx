@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from '@/components/server.index';
 import { Message } from '@reqeefy/types';
+import { FileText } from 'lucide-react';
 import Image from 'next/image';
 
 export const TicketMessage = ({ message }: { message: Message }) => {
@@ -56,14 +57,21 @@ export const TicketMessage = ({ message }: { message: Message }) => {
             {message.upload_files.map((file) => (
               <div key={file.id}>
                 <div className="relative h-24 w-48">
-                  <Image
-                    src={file.file_url}
-                    alt={file.file_name}
-                    layout="fill"
-                    objectFit="cover"
-                    objectPosition="center"
-                    className="rounded-t-md"
-                  />
+                  {/* I should update this using file_type instead of file_url */}
+                  {file.file_url.includes('.pdf') ? (
+                    <div className="flex h-full bg-gray-300 rounded-t-md items-center justify-center">
+                      <FileText className="w-10 h-10 text-primary-900" />
+                    </div>
+                  ) : (
+                    <Image
+                      src={file.file_url}
+                      alt="file"
+                      layout="fill"
+                      className="rounded-t-md"
+                      objectFit="cover"
+                      objectPosition="center"
+                    />
+                  )}
                 </div>
 
                 <div className="space-y-2 bg-gray-200 rounded-b-md p-2">
