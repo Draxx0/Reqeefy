@@ -41,7 +41,11 @@ export const useWysiwyg = ({
           ];
         },
       }),
-      Underline,
+      Underline.configure({
+        HTMLAttributes: {
+          class: 'underline',
+        },
+      }),
       Placeholder.configure({
         placeholder: wysiwygParams.placeholder,
       }),
