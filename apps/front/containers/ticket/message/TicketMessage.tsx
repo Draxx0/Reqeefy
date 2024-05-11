@@ -53,10 +53,10 @@ export const TicketMessage = ({ message }: { message: Message }) => {
         <>
           <Separator />
 
-          <div className="flex gap-4">
+          <div className="grid grid-cols-5 gap-4">
             {message.upload_files.map((file) => (
               <div key={file.id}>
-                <div className="relative h-24 w-48">
+                <div className="relative h-24 w-full" title={file.file_name}>
                   {/* I should update this using file_type instead of file_url */}
                   {file.file_url.includes('.pdf') ? (
                     <div className="flex h-full bg-gray-300 rounded-t-md items-center justify-center">
@@ -75,7 +75,7 @@ export const TicketMessage = ({ message }: { message: Message }) => {
                 </div>
 
                 <div className="space-y-2 bg-gray-200 rounded-b-md p-2">
-                  <p className="text-xs">{file.file_name}</p>
+                  <p className="text-xs truncate">{file.file_name}</p>
                   {/* INSERT FILE SIZE  */}
                 </div>
               </div>
