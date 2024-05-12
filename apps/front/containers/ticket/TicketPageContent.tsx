@@ -1,6 +1,4 @@
-'use client';
-
-import {
+'use client';import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -17,7 +15,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/server.index';
-import { useGetTicket } from '@/hooks/tickets/useGetTicket';
+import { useGetTicket } from '@/hooks';
 import { formatDate } from '@/utils';
 import { TicketMessageContainer } from './message/TicketMessageContainer';
 import { Lock, Pen } from 'lucide-react';
@@ -60,6 +58,7 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
 
   console.log(ticket);
 
+  //TODO Should be moved in another file
   const status: {
     label: string;
     tooltipLabel: string;
@@ -113,14 +112,16 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
 
         <Separator />
 
-        <ButtonLink
-          href="#message"
-          variant={'ghost'}
-          className="gap-3 font-medium text-primary-700"
-        >
-          <span>Ecrire un message</span>
-          <Pen className="w-4 h-4" />
-        </ButtonLink>
+        {ticket.distributed && (
+          <ButtonLink
+            href="#message"
+            variant={'ghost'}
+            className="gap-3 font-medium text-primary-700"
+          >
+            <span>Ecrire un message</span>
+            <Pen className="w-4 h-4" />
+          </ButtonLink>
+        )}
 
         <div>
           {ticket.messages.map((message) => (

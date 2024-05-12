@@ -1,5 +1,4 @@
-import {
-  Avatar,
+import {  Avatar,
   AvatarFallback,
   AvatarImage,
   Separator,
@@ -9,8 +8,9 @@ import {
   TooltipTrigger,
 } from '@/components/server.index';
 import { Message } from '@reqeefy/types';
-import { FileText } from 'lucide-react';
+import { FileText, ZoomIn } from 'lucide-react';
 import Image from 'next/image';
+import { TicketMessageUploadedFiles } from './TicketMessageUploadedFiles';
 
 export const TicketMessage = ({ message }: { message: Message }) => {
   return (
@@ -55,30 +55,7 @@ export const TicketMessage = ({ message }: { message: Message }) => {
 
           <div className="grid grid-cols-5 gap-4">
             {message.upload_files.map((file) => (
-              <div key={file.id}>
-                <div className="relative h-24 w-full" title={file.file_name}>
-                  {/* I should update this using file_type instead of file_url */}
-                  {file.file_url.includes('.pdf') ? (
-                    <div className="flex h-full bg-gray-300 rounded-t-md items-center justify-center">
-                      <FileText className="w-10 h-10 text-primary-900" />
-                    </div>
-                  ) : (
-                    <Image
-                      src={file.file_url}
-                      alt="file"
-                      layout="fill"
-                      className="rounded-t-md"
-                      objectFit="cover"
-                      objectPosition="center"
-                    />
-                  )}
-                </div>
-
-                <div className="space-y-2 bg-gray-200 rounded-b-md p-2">
-                  <p className="text-xs truncate">{file.file_name}</p>
-                  {/* INSERT FILE SIZE  */}
-                </div>
-              </div>
+              <TicketMessageUploadedFiles key={file.id} file={file} />
             ))}
           </div>
         </>
