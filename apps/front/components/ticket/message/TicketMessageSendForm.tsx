@@ -1,5 +1,4 @@
-'use client';
-import {
+'use client';import {
   Button,
   Form,
   FormControl,
@@ -41,7 +40,7 @@ export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
                       type="submit"
                       className="w-fit"
                       disabled={!form.formState.isValid}
-                      isLoading={isPending}
+                      isLoading={isPending || form.formState.isSubmitting}
                     >
                       Envoyer
                     </Button>

@@ -1,4 +1,5 @@
-'use client';import { useCreateTicket } from '@/hooks';
+'use client';
+import { useCreateTicket } from '@/hooks';
 import {
   Button,
   Form,
@@ -48,6 +49,7 @@ export const CreateTicketForm = ({ projectId }: { projectId: string }) => {
               <FormControl>
                 <Wysywig
                   autofocus={false}
+                  setValue={form.setValue}
                   placeholder="Ecrire mon premier message"
                   onChange={(content) => field.onChange(content)}
                   isSubmit={form.formState.isSubmitSuccessful}

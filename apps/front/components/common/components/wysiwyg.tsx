@@ -43,6 +43,13 @@ const Wysywig = ({
     setValue('uploadedFiles', files);
   }, [files]);
 
+  useEffect(() => {
+    if (isSubmit) {
+      setFiles([]);
+      setPreviewUrls([]);
+    }
+  }, [isSubmit]);
+
   const { editor } = useWysiwyg({
     wysiwygParams: {
       autofocus,

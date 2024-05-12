@@ -1,5 +1,4 @@
 import { UseFormSetValue } from 'react-hook-form';
-
 export interface WysiwygParams {
   autofocus: boolean;
   placeholder: string;
@@ -11,3 +10,5 @@ export interface WysiwygParams {
   }>;
   isSubmit: boolean;
 }
+
+// create one type for each wysiwyg editor
