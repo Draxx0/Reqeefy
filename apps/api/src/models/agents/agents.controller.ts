@@ -1,26 +1,27 @@
 import {
+  Body,
   Controller,
   Get,
-  Body,
-  Patch,
   Param,
-  Delete,
+  Post,
+  Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { AgentsService } from './agents.service';
-import { UpdateAgentDto } from './dto/update-agent.dto';
 import { PaginatedData } from '@reqeefy/types';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
+import { AddToAgencyGroupDTO } from './dto/add-to-agency-group.dto';
+import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('agents')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class AgentsController {
   constructor(private readonly agentsService: AgentsService) {}
-
-  // @Post()
-  // create(@Body() createAgentDto: CreateAgentDto) {
-  //   return this.agentsService.create(createAgentDto);
-  // }
 
   @Get()
   async findAll(
@@ -29,18 +30,33 @@ export class AgentsController {
     return this.agentsService.findAll(queries);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.agentsService.findOne(+id);
+  @Post('/agency/:id')
+  @Roles(...SUPERADMINS_PERMISSIONS)
+  async createUsersAgent(
+    @Body() body: CreateAgentDTO,
+    @Param('id') id: string,
+  ) {
+    return await this.agentsService.createUserAgent(body, id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAgentDto: UpdateAgentDto) {
-    return this.agentsService.update(+id, updateAgentDto);
+  @Post('/user/:id')
+  async addExistingUserAgentToAgency(
+    @Body() body: AddAgentToAgencyDTO,
+    @Param('id') id: string,
+  ) {
+    return this.agentsService.createExistingUserAgent(body, id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.agentsService.remove(+id);
+  @Put(':id/add-to-agency-group')
+  async addAgentToAgencyGroup(
+    @Param('id') id: string,
+    @Body() body: AddToAgencyGroupDTO,
+  ) {
+    const { agency_groups_ids } = body;
+    return Promise.all(
+      agency_groups_ids.map((agency_group_id) =>
+        this.agentsService.addAgentToAgencyGroup(id, agency_group_id),
+      ),
+    );
   }
 }

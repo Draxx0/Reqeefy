@@ -1,13 +1,15 @@
+import { UserRole } from '@reqeefy/types';
 import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
 import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
 import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 import { MessageEntity } from 'src/models/messages/entities/message.entity';
 import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
+import { UserPreferencesEntity } from 'src/models/user-preferences/entities/user-preferences.entity';
 import {
   Column,
   Entity,
-  ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -33,13 +35,19 @@ export class UserEntity extends TimestampEntity {
   @Column({ default: false, type: 'boolean' })
   is_email_confirmed: boolean;
 
+  @Column({
+    type: 'enum',
+    enum: ['superadmin', 'distributor', 'agent', 'customer'],
+    nullable: true,
+  })
+  role: UserRole;
+
   // RELATIONS
 
   @OneToOne(() => UploadFileEntity, (uploadFile) => uploadFile.user, {
     nullable: true,
     eager: true,
     onDelete: 'CASCADE',
-    cascade: ['insert', 'update'],
   })
   avatar: UploadFileEntity;
 
@@ -57,10 +65,16 @@ export class UserEntity extends TimestampEntity {
   })
   customer: CustomerEntity;
 
-  @ManyToMany(() => AgencyEntity, (agency) => agency.users, {
+  @OneToOne(
+    () => UserPreferencesEntity,
+    (user_preferences) => user_preferences.user,
+  )
+  preferences: UserPreferencesEntity;
+
+  @ManyToOne(() => AgencyEntity, (agency) => agency.users, {
     onDelete: 'CASCADE',
   })
-  agencies: AgencyEntity[];
+  agency: AgencyEntity;
 
   @OneToMany(() => MessageEntity, (message) => message.user, {
     onDelete: 'NO ACTION',

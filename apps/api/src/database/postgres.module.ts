@@ -2,12 +2,15 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configuration } from 'config/config';
+import { prepareValidateEnv } from 'libs/utils/src/validate-env';
+import { envSchema } from 'src/schemas/server-env.schema';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/config/env/.env.${process.env.NODE_ENV}`,
       load: [configuration],
+      validate: prepareValidateEnv(envSchema),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

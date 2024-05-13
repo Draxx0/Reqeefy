@@ -1,26 +1,85 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { sanitize } from 'src/utils/sanitizer';
+import { Repository } from 'typeorm';
+import { TicketEntity } from '../tickets/entities/ticket.entity';
 import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
+import { MessageEntity } from './entities/message.entity';
+import { UploadFilesService } from '../upload-files/upload-files.service';
 
 @Injectable()
 export class MessagesService {
-  create(createMessageDto: CreateMessageDto) {
-    return 'This action adds a new message';
+  constructor(
+    @InjectRepository(MessageEntity)
+    private readonly messageRepository: Repository<MessageEntity>,
+    private readonly uploadFilesService: UploadFilesService,
+  ) {}
+
+  async create(
+    createMessageDto: CreateMessageDto,
+    ticketId: string,
+    userId: string,
+  ) {
+    const { content, uploadedFiles } = createMessageDto;
+
+    const cleanedContent = sanitize(content);
+
+    const message = this.messageRepository.create({
+      content: cleanedContent,
+      ticket: { id: ticketId },
+      user: { id: userId },
+    });
+
+    await this.messageRepository.save(message);
+
+    const messageUploadedFiles = await Promise.all(
+      uploadedFiles.map((file) =>
+        this.uploadFilesService.createMessageFile(
+          {
+            fileName: file.fileName,
+            publicUrl: file.publicUrl,
+          },
+          message.id,
+        ),
+      ),
+    );
+
+    message.upload_files = messageUploadedFiles;
+
+    return this.messageRepository.save(message);
   }
 
-  findAll() {
-    return `This action returns all messages`;
+  createOnTicket(content: string, ticket: TicketEntity, userId: string) {
+    const cleanedContent = sanitize(content);
+
+    const message = this.messageRepository.create({
+      content: cleanedContent,
+      ticket,
+      user: { id: userId },
+    });
+
+    return this.messageRepository.save(message);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} message`;
+  async findOneById(id: string) {
+    const message = await this.messageRepository
+      .createQueryBuilder('message')
+      .leftJoinAndSelect('message.ticket', 'ticket')
+      .where('message.id = :id', { id })
+      .getOne();
+
+    if (!message) {
+      throw new HttpException('Message not found', 404);
+    }
+
+    return message;
   }
 
-  update(id: number, updateMessageDto: UpdateMessageDto) {
-    return `This action updates a #${id} message`;
-  }
+  async updateReadStatus(id: string) {
+    const message = await this.findOneById(id);
 
-  remove(id: number) {
-    return `This action removes a #${id} message`;
+    message.readed = true;
+
+    return this.messageRepository.save(message);
   }
 }

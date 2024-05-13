@@ -1,26 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAgencyGroupDto } from './dto/create-agency-group.dto';
-import { UpdateAgencyGroupDto } from './dto/update-agency-group.dto';
+import { CreateAgencyGroupDTO } from './dto/create-agency-group.dto';
+import { AgencyGroupEntity } from './entities/agency-group.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 
 @Injectable()
 export class AgencyGroupsService {
-  create(createAgencyGroupDto: CreateAgencyGroupDto) {
-    return 'This action adds a new agencyGroup';
+  constructor(
+    // REPOSITORIES
+    @InjectRepository(AgencyGroupEntity)
+    private readonly agencyGroupRepository: Repository<AgencyGroupEntity>,
+    private readonly paginationService: PaginationService,
+  ) {}
+
+  async findAllByAgency(agencyId: string) {
+    return await this.agencyGroupRepository
+      .createQueryBuilder('agency_group')
+      .leftJoinAndSelect('agency_group.agency', 'agency')
+      .leftJoinAndSelect('agency_group.agents', 'agents')
+      .where('agency.id = :agencyId', { agencyId })
+      .getMany();
   }
 
-  findAll() {
-    return `This action returns all agencyGroups`;
+  async findOneById(id: string) {
+    return this.agencyGroupRepository.findOneBy({ id });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} agencyGroup`;
+  create(body: CreateAgencyGroupDTO, agencyId: string) {
+    const agencyGroup = this.agencyGroupRepository.create({
+      ...body,
+      agency: { id: agencyId },
+    });
+
+    return this.agencyGroupRepository.save(agencyGroup);
   }
 
-  update(id: number, updateAgencyGroupDto: UpdateAgencyGroupDto) {
-    return `This action updates a #${id} agencyGroup`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} agencyGroup`;
+  async findByIds(ids: string[]) {
+    return await Promise.all(ids.map((id) => this.findOneById(id)));
   }
 }

@@ -1,4 +1,10 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateProjectDto } from './create-project.dto';
+import { CreateProjectDTO } from './create-project.dto';
+import { IsArray, IsOptional } from 'class-validator';
+import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 
-export class UpdateProjectDto extends PartialType(CreateProjectDto) {}
+export class UpdateProjectDto extends PartialType(CreateProjectDTO) {
+  @IsOptional()
+  @IsArray()
+  customers: CustomerEntity[];
+}

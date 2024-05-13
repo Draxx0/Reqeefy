@@ -1,43 +1,32 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
+import { UserEntity } from 'src/models/users/entities/user.entity';
 import { UsersService } from 'src/models/users/users.service';
+import { Repository } from 'typeorm';
 import { AuthenticationSigninDto } from './dto/authentication-signin.dto';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { UserEntity } from 'src/models/users/entities/user.entity';
-import { TokenObject } from 'src/common/types/api';
+import { JwtUtilsService } from './jwt/jwt-utils.service';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private usersService: UsersService,
-    private jwtService: JwtService,
+    // REPOSITORIES
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    // SERVICES
+    private usersService: UsersService,
+    private readonly jwtUtilsService: JwtUtilsService,
   ) {}
 
   async signin({
     email,
     password,
-  }: AuthenticationSigninDto): Promise<TokenObject> {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndSelect('user.agent', 'agent')
-      .leftJoinAndSelect('user.customer', 'customer')
-      .leftJoinAndSelect('user.agencies', 'agencies')
-      .leftJoinAndSelect('user.messages', 'messages')
-      .addSelect('user.password')
-      .where('user.email = :email', { email })
-      .getOne();
+  }: AuthenticationSigninDto): Promise<UserEntity> {
+    const user = await this.usersService.findOneByEmail(email);
 
     if (!user) {
-      throw new HttpException(
-        'No user found with this email',
-        HttpStatus.UNAUTHORIZED,
-      );
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
     const isPasswordMatching = await bcrypt.compare(password, user.password);
@@ -47,17 +36,10 @@ export class AuthenticationService {
       throw new HttpException('Password is invalid', HttpStatus.UNAUTHORIZED);
     }
 
-    const payload = {
-      id: user.id,
-      email: user.email,
-    };
-
     delete user.password;
 
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-      user,
-    };
+    // return await this.jwtUtilsService.generateJwtToken(user);
+    return user;
   }
 
   async signup(body: AuthenticationSignupDto): Promise<UserEntity> {
@@ -80,5 +62,24 @@ export class AuthenticationService {
 
     const createdUser = this.userRepository.create(newUser);
     return await this.userRepository.save(createdUser);
+  }
+
+  async logout(response) {
+    response.cookie('ACCESS_TOKEN', '', {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() - 1000),
+    });
+    response.cookie('REFRESH_TOKEN', '', {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() - 1000),
+    });
+    response.cookie('USER_DATA', '', {
+      httpOnly: true,
+      secure: true,
+      expires: new Date(Date.now() - 1000),
+    });
+    return { message: 'Signout successful' };
   }
 }

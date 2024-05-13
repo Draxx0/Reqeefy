@@ -1,3 +1,4 @@
+import { ProjectStatus } from '@reqeefy/types';
 import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
 import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
@@ -8,7 +9,6 @@ import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.e
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -23,6 +23,16 @@ export class ProjectEntity extends TimestampEntity {
 
   @Column()
   name: string;
+
+  @Column()
+  description: string;
+
+  @Column({
+    type: 'enum',
+    enum: ['active', 'inactive', 'archived'],
+    default: 'active',
+  })
+  status: ProjectStatus;
 
   // RELATIONS
 
@@ -41,10 +51,7 @@ export class ProjectEntity extends TimestampEntity {
   })
   tickets: TicketEntity[];
 
-  @ManyToMany(() => CustomerEntity, (customer) => customer.projects, {
-    cascade: ['insert', 'update'],
-  })
-  @JoinTable()
+  @OneToMany(() => CustomerEntity, (customer) => customer.project)
   customers: CustomerEntity[];
 
   @ManyToOne(() => AgencyEntity, (agency) => agency.projects, {
@@ -57,6 +64,7 @@ export class ProjectEntity extends TimestampEntity {
     (ticketSubjectCategory) => ticketSubjectCategory.project,
     {
       onDelete: 'CASCADE',
+      cascade: ['insert', 'update'],
     },
   )
   ticket_subject_categories: TicketSubjectCategoryEntity[];

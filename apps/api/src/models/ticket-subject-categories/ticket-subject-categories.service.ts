@@ -1,26 +1,55 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTicketSubjectCategoryDto } from './dto/create-ticket-subject-category.dto';
-import { UpdateTicketSubjectCategoryDto } from './dto/update-ticket-subject-category.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TicketSubjectCategoryEntity } from './entities/ticket-subject-category.entity';
+import { Repository } from 'typeorm';
+import { TicketSubjectCategoriesQueries } from './queries/queries';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 
 @Injectable()
 export class TicketSubjectCategoriesService {
-  create(createTicketSubjectCategoryDto: CreateTicketSubjectCategoryDto) {
-    return 'This action adds a new ticketSubjectCategory';
+  constructor(
+    // REPOSITORIES
+    @InjectRepository(TicketSubjectCategoryEntity)
+    private readonly ticketSubjectCategoryRepository: Repository<TicketSubjectCategoryEntity>,
+    // SERVICES
+    private readonly paginationService: PaginationService,
+  ) {}
+  async create(id: string, body: CreateTicketSubjectCategoryDto) {
+    const ticketSubjectCategory = this.ticketSubjectCategoryRepository.create({
+      ...body,
+      project: { id },
+    });
+
+    return this.ticketSubjectCategoryRepository.save(ticketSubjectCategory);
   }
 
-  findAll() {
-    return `This action returns all ticketSubjectCategories`;
-  }
+  async findAll(queries: TicketSubjectCategoriesQueries, projectId: string) {
+    const { limit_per_page = 10, page = 1, search } = queries;
+    const query = this.ticketSubjectCategoryRepository
+      .createQueryBuilder('ticketSubjectCategory')
+      .leftJoinAndSelect(
+        'ticketSubjectCategory.ticket_subjects',
+        'ticket_subjects',
+      )
+      .where('ticketSubjectCategory.project.id = :projectId', { projectId });
 
-  findOne(id: number) {
-    return `This action returns a #${id} ticketSubjectCategory`;
-  }
+    if (search) {
+      query.where('ticketSubjectCategory.name LIKE :search', {
+        search: `%${search}%`,
+      });
+    }
 
-  update(id: number, updateTicketSubjectCategoryDto: UpdateTicketSubjectCategoryDto) {
-    return `This action updates a #${id} ticketSubjectCategory`;
-  }
+    const [ticketSubjectCategories, total] = await query
+      .skip((page - 1) * limit_per_page)
+      .take(limit_per_page)
+      .getManyAndCount();
 
-  remove(id: number) {
-    return `This action removes a #${id} ticketSubjectCategory`;
+    return this.paginationService.paginate<TicketSubjectCategoryEntity>({
+      page,
+      total,
+      limit_per_page,
+      data: ticketSubjectCategories,
+    });
   }
 }

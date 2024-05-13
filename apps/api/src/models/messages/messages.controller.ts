@@ -1,34 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  Param,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { MessagesService } from './messages.service';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
+import { UserRequest } from 'src/common/types/api';
+import { UsersService } from '../users/users.service';
 
 @Controller('messages')
+@UseGuards(JwtAuthGuard)
 export class MessagesController {
-  constructor(private readonly messagesService: MessagesService) {}
+  constructor(
+    private readonly messagesService: MessagesService,
+    private readonly usersService: UsersService,
+  ) {}
 
-  @Post()
-  create(@Body() createMessageDto: CreateMessageDto) {
-    return this.messagesService.create(createMessageDto);
-  }
+  @Get('/:id')
+  async updateReadStatus(@Param('id') id: string, @Req() req: UserRequest) {
+    if (!req.user) throw new HttpException('Unauthorized', 401);
+    const user = await this.usersService.findOneById(req.user.id);
 
-  @Get()
-  findAll() {
-    return this.messagesService.findAll();
-  }
+    // If user is not an agent, don't update read status
+    if (!user.agent) return;
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.messagesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDto) {
-    return this.messagesService.update(+id, updateMessageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.messagesService.remove(+id);
+    return this.messagesService.updateReadStatus(id);
   }
 }

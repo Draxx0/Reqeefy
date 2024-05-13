@@ -1,6 +1,7 @@
+import { Timestamps } from '../common';
 import { TicketSubjectCategory } from './ticket_subject_category';
 
-export interface TicketSubject {
+export interface TicketSubject extends Timestamps {
   id: string;
   title: string;
   ticketSubjectCategories: TicketSubjectCategory;

@@ -1,6 +1,16 @@
-import { UserEntity } from 'src/models/users/entities/user.entity';
+import { UserRole } from '@reqeefy/types';
 
 export interface TokenObject {
   access_token: string;
-  user: UserEntity;
+  refresh_token: string;
+}
+
+export interface UserRequest extends Request {
+  user: {
+    id: string;
+    email: string;
+    role: UserRole;
+    iat: number;
+    exp: number;
+  };
 }

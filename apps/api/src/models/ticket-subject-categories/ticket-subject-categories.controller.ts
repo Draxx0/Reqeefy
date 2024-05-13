@@ -3,52 +3,38 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  UseGuards,
   Param,
-  Delete,
+  Query,
 } from '@nestjs/common';
 import { TicketSubjectCategoriesService } from './ticket-subject-categories.service';
 import { CreateTicketSubjectCategoryDto } from './dto/create-ticket-subject-category.dto';
-import { UpdateTicketSubjectCategoryDto } from './dto/update-ticket-subject-category.dto';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { TicketSubjectCategoriesQueries } from './queries/queries';
 
 @Controller('ticket-subject-categories')
+@UseGuards(JwtAuthGuard)
 export class TicketSubjectCategoriesController {
   constructor(
     private readonly ticketSubjectCategoriesService: TicketSubjectCategoriesService,
   ) {}
 
-  @Post()
+  @Post(':id')
   create(
+    @Param('id') id: string,
     @Body() createTicketSubjectCategoryDto: CreateTicketSubjectCategoryDto,
   ) {
     return this.ticketSubjectCategoriesService.create(
+      id,
       createTicketSubjectCategoryDto,
     );
   }
 
-  @Get()
-  findAll() {
-    return this.ticketSubjectCategoriesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketSubjectCategoriesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(
+  @Get('/project/:id')
+  findAll(
+    @Query() queries: TicketSubjectCategoriesQueries,
     @Param('id') id: string,
-    @Body() updateTicketSubjectCategoryDto: UpdateTicketSubjectCategoryDto,
   ) {
-    return this.ticketSubjectCategoriesService.update(
-      +id,
-      updateTicketSubjectCategoryDto,
-    );
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketSubjectCategoriesService.remove(+id);
+    return this.ticketSubjectCategoriesService.findAll(queries, id);
   }
 }

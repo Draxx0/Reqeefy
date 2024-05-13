@@ -13,6 +13,8 @@ import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 import { ProjectEntity } from 'src/models/projects/entities/project.entity';
 import { MessageEntity } from 'src/models/messages/entities/message.entity';
+import { TicketSubjectEntity } from 'src/models/ticket-subjects/entities/ticket-subject.entity';
+import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
 
 @Entity('ticket')
 export class TicketEntity extends TimestampEntity {
@@ -24,14 +26,16 @@ export class TicketEntity extends TimestampEntity {
 
   @Column({
     type: 'enum',
-    enum: ['open', 'closed', 'pending', 'resolved'],
-    default: 'open',
+    enum: ['open', 'pending', 'archived'],
+    default: 'pending',
   })
   status: TicketStatus;
 
   @Column({
     type: 'enum',
     enum: ['low', 'medium', 'high'],
+    nullable: true,
+    default: null,
   })
   priority: TicketPriority;
 
@@ -41,13 +45,24 @@ export class TicketEntity extends TimestampEntity {
   })
   distributed: boolean;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    default: null,
+  })
+  archiving_at: Date;
+
   // RELATIONS
 
   @ManyToOne(() => ProjectEntity, (project) => project.tickets)
   project: ProjectEntity;
 
+  @ManyToOne(() => TicketSubjectEntity, (subject) => subject.tickets)
+  subject: TicketSubjectEntity[];
+
   @ManyToMany(() => AgentEntity, (agent) => agent.tickets_support, {
     cascade: ['insert', 'update'],
+    nullable: true,
   })
   @JoinTable()
   support_agents: AgentEntity[];
@@ -63,4 +78,20 @@ export class TicketEntity extends TimestampEntity {
     cascade: ['insert', 'update'],
   })
   messages: MessageEntity[];
+
+  @ManyToMany(() => AgencyGroupEntity, (agency_group) => agency_group.tickets, {
+    cascade: ['insert', 'update'],
+    nullable: true,
+  })
+  @JoinTable()
+  agency_groups: AgencyGroupEntity[];
+
+  // METHODS
+  sortMessages() {
+    if (this.messages.length > 1) {
+      this.messages.sort((a, b) => {
+        return b.created_at.getTime() - a.created_at.getTime();
+      });
+    }
+  }
 }
