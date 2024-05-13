@@ -1,0 +1,42 @@
+import { Injectable } from '@nestjs/common';
+import { CreateAgencyGroupDTO } from './dto/create-agency-group.dto';
+import { AgencyGroupEntity } from './entities/agency-group.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { PaginationService } from '../common/models/pagination/pagination.service';
+
+@Injectable()
+export class AgencyGroupsService {
+  constructor(
+    // REPOSITORIES
+    @InjectRepository(AgencyGroupEntity)
+    private readonly agencyGroupRepository: Repository<AgencyGroupEntity>,
+    private readonly paginationService: PaginationService,
+  ) {}
+
+  async findAllByAgency(agencyId: string) {
+    return await this.agencyGroupRepository
+      .createQueryBuilder('agency_group')
+      .leftJoinAndSelect('agency_group.agency', 'agency')
+      .leftJoinAndSelect('agency_group.agents', 'agents')
+      .where('agency.id = :agencyId', { agencyId })
+      .getMany();
+  }
+
+  async findOneById(id: string) {
+    return this.agencyGroupRepository.findOneBy({ id });
+  }
+
+  create(body: CreateAgencyGroupDTO, agencyId: string) {
+    const agencyGroup = this.agencyGroupRepository.create({
+      ...body,
+      agency: { id: agencyId },
+    });
+
+    return this.agencyGroupRepository.save(agencyGroup);
+  }
+
+  async findByIds(ids: string[]) {
+    return await Promise.all(ids.map((id) => this.findOneById(id)));
+  }
+}

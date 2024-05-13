@@ -1,0 +1,13 @@
+import { Timestamps } from '../common/timestamps';
+import { Ticket } from '../ticket';
+import { UploadFile } from '../upload-file';
+import { User } from '../user';
+
+export interface Message extends Timestamps {
+  id: string;
+  content: string;
+  readed: boolean;
+  user: User;
+  ticket: Ticket;
+  upload_files: UploadFile[];
+}
