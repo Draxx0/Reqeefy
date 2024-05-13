@@ -3,13 +3,14 @@ import { useGetTicketsByProject } from '@/hooks';
 import { EmptyTickets } from '@/containers';
 
 export const ProjectTicketsList = ({ projectId }: { projectId: string }) => {
+  //TODO Update not archived using status filter button
   const {
     data: tickets,
     isLoading,
     isError,
   } = useGetTicketsByProject({
     projectId,
-    queryParams: { page: 1, sort_order: 'DESC' },
+    queryParams: { page: 1, sort_order: 'DESC', status: 'not_archived' },
   });
 
   //! add skeleton loader for tickets list

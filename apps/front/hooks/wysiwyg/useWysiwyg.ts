@@ -27,14 +27,13 @@ export const useWysiwyg = ({
           const level = this.options.levels.includes(node.attrs.level)
             ? node.attrs.level
             : this.options.levels[0];
-          const classes = {
-            1: 'text-xl font-bold text-xl',
-            2: 'text-lg font-bold text-lg',
+          const classes: Record<number, string> = {
+            1: 'text-xl font-bold',
+            2: 'text-lg font-bold',
           };
           return [
             `h${level}`,
             mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              // @ts-ignore
               class: `${classes[level]}`,
             }),
             0,

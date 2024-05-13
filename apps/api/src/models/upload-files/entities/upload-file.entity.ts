@@ -11,6 +11,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
+import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
 
 @Entity('upload_file')
 export class UploadFileEntity extends TimestampEntity {
@@ -48,4 +49,10 @@ export class UploadFileEntity extends TimestampEntity {
     nullable: true,
   })
   message: MessageEntity;
+
+  @ManyToOne(() => TicketEntity, (ticket) => ticket.upload_files, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  ticket: TicketEntity;
 }

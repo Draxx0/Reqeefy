@@ -24,6 +24,7 @@ import {
   CUSTOMERS_PERMISSIONS,
   DISTRIBUTORS_PERMISSIONS,
   Roles,
+  SUPERADMINS_PERMISSIONS,
 } from 'src/decorator/roles.decorator';
 
 @Controller('tickets')
@@ -96,6 +97,12 @@ export class TicketsController {
   @Get(':id')
   findOneById(@Param('id') id: string) {
     return this.ticketsService.findOneById(id);
+  }
+
+  @Put(':id/archive')
+  @Roles(...SUPERADMINS_PERMISSIONS)
+  archiveTicket(@Param('id') id: string) {
+    return this.ticketsService.archiveTicket(id);
   }
 
   @Put(':id/distribute')

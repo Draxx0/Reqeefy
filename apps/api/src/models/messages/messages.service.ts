@@ -40,6 +40,7 @@ export class MessagesService {
             publicUrl: file.publicUrl,
           },
           message.id,
+          ticketId,
         ),
       ),
     );

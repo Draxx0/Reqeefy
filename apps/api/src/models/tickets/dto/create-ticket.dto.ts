@@ -7,7 +7,7 @@ export class CreateTicketDto {
 
   @IsNotEmpty()
   @IsString()
-  message: string;
+  content: string;
 
   // UPLOAD FILE
 }

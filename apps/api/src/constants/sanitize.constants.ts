@@ -3,10 +3,6 @@ import sanitizeHtml from 'sanitize-html';
 const ALLOWED_TAGS = [
   'h1',
   'h2',
-  'h3',
-  'h4',
-  'h5',
-  'h6',
   'a',
   'p',
   'ul',
@@ -31,12 +27,13 @@ const ALLOWED_TAGS = [
 const ALLOWED_ATTRIBUTES = {
   a: ['href', 'title', 'target', 'rel'],
   img: ['src', 'alt', 'title', 'width', 'height'],
-  div: ['style'],
-  span: ['style'],
-  p: ['style'],
-  ul: ['style'],
-  ol: ['style'],
-  li: ['style'],
+  div: ['class'],
+  span: ['class'],
+  p: ['class'],
+  ul: ['class'],
+  ol: ['class'],
+  li: ['class'],
+  h1: ['class'],
 };
 
 export const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {

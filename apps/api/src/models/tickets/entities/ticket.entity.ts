@@ -15,6 +15,7 @@ import { ProjectEntity } from 'src/models/projects/entities/project.entity';
 import { MessageEntity } from 'src/models/messages/entities/message.entity';
 import { TicketSubjectEntity } from 'src/models/ticket-subjects/entities/ticket-subject.entity';
 import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
+import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
 
 @Entity('ticket')
 export class TicketEntity extends TimestampEntity {
@@ -85,6 +86,9 @@ export class TicketEntity extends TimestampEntity {
   })
   @JoinTable()
   agency_groups: AgencyGroupEntity[];
+
+  @OneToMany(() => UploadFileEntity, (upload_file) => upload_file.ticket)
+  upload_files: UploadFileEntity[];
 
   // METHODS
   sortMessages() {

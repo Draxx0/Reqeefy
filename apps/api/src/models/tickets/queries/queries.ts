@@ -1,3 +1,4 @@
+import { TicketStatus } from '@reqeefy/types';
 import { IsIn, IsOptional, IsString } from 'class-validator';
 import { PaginateQueries } from 'src/models/common/queries/pagination.queries';
 
@@ -17,4 +18,8 @@ export class TicketQueries extends PaginateQueries {
   @IsOptional()
   @IsString()
   agency_group_name?: string;
+
+  @IsOptional()
+  @IsString()
+  status?: TicketStatus | 'not_archived';
 }
