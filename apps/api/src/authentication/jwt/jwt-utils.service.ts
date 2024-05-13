@@ -75,7 +75,7 @@ export class JwtUtilsService {
     response.cookie(cookieName, data, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
     });
   }
