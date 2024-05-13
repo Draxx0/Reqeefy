@@ -29,6 +29,8 @@ export default function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  console.log(req.cookies);
+
   const userCookie = req.cookies.get('USER_DATA')?.value;
 
   if (!userCookie) {
