@@ -22,9 +22,8 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    //! Should be changed to the production client URL
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin: 'https://reqeefy-front.vercel.app',
   });
 
   await app.listen(Number(process.env.PORT) || 8000);
