@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "reqeefy-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -12,6 +12,7 @@
     "dev": "NODE_ENV=development nest start --watch",
     "dev:win": "cross-env NODE_ENV=development nest start --watch",
     "debug": "nest start --debug --watch",
+    "staging": "NODE_ENV=staging node dist/main",
     "prod": "NODE_ENV=production node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
