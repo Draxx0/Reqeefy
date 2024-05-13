@@ -11,6 +11,7 @@ export interface Ticket extends Timestamps {
   title: string;
   subject: string;
   status: TicketStatus;
+  archived_at: Date | null;
   priority: TicketPriority;
   messages: Array<Message>;
   support_agents: Array<Agent>;

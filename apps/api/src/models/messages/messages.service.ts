@@ -75,12 +75,4 @@ export class MessagesService {
 
     return message;
   }
-
-  async updateReadStatus(id: string) {
-    const message = await this.findOneById(id);
-
-    message.readed = true;
-
-    return this.messageRepository.save(message);
-  }
 }

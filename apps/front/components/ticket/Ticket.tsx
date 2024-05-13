@@ -46,10 +46,10 @@ export const Ticket = ({ ticket }: Props) => {
   return (
     <div className="bg-white p-6 rounded-lg hover:shadow-primary-500 transition ease-in-out duration-300 shadow-md relative border min-h-[300px]">
       <div
-        className={`absolute left-0 top-0 ${lastMessage.readed ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tl-lg rounded-bl-lg`}
+        className={`absolute left-0 top-0 ${ticket.archived_at ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tl-lg rounded-bl-lg`}
       ></div>
       <div
-        className={`absolute right-0 top-0 ${lastMessage.readed ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tr-lg rounded-br-lg`}
+        className={`absolute right-0 top-0 ${ticket.archived_at ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tr-lg rounded-br-lg`}
       ></div>
       <div className="flex flex-col gap-3 h-full justify-between">
         <div className="w-full flex justify-end">

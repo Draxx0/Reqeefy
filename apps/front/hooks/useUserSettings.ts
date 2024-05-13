@@ -1,6 +1,6 @@
 'use client';
 import { userSettingsSchema } from '@/schemas';
-import { authService, userService } from '@/services';
+import { userService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';

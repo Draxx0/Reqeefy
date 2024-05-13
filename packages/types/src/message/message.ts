@@ -6,7 +6,6 @@ import { User } from '../user';
 export interface Message extends Timestamps {
   id: string;
   content: string;
-  readed: boolean;
   user: User;
   ticket: Ticket;
   upload_files: UploadFile[];
