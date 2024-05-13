@@ -39,8 +39,6 @@ export class UploadFilesService {
       message: { id: messageId },
     });
 
-    console.log('uploadFile', uploadFile);
-
     return this.uploadFileRepository.save(uploadFile);
   }
 

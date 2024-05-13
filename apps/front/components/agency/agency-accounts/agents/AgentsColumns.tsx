@@ -87,8 +87,6 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
     cell: ({ row }) => {
       const agent = row.original;
 
-      console.log(agent);
-
       return agent.group ? (
         <Badge variant={'outline'}>{agent.group.name}</Badge>
       ) : (

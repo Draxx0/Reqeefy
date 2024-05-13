@@ -11,8 +11,6 @@ import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
 export const AgentTicketsList = () => {
   const user = useAuthStore((state) => state.user);
 
-  console.log(user);
-
   const [currentPage, setCurrentPage] = useQueryState(
     'page',
     parseAsInteger.withDefault(1)
@@ -88,7 +86,7 @@ export const AgentTicketsList = () => {
 
       {tickets.data && tickets.data.length > 0 ? (
         <>
-          <div className="grid grid-cols-4 gap-8">
+          <div className="grid grid-cols-3 2xl:grid-cols-4 gap-8">
             {tickets.data.map((ticket) => (
               <Ticket key={ticket.id} ticket={ticket} />
             ))}

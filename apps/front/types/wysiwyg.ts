@@ -1,4 +1,5 @@
 import { UseFormSetValue } from 'react-hook-form';
+
 export interface WysiwygParams {
   autofocus: boolean;
   placeholder: string;

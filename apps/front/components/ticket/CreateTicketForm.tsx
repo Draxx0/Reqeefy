@@ -42,20 +42,19 @@ export const CreateTicketForm = ({ projectId }: { projectId: string }) => {
         />
         <FormField
           control={form.control}
-          name="message"
+          name="content"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-lg font-bold">Votre message</FormLabel>
               <FormControl>
                 <Wysywig
                   autofocus={false}
+                  // @ts-expect-error should be replaced
                   setValue={form.setValue}
                   placeholder="Ecrire mon premier message"
                   onChange={(content) => field.onChange(content)}
                   isSubmit={form.formState.isSubmitSuccessful}
-                >
-                  <></>
-                </Wysywig>
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -66,7 +65,7 @@ export const CreateTicketForm = ({ projectId }: { projectId: string }) => {
             type="submit"
             className="w-fit"
             disabled={!form.formState.isValid}
-            isLoading={isPending}
+            isLoading={isPending || form.formState.isSubmitting}
           >
             Envoyer
           </Button>

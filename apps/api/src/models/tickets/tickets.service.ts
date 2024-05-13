@@ -174,8 +174,6 @@ export class TicketsService {
       .take(limit_per_page)
       .getManyAndCount();
 
-    // tickets.forEach((ticket) => console.log(ticket.messages));
-
     tickets.forEach((ticket) => ticket.sortMessages());
 
     return this.paginationService.paginate<TicketEntity>({
@@ -211,8 +209,6 @@ export class TicketsService {
     }
 
     ticket.sortMessages();
-
-    console.log('ticket', ticket.messages);
 
     return ticket;
   }

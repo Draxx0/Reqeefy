@@ -43,7 +43,6 @@ export const uploadFiles = async (
   const results: UploadResult[] = [];
 
   for (const file of files) {
-    console.log('Uploading file', file.name);
     const fileExt = file.name.split('.').pop();
     const fileName = `${file.name.split('.')[0]}.${fileExt}`;
     const filePath = `${folderPath}/${fileName}`;
@@ -53,8 +52,6 @@ export const uploadFiles = async (
       .upload(filePath, file, {
         upsert: true,
       });
-
-    console.log('files has been uploaded', data?.path);
 
     if (error) {
       renderErrorToast(

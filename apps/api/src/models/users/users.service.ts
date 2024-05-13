@@ -153,8 +153,6 @@ export class UsersService {
     }
     //!
 
-    console.log('trying to update user his own profile');
-
     if (body.avatar) {
       if (user.avatar) {
         await this.uploadFilesService.delete(user.avatar.id);
@@ -181,8 +179,6 @@ export class UsersService {
 
     // get the user from findOneById to get the joined relations
     const updatedUser = await this.findOneByEmail(update.email);
-
-    console.log('updatedUser', updatedUser);
 
     return await this.jwtUtilsService.reauthenticateUser(updatedUser, res);
   }

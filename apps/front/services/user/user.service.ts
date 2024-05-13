@@ -10,7 +10,6 @@ const updateUserProfile = async ({
   userId: string;
   data: z.infer<typeof userSettingsSchema>;
 }): Promise<User> => {
-  console.log('data', data);
   try {
     return api.put(`/users/${userId}`, data);
   } catch (error) {

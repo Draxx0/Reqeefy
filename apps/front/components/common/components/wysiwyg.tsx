@@ -39,7 +39,6 @@ const Wysywig = ({
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
   useEffect(() => {
-    console.log('SETTINGS NEW LOCAL FILS IN RHF', files);
     setValue('uploadedFiles', files);
   }, [files]);
 

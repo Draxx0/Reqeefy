@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -55,8 +56,6 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
       <div>Une erreur est survenue lors de la récupération du ticket.</div>
     );
   }
-
-  console.log(ticket);
 
   //TODO Should be moved in another file
   const status: {

@@ -24,7 +24,6 @@ export const useCreateMessage = ({ ticketId }: { ticketId: string }) => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: CreateTicketMessage) => {
-      console.log(data.uploadedFiles);
       return await messagesService.create(
         {
           content: data.content,
@@ -49,24 +48,19 @@ export const useCreateMessage = ({ ticketId }: { ticketId: string }) => {
     const filesToUpload = formData.uploadedFiles;
 
     if (filesToUpload && filesToUpload.length > 0) {
-      console.log('There is', filesToUpload.length, 'files to upload');
       try {
         const uploadResults = await uploadFiles(
           filesToUpload,
           'attached-files'
         );
-        console.log('uploadResults', uploadResults);
         form.setValue('uploadedFiles', uploadResults as any);
-        console.log('form values after set uploadResults', form.getValues());
       } catch (error) {
         renderErrorToast('Erreur lors du téléchargement des fichiers');
         return;
       }
     }
 
-    // Assurez-vous que le state local du formulaire est à jour avant de procéder
     const updatedFormData = form.getValues();
-    console.log('data to send', updatedFormData);
 
     mutate(updatedFormData);
   });

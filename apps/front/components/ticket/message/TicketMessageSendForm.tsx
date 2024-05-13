@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   Button,
   Form,
   FormControl,
@@ -15,9 +16,7 @@ export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
     ticketId: ticketId,
   });
 
-  useEffect(() => {
-    console.log('uploaded files in rhf', form.getValues('uploadedFiles'));
-  }, [form.watch('uploadedFiles')]);
+  useEffect(() => {}, [form.watch('uploadedFiles')]);
 
   return (
     <div className="space-y-12" id="message">

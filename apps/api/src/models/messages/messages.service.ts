@@ -22,8 +22,6 @@ export class MessagesService {
   ) {
     const { content, uploadedFiles } = createMessageDto;
 
-    console.log('uploadedFiles', uploadedFiles);
-
     const cleanedContent = sanitize(content);
 
     const message = this.messageRepository.create({

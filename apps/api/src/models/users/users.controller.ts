@@ -40,7 +40,6 @@ export class UsersController {
     @Req() req: UserRequest,
     @Res({ passthrough: true }) res,
   ) {
-    console.log('body', body);
     return await this.usersService.updateUserProfile({
       userId: id,
       req,

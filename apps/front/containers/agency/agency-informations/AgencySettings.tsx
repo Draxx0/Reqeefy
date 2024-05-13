@@ -16,8 +16,6 @@ export const AgencySettings = () => {
       </div>
     );
 
-  console.log(agency);
-
   return (
     <section className="space-y-12">
       <AgencySettingsInformationsContent agency={agency} />

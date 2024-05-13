@@ -14,20 +14,17 @@ export const useUserSettings = () => {
   const { user, setUser } = useAuthStore();
   const router = useRouter();
 
-  if (!user) {
-    throw new Error('User not found');
-  }
-
   const form = useForm<z.infer<typeof userSettingsSchema>>({
     resolver: zodResolver(userSettingsSchema),
     defaultValues: {
-      first_name: user.first_name,
-      last_name: user.last_name,
+      first_name: user?.first_name,
+      last_name: user?.last_name,
     },
   });
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: z.infer<typeof userSettingsSchema>) => {
+      if (!user) return null;
       return await userService.updateUserProfile({
         userId: user.id,
         data,

@@ -18,7 +18,7 @@ export const useCreateTicket = ({ projectId }: { projectId: string }) => {
     resolver: zodResolver(createTicketSchema),
     defaultValues: {
       title: '',
-      message: '',
+      content: '',
       // upload_files
     },
   });
