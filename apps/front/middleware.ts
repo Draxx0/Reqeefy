@@ -32,6 +32,7 @@ export default function middleware(req: NextRequest) {
   const userCookie = req.cookies.get('USER_DATA')?.value;
 
   if (!userCookie) {
+    console.log('No user cookie found, redirecting to login page');
     return NextResponse.redirect(new URL('/auth/login', req.url));
   }
 
@@ -43,7 +44,9 @@ export default function middleware(req: NextRequest) {
     const isUserSuperadmin = parsedUser.role === 'superadmin';
 
     if (isValidUser) {
+      console.log('User cookie found:', parsedUser);
       if (isPrivateRoute) {
+        console.log('Private accesbile route:', path);
         return NextResponse.next();
       }
       if (isSuperadminRoute && isUserSuperadmin) {
