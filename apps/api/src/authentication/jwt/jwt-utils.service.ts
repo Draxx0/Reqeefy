@@ -76,6 +76,8 @@ export class JwtUtilsService {
       httpOnly: true,
       secure: true,
       sameSite: 'none',
+      domain: 'https://reqeefy-front.vercel.app',
+      path: '/',
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
     });
   }
