@@ -19,8 +19,8 @@ import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
 import { UpdateAgencyDTO } from './dto/update-agency.dto';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
 import {
-  FIFTEEN_MINUTES,
   FOURTEEN_DAYS,
+  FIFTEEN_MINUTES,
 } from 'src/constants/cookies.constants';
 
 @Controller('agencies')
