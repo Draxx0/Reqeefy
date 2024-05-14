@@ -5,7 +5,10 @@ import { LocalGuard } from '../guards/local.guard';
 import { AuthenticationService } from './authentication.service';
 import { JwtUtilsService } from './jwt/jwt-utils.service';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
-import { FOURTEEN_DAYS, ONE_MINUTE } from 'src/constants/cookies.constants';
+import {
+  FOURTEEN_DAYS,
+  FIFTEEN_MINUTES,
+} from 'src/constants/cookies.constants';
 import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
 
 @Controller('auth')
@@ -25,7 +28,7 @@ export class AuthenticationController {
       response,
       data: access_token,
       cookieName: 'ACCESS_TOKEN',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FIFTEEN_MINUTES),
     });
 
     await this.jwtUtilsService.setResponseCookies({
@@ -43,7 +46,7 @@ export class AuthenticationController {
         role: req.user.role,
       }),
       cookieName: 'USER_DATA',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
     return req.user;
@@ -62,7 +65,7 @@ export class AuthenticationController {
       response,
       data: access_token,
       cookieName: 'ACCESS_TOKEN',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FIFTEEN_MINUTES),
     });
 
     await this.jwtUtilsService.setResponseCookies({
@@ -80,7 +83,7 @@ export class AuthenticationController {
         role: req.user.role,
       }),
       cookieName: 'USER_DATA',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
     return req.user;

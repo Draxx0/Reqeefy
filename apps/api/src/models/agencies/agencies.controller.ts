@@ -18,7 +18,10 @@ import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
 import { UpdateAgencyDTO } from './dto/update-agency.dto';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
-import { FOURTEEN_DAYS, ONE_MINUTE } from 'src/constants/cookies.constants';
+import {
+  FOURTEEN_DAYS,
+  FIFTEEN_MINUTES,
+} from 'src/constants/cookies.constants';
 
 @Controller('agencies')
 export class AgenciesController {
@@ -60,7 +63,7 @@ export class AgenciesController {
       response,
       data: access_token,
       cookieName: 'ACCESS_TOKEN',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FIFTEEN_MINUTES),
     });
 
     await this.jwtUtilsService.setResponseCookies({
@@ -78,7 +81,7 @@ export class AgenciesController {
         role: agencyFounder.role,
       }),
       cookieName: 'USER_DATA',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
     return agencyFounder;
