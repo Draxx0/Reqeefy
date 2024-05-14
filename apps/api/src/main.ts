@@ -23,7 +23,10 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: ['https://www.reqeefy.fr', 'https://reqeefy.fr'],
+    origin:
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000'
+        : ['https://www.reqeefy.fr', 'https://reqeefy.fr'],
   });
 
   await app.listen(Number(process.env.PORT) || 8000);

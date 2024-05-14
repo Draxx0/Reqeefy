@@ -78,8 +78,12 @@ export class JwtUtilsService {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      domain: '.reqeefy.fr',
-      path: '/',
+      ...(process.env.NODE_ENV !== 'development' && {
+        domain: '.reqeefy.fr',
+      }),
+      ...(process.env.NODE_ENV !== 'development' && {
+        path: '/',
+      }),
       expires,
     });
   }
