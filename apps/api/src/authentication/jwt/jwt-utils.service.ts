@@ -75,6 +75,8 @@ export class JwtUtilsService {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
+      domain: '.reqeefy.fr',
+      path: '/',
       expires,
     });
   }
