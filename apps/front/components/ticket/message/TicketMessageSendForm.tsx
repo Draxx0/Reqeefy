@@ -16,7 +16,9 @@ export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
     ticketId: ticketId,
   });
 
-  useEffect(() => {}, [form.watch('uploadedFiles')]);
+  useEffect(() => {
+    console.log(form.getValues('content'));
+  }, [form.watch('content')]);
 
   return (
     <div className="space-y-12" id="message">

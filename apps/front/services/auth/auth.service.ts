@@ -1,24 +1,22 @@
 import { api } from '@/services';
 import { z } from 'zod';
 import { loginSchema } from '@/schemas';
-import { AxiosError } from 'axios';
+import { User } from '@reqeefy/types';
 
-const login = async (credentials: z.infer<typeof loginSchema>) => {
+const login = async (
+  credentials: z.infer<typeof loginSchema>
+): Promise<User> => {
   try {
     return await api.post('/auth/signin', credentials);
   } catch (error) {
-    const axiosError = error as AxiosError;
-    if (axiosError.response?.status === 404) {
-      throw new Error('Utilisateur introuvable');
-    } else if (axiosError.response?.status === 401) {
-      throw new Error('Identifiants incorrects');
-    }
+    console.error(error);
+    throw new Error('Identifiants incorrects');
   }
 };
 
 const logout = async (): Promise<void> => {
   try {
-    await api.get('/auth/signout', { withCredentials: true });
+    await api.get('/auth/signout');
   } catch (error) {
     throw new Error('Impossible de se déconnecter');
   }
@@ -26,7 +24,7 @@ const logout = async (): Promise<void> => {
 
 const generateRefreshToken = async () => {
   try {
-    return await api.post('/auth/refresh', {}, { withCredentials: true });
+    return await api.post('/auth/refresh');
   } catch (error) {
     throw new Error('Impossible de rafraîchir le token');
   }

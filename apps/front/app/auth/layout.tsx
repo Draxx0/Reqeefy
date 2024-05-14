@@ -7,7 +7,7 @@ export default function AppGroupLayout({
 }>) {
   return (
     <main className="flex min-h-screen max-h-screen">
-      <div className="w-1/3 left-0 fixed h-screen bg-[url('/assets/images/auth/auth-bg.jpg')]  bg-no-repeat bg-cover">
+      <div className="w-2/5 left-0 fixed h-screen bg-[url('/assets/images/auth/auth-bg.jpg')]  bg-no-repeat bg-cover">
         <div className="relative flex flex-col justify-between h-full p-12">
           <div className="absolute bg-black/30 inset-0 w-full h-full"></div>
           <div className="py-2 px-3 rounded-lg w-fit z-10 flex items-center gap-1 backdrop-blur-2xl bg-gradient-main shadow-sm">
@@ -29,7 +29,7 @@ export default function AppGroupLayout({
           </p>
         </div>
       </div>
-      <div className="w-2/3 p-12 ml-[33.333333%]">{children}</div>
+      <div className="w-3/5 p-12 ml-[40%]">{children}</div>
     </main>
   );
 }

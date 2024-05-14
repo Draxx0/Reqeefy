@@ -123,7 +123,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      <PageHeader title="Tickets" hasSeparator size="small" />
+      <PageHeader title="Discussions" hasSeparator size="small" />
 
       <div className="flex justify-end">
         <Button

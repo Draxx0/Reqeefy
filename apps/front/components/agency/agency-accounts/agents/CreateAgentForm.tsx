@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../../../server.index';
-import { useCreateAgent, useCreateCustomer } from '@/hooks';
+import { useCreateAgent } from '@/hooks';
 import { Agency } from '@reqeefy/types';
 import { AGENTS_ROLE } from '@/constants';
 

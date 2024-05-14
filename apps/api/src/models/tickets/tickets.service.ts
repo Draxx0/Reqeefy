@@ -58,6 +58,7 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.project', 'project')
       .leftJoinAndSelect('project.agents_referents', 'agents_referents')
       .where('project.agency = :agencyId', { agencyId })
+      .andWhere('ticket.status != :archived', { archived: 'archived' })
       .andWhere('ticket.distributed = :distributed', { distributed: true });
 
     if (search) {
@@ -124,6 +125,7 @@ export class TicketsService {
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('ticket.project', 'project')
       .where('project.agency = :agencyId', { agencyId })
+      .andWhere('ticket.status != :archived', { archived: 'archived' })
       .andWhere('ticket.distributed = :distributed', { distributed: false });
 
     const [tickets, total] = await query
@@ -149,6 +151,7 @@ export class TicketsService {
       search,
       sort_by = 'created_at',
       sort_order = 'DESC',
+      status = 'not_archived',
     } = queries;
 
     const query = this.ticketRepository
@@ -166,6 +169,14 @@ export class TicketsService {
 
     if (search) {
       query.where('ticket.title LIKE :search', { search: `%${search}%` });
+    }
+
+    if (status) {
+      if (status === 'not_archived') {
+        query.andWhere('ticket.status != :archived', { archived: 'archived' });
+      } else {
+        query.andWhere('ticket.status = :status', { status });
+      }
     }
 
     const [tickets, total] = await query
@@ -188,9 +199,10 @@ export class TicketsService {
     const ticket = await this.ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('ticket.upload_files', 'upload_files')
       .leftJoinAndSelect('messages.user', 'user')
       .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndSelect('messages.upload_files', 'upload_files')
+      .leftJoinAndSelect('messages.upload_files', 'message_upload_files')
       .leftJoinAndSelect('ticket.customers', 'customers')
       .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('customer_user.avatar', 'customer_avatar')
@@ -218,7 +230,7 @@ export class TicketsService {
     projectId: string,
     userId: string,
   ) {
-    const { message, title } = createTicketDto;
+    const { content, title } = createTicketDto;
 
     const customer = await this.customerService.findOneByUserId(userId);
 
@@ -231,7 +243,7 @@ export class TicketsService {
     const ticket = await this.ticketRepository.save(newTicket);
 
     const newMessage = await this.messageService.createOnTicket(
-      message,
+      content,
       ticket,
       userId,
     );
@@ -249,6 +261,16 @@ export class TicketsService {
       ticket.status = 'pending';
       await this.ticketRepository.save(ticket);
     }
+  }
+
+  async archiveTicket(ticketId: string) {
+    const ticket = await this.findOneById(ticketId);
+
+    return this.ticketRepository.save({
+      ...ticket,
+      status: 'archived',
+      archiving_at: new Date(),
+    });
   }
 
   async distribute(id: string, body: DistributeTicketDTO) {

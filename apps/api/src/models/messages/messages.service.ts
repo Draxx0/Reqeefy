@@ -40,6 +40,7 @@ export class MessagesService {
             publicUrl: file.publicUrl,
           },
           message.id,
+          ticketId,
         ),
       ),
     );
@@ -73,13 +74,5 @@ export class MessagesService {
     }
 
     return message;
-  }
-
-  async updateReadStatus(id: string) {
-    const message = await this.findOneById(id);
-
-    message.readed = true;
-
-    return this.messageRepository.save(message);
   }
 }

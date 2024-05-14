@@ -8,11 +8,13 @@ export const AgencySettingsProjects = () => {
   const { data: agency, isLoading, isError } = useGetAgency();
 
   if (isLoading) return <AgencySettingsLoader />;
+
+  if (isError || !agency) {
+    return <div>Error...</div>;
+  }
   return (
-    agency && (
-      <section className="space-y-12">
-        <AgencySettingsProjectsContent agency={agency} />
-      </section>
-    )
+    <section className="space-y-12">
+      <AgencySettingsProjectsContent agency={agency} />
+    </section>
   );
 };

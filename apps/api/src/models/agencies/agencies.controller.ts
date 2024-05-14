@@ -17,6 +17,8 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
 import { UpdateAgencyDTO } from './dto/update-agency.dto';
+import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+import { FOURTEEN_DAYS, ONE_MINUTE } from 'src/constants/cookies.constants';
 
 @Controller('agencies')
 export class AgenciesController {
@@ -58,18 +60,25 @@ export class AgenciesController {
       response,
       data: access_token,
       cookieName: 'ACCESS_TOKEN',
+      expires: generateExpirationDate(ONE_MINUTE),
     });
 
     await this.jwtUtilsService.setResponseCookies({
       response,
       data: refresh_token,
       cookieName: 'REFRESH_TOKEN',
+      expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
     await this.jwtUtilsService.setResponseCookies({
       response,
-      data: JSON.stringify(agencyFounder),
+      data: JSON.stringify({
+        id: agencyFounder.id,
+        email: agencyFounder.email,
+        role: agencyFounder.role,
+      }),
       cookieName: 'USER_DATA',
+      expires: generateExpirationDate(ONE_MINUTE),
     });
 
     return agencyFounder;
