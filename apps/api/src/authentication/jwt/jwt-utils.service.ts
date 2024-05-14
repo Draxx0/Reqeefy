@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@reqeefy/types';
-import { TokenObject } from 'src/common/types/api';
-import { FOURTEEN_DAYS, ONE_MINUTE } from 'src/constants/cookies.constants';
-import { UserEntity } from 'src/models/users/entities/user.entity';
+import { TokenObject, UserRequest } from 'src/common/types/api';
+import {
+  FIFTEEN_MINUTES,
+  FOURTEEN_DAYS,
+} from 'src/constants/cookies.constants';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
 
 @Injectable()
@@ -29,14 +31,18 @@ export class JwtUtilsService {
     };
   }
 
-  async reauthenticateUser(user: UserEntity, response) {
-    const { access_token, refresh_token } = await this.generateJwtToken(user);
+  async reauthenticateUser(user: UserRequest['user'], response) {
+    const { access_token, refresh_token } = await this.generateJwtToken({
+      email: user.email,
+      id: user.id,
+      role: user.role,
+    });
 
     await this.setResponseCookies({
       data: access_token,
       cookieName: 'ACCESS_TOKEN',
       response,
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FIFTEEN_MINUTES),
     });
 
     await this.setResponseCookies({
@@ -54,7 +60,7 @@ export class JwtUtilsService {
       }),
       cookieName: 'USER_DATA',
       response,
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
     return user;

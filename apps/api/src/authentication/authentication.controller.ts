@@ -5,7 +5,10 @@ import { LocalGuard } from '../guards/local.guard';
 import { AuthenticationService } from './authentication.service';
 import { JwtUtilsService } from './jwt/jwt-utils.service';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
-import { FOURTEEN_DAYS, ONE_MINUTE } from 'src/constants/cookies.constants';
+import {
+  FIFTEEN_MINUTES,
+  FOURTEEN_DAYS,
+} from 'src/constants/cookies.constants';
 import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
 
 @Controller('auth')
@@ -25,7 +28,7 @@ export class AuthenticationController {
       response,
       data: access_token,
       cookieName: 'ACCESS_TOKEN',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FIFTEEN_MINUTES),
     });
 
     await this.jwtUtilsService.setResponseCookies({
@@ -43,7 +46,7 @@ export class AuthenticationController {
         role: req.user.role,
       }),
       cookieName: 'USER_DATA',
-      expires: generateExpirationDate(ONE_MINUTE),
+      expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
     return req.user;
@@ -55,35 +58,7 @@ export class AuthenticationController {
     @Req() req: UserRequest,
     @Res({ passthrough: true }) response,
   ) {
-    const { access_token, refresh_token } =
-      await this.jwtUtilsService.generateJwtToken(req.user);
-
-    await this.jwtUtilsService.setResponseCookies({
-      response,
-      data: access_token,
-      cookieName: 'ACCESS_TOKEN',
-      expires: generateExpirationDate(ONE_MINUTE),
-    });
-
-    await this.jwtUtilsService.setResponseCookies({
-      response,
-      data: refresh_token,
-      cookieName: 'REFRESH_TOKEN',
-      expires: generateExpirationDate(FOURTEEN_DAYS),
-    });
-
-    await this.jwtUtilsService.setResponseCookies({
-      response,
-      data: JSON.stringify({
-        id: req.user.id,
-        email: req.user.email,
-        role: req.user.role,
-      }),
-      cookieName: 'USER_DATA',
-      expires: generateExpirationDate(ONE_MINUTE),
-    });
-
-    return req.user;
+    return await this.jwtUtilsService.reauthenticateUser(req.user, response);
   }
 
   @Get('signout')
