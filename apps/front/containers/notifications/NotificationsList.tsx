@@ -5,7 +5,7 @@ import { FolderGit2, MessageCircle, User } from 'lucide-react';
 export const NotificationsList = () => {
   return (
     <div className="grid gap-8 grid-cols-2">
-      <Alert className="space-x-2 border-primary-700 relative">
+      {/* <Alert className="space-x-2 border-primary-700 relative">
         <div className="absolute -top-3 -right-3 bg-primary-900 text-white text-xs font-semibold px-2 py-1 rounded-full">
           Nouveau
         </div>
@@ -58,7 +58,7 @@ export const NotificationsList = () => {
             <Button>Consulter le projet</Button>
           </div>
         </div>
-      </Alert>
+      </Alert> */}
     </div>
   );
 };
