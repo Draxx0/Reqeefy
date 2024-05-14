@@ -23,7 +23,7 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: 'https://reqeefy.fr',
+    origin: ['https://www.reqeefy.fr', 'https://reqeefy.fr'],
   });
 
   await app.listen(Number(process.env.PORT) || 8000);
