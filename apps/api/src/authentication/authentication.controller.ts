@@ -6,8 +6,8 @@ import { AuthenticationService } from './authentication.service';
 import { JwtUtilsService } from './jwt/jwt-utils.service';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
 import {
-  FOURTEEN_DAYS,
   FIFTEEN_MINUTES,
+  FOURTEEN_DAYS,
 } from 'src/constants/cookies.constants';
 import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
 
