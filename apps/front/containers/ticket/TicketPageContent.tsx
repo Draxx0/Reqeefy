@@ -35,7 +35,7 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
     <div className="flex justify-between gap-12">
       <div className="space-y-8 w-9/12">
         <Breadcrumb>
-          <BreadcrumbList>
+          <BreadcrumbList className="flex-nowrap">
             <BreadcrumbItem>
               <BreadcrumbLink href={STATIC_PATHS.TICKETS}>
                 Discussions
@@ -43,7 +43,11 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage> {ticket.title}</BreadcrumbPage>
+              <BreadcrumbPage className="">
+                {ticket.title.length > 50
+                  ? `${ticket.title.slice(0, 50)}...`
+                  : ticket.title}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

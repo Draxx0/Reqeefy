@@ -52,15 +52,14 @@ export const Ticket = ({ ticket }: Props) => {
         className={`absolute right-0 top-0 ${ticket.archived_at ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tr-lg rounded-br-lg`}
       ></div>
       <div className="flex flex-col gap-3 h-full justify-between">
-        <div className="w-full flex justify-end">
+        <div className="flex justify-between gap-4">
+          <p className="text-xl truncate">{ticket.title}</p>
           <Badge className="w-fit uppercase" variant={'outline'}>
             {ticket.project.name}
           </Badge>
         </div>
 
         <div className="space-y-4">
-          <p className="text-xl">{ticket.title}</p>
-
           <div
             className="line-clamp-1 text-gray-900"
             dangerouslySetInnerHTML={{
