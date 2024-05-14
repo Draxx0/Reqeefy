@@ -58,7 +58,35 @@ export class AuthenticationController {
     @Req() req: UserRequest,
     @Res({ passthrough: true }) response,
   ) {
-    return await this.jwtUtilsService.reauthenticateUser(req.user, response);
+    const { access_token, refresh_token } =
+      await this.jwtUtilsService.generateJwtToken(req.user);
+
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      data: access_token,
+      cookieName: 'ACCESS_TOKEN',
+      expires: generateExpirationDate(FIFTEEN_MINUTES),
+    });
+
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      data: refresh_token,
+      cookieName: 'REFRESH_TOKEN',
+      expires: generateExpirationDate(FOURTEEN_DAYS),
+    });
+
+    await this.jwtUtilsService.setResponseCookies({
+      response,
+      data: JSON.stringify({
+        id: req.user.id,
+        email: req.user.email,
+        role: req.user.role,
+      }),
+      cookieName: 'USER_DATA',
+      expires: generateExpirationDate(FOURTEEN_DAYS),
+    });
+
+    return req.user;
   }
 
   @Get('signout')

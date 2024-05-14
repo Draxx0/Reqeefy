@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@reqeefy/types';
-import { TokenObject, UserRequest } from 'src/common/types/api';
+import { TokenObject } from 'src/common/types/api';
 import {
   FIFTEEN_MINUTES,
   FOURTEEN_DAYS,
 } from 'src/constants/cookies.constants';
+import { UserEntity } from 'src/models/users/entities/user.entity';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
 
 @Injectable()
@@ -31,12 +32,8 @@ export class JwtUtilsService {
     };
   }
 
-  async reauthenticateUser(user: UserRequest['user'], response) {
-    const { access_token, refresh_token } = await this.generateJwtToken({
-      email: user.email,
-      id: user.id,
-      role: user.role,
-    });
+  async reauthenticateUser(user: UserEntity, response) {
+    const { access_token, refresh_token } = await this.generateJwtToken(user);
 
     await this.setResponseCookies({
       data: access_token,
