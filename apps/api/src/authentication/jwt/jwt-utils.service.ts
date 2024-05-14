@@ -2,7 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@reqeefy/types';
 import { TokenObject } from 'src/common/types/api';
+import { FOURTEEN_DAYS, ONE_MINUTE } from 'src/constants/cookies.constants';
 import { UserEntity } from 'src/models/users/entities/user.entity';
+import { generateExpirationDate } from 'src/utils/generateExpirationDate';
 
 @Injectable()
 export class JwtUtilsService {
@@ -27,18 +29,6 @@ export class JwtUtilsService {
     };
   }
 
-  async refreshJwtToken(user: UserEntity): Promise<{ access_token: string }> {
-    const payload = {
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    };
-
-    return {
-      access_token: await this.jwtService.signAsync(payload),
-    };
-  }
-
   async reauthenticateUser(user: UserEntity, response) {
     const { access_token, refresh_token } = await this.generateJwtToken(user);
 
@@ -46,18 +36,25 @@ export class JwtUtilsService {
       data: access_token,
       cookieName: 'ACCESS_TOKEN',
       response,
+      expires: generateExpirationDate(ONE_MINUTE),
     });
 
     await this.setResponseCookies({
       data: refresh_token,
       cookieName: 'REFRESH_TOKEN',
       response,
+      expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
     await this.setResponseCookies({
-      data: JSON.stringify(user),
+      data: JSON.stringify({
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      }),
       cookieName: 'USER_DATA',
       response,
+      expires: generateExpirationDate(ONE_MINUTE),
     });
 
     return user;
@@ -67,16 +64,18 @@ export class JwtUtilsService {
     response,
     data,
     cookieName,
+    expires,
   }: {
     response: any;
     data: string | object;
     cookieName: string;
+    expires: Date;
   }) {
     response.cookie(cookieName, data, {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14),
+      expires,
     });
   }
 }
