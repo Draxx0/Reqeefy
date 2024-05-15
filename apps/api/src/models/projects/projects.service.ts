@@ -38,14 +38,6 @@ export class ProjectsService {
       .leftJoinAndSelect('project.customers', 'customers')
       .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('project.photo_url', 'photo_url')
-      .leftJoinAndSelect(
-        'project.ticket_subject_categories',
-        'ticket_subject_categories',
-      )
-      .leftJoinAndSelect(
-        'ticket_subject_categories.ticket_subjects',
-        'ticket_subjects',
-      )
       .where('project.agency.id = :agencyId', { agencyId });
 
     if (search) {
@@ -88,12 +80,7 @@ export class ProjectsService {
   }
 
   async create(body: CreateProjectDTO, agencyId: string) {
-    const {
-      name,
-      agents_referents_ids,
-      ticket_subject_categories,
-      description,
-    } = body;
+    const { name, agents_referents_ids, description } = body;
 
     const agents_referents =
       await this.agentsService.findAllByIds(agents_referents_ids);
@@ -103,7 +90,6 @@ export class ProjectsService {
       description,
       agency: { id: agencyId },
       agents_referents,
-      ticket_subject_categories,
     });
 
     return await this.projectsRepository.save(project);

@@ -13,7 +13,6 @@ import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
 import { ProjectEntity } from 'src/models/projects/entities/project.entity';
 import { MessageEntity } from 'src/models/messages/entities/message.entity';
-import { TicketSubjectEntity } from 'src/models/ticket-subjects/entities/ticket-subject.entity';
 import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
 import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
 
@@ -57,9 +56,6 @@ export class TicketEntity extends TimestampEntity {
 
   @ManyToOne(() => ProjectEntity, (project) => project.tickets)
   project: ProjectEntity;
-
-  @ManyToOne(() => TicketSubjectEntity, (subject) => subject.tickets)
-  subject: TicketSubjectEntity[];
 
   @ManyToMany(() => AgentEntity, (agent) => agent.tickets_support, {
     cascade: ['insert', 'update'],
