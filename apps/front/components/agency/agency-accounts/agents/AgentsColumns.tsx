@@ -47,11 +47,6 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
     enableHiding: false,
   },
   {
-    id: 'ID',
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
     id: 'Nom',
     accessorKey: 'last_name',
     header: 'Nom',
@@ -79,6 +74,20 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
     id: 'Rôle',
     accessorKey: 'role',
     header: 'Rôle',
+    cell: ({ row }) => {
+      const agent = row.original;
+
+      switch (agent.role) {
+        case 'agent':
+          return <Badge variant="outline">Agent</Badge>;
+        case 'distributor':
+          return <Badge variant="outline">Distributeur</Badge>;
+        case 'superadmin':
+          return <Badge variant="outline">Administrateur</Badge>;
+        default:
+          return <Badge variant="outline">Non assigné</Badge>;
+      }
+    },
   },
   {
     id: 'Groupe',
@@ -88,14 +97,16 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
       const agent = row.original;
 
       return agent.group ? (
-        <Badge variant={'outline'}>{agent.group.name}</Badge>
+        <Badge>{agent.group.name}</Badge>
       ) : (
-        <Badge variant="outline">Non assigné</Badge>
+        <Badge>Non assigné</Badge>
       );
     },
   },
   {
     id: 'actions',
+    header: 'Actions',
+    accessorKey: 'actions',
     cell: ({ row }) => {
       const agent = row.original;
 

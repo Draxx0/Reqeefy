@@ -11,7 +11,6 @@ export const useGetAgents = ({ agency }: { agency: Agency }) => {
     );
 
     return agents.map((userAsAgent) => ({
-      id: userAsAgent.id,
       first_name: userAsAgent.first_name,
       last_name: userAsAgent.last_name,
       email: userAsAgent.email,

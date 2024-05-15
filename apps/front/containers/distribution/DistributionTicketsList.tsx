@@ -55,14 +55,15 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
         ))}
       </div>
 
-      <PaginationComponent
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {totalPages > 1 ? (
+        <PaginationComponent
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      ) : null}
     </div>
   ) : (
-    // Create visual for no ticket found
     <EmptyTickets />
   );
 };

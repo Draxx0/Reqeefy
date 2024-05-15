@@ -11,7 +11,6 @@ import {
   buttonVariants,
 } from '@/components/client.index';
 import { AgencyGroupTableData } from '@/types';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Pen, Trash, Users } from 'lucide-react';
 
@@ -37,11 +36,6 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
     ),
     enableSorting: false,
     enableHiding: false,
-  },
-  {
-    id: 'ID',
-    accessorKey: 'id',
-    header: 'ID',
   },
   {
     id: 'Nom du groupe',

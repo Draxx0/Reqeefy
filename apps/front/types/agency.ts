@@ -1,5 +1,5 @@
-import { AgencyGroup, Agent, Project, UserRole } from '@reqeefy/types';export interface AgencyCustomerTableData {
-  id: string;
+import { AgencyGroup, Agent, Project, UserRole } from '@reqeefy/types';
+export interface AgencyCustomerTableData {
   first_name: string;
   last_name: string;
   email: string;
@@ -7,7 +7,6 @@ import { AgencyGroup, Agent, Project, UserRole } from '@reqeefy/types';export in
 }
 
 export interface AgencyAgentTableData {
-  id: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -16,7 +15,6 @@ export interface AgencyAgentTableData {
 }
 
 export interface AgencyGroupTableData {
-  id: string;
   name: string;
   agents: Agent[];
 }

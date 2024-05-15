@@ -6,7 +6,6 @@ export const useGetCustomers = ({ agency }: { agency: Agency }) => {
     const customers = agency.users.filter((user) => user.role === 'customer');
 
     return customers.map((userAsCustomer) => ({
-      id: userAsCustomer.id,
       first_name: userAsCustomer.first_name,
       last_name: userAsCustomer.last_name,
       email: userAsCustomer.email,

@@ -1,4 +1,5 @@
-import {  Avatar,
+import {
+  Avatar,
   AvatarFallback,
   AvatarImage,
   Separator,
@@ -8,8 +9,6 @@ import {  Avatar,
   TooltipTrigger,
 } from '@/components/server.index';
 import { Message } from '@reqeefy/types';
-import { FileText, ZoomIn } from 'lucide-react';
-import Image from 'next/image';
 import { TicketMessageUploadedFiles } from './TicketMessageUploadedFiles';
 
 export const TicketMessage = ({ message }: { message: Message }) => {
