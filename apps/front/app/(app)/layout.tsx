@@ -1,4 +1,3 @@
-'use client';
 import { Navigation } from '@/layouts';
 export default function AppGroupLayout({
   children,

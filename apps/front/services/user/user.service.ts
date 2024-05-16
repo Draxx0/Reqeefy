@@ -19,6 +19,17 @@ const updateUserProfile = async ({
   }
 };
 
+const getProfile = async (): Promise<User> => {
+  try {
+    return api.get(`/auth/status`);
+  } catch (error) {
+    throw new Error(
+      'Une erreur est survenue lors de la récupération de vos informations.'
+    );
+  }
+};
+
 export const userService = {
   updateUserProfile,
+  getProfile,
 };

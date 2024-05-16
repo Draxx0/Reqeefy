@@ -21,19 +21,21 @@ import {
   TooltipTrigger,
 } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, STATIC_PATHS } from '@/constants';
-import { useLogOut } from '@/hooks';
+import { useGetProfile, useLogOut } from '@/hooks';
 import { cn } from '@/lib';
-import { useAuthStore } from '@/stores';
 import { hasDistributorPermissions, hasSuperAdminPermissions } from '@/utils';
-import { Bell, Settings, Shuffle, TicketSlash } from 'lucide-react';
+import { Bell, Settings, Split, TicketSlash } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
 import { agencyService, ticketsService } from '@/services';
+import { useAuthStore } from '@/stores';
+import { useEffect } from 'react';
 
 export const Navigation = () => {
-  const { user } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const { fetchUser } = useGetProfile();
   const pathname = usePathname();
   const { handleLogOut } = useLogOut();
   const queryClient = useQueryClient();
@@ -46,6 +48,10 @@ export const Navigation = () => {
       isActive(link) && 'bg-gray-500 border-primary-700 text-primary-700'
     );
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   if (!user) return null;
 
@@ -112,7 +118,7 @@ export const Navigation = () => {
                         href={STATIC_PATHS.DISTRIBUTIONS}
                         className={linkClasses(STATIC_PATHS.DISTRIBUTIONS)}
                       >
-                        <Shuffle />
+                        <Split />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent align="center" side="right">
@@ -131,13 +137,16 @@ export const Navigation = () => {
                       className={`${linkClasses(STATIC_PATHS.NOTIFICATIONS)}`}
                     >
                       <div className="relative">
-                        <div className="size-2.5 bg-primary-700 rounded-full flex items-center justify-center absolute -top-1 -right-1">
-                          <div
-                            className="
+                        {user.notifications.filter((n) => !n.read).length >
+                          0 && (
+                          <div className="size-2.5 bg-primary-700 rounded-full flex items-center justify-center absolute -top-1 -right-1">
+                            <div
+                              className="
                            size-2 bg-primary-900  rounded-full animate-ping
                           "
-                          ></div>
-                        </div>
+                            ></div>
+                          </div>
+                        )}
                         <Bell />
                       </div>
                     </Link>

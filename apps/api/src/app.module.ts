@@ -5,6 +5,7 @@ import { PostgresModule } from './database/postgres.module';
 import { CoreModule } from './models/core.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { APP_GUARD } from '@nestjs/core';
     ]),
     PostgresModule,
     CoreModule,
+    EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [

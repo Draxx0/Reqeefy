@@ -12,6 +12,7 @@ import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity
 import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 import { AgentsService } from '../agents/agents.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class TicketsService {
@@ -27,6 +28,7 @@ export class TicketsService {
     private readonly customerService: CustomersService,
     private readonly agencyGroupsService: AgencyGroupsService,
     private readonly agentsService: AgentsService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async findAllDistributedByAgency(
@@ -256,7 +258,14 @@ export class TicketsService {
 
     ticket.messages = [newMessage];
 
-    return this.ticketRepository.save(ticket);
+    const persistedTicket = await this.ticketRepository.save(ticket);
+
+    this.eventEmitter.emit('new.ticket_to_distribute', {
+      ticketId: persistedTicket.id,
+      ticketOwnerId: userId,
+    });
+
+    return persistedTicket;
   }
 
   async updateStatus(ticket: TicketEntity, user: UserEntity) {
@@ -298,11 +307,18 @@ export class TicketsService {
       ...ticket.project.agents_referents,
     ];
 
-    return await this.ticketRepository.save({
+    const persistedTicket = await this.ticketRepository.save({
       ...ticket,
       distributed: true,
       agency_groups,
       support_agents: agents,
     });
+
+    this.eventEmitter.emit('new.ticket', {
+      ticketId: persistedTicket.id,
+      ticketOwnerId: persistedTicket.customers[0].user.id,
+    });
+
+    return persistedTicket;
   }
 }
