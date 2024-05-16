@@ -7,3 +7,5 @@ export * from './agency/agency-projects/CreateProjectForm';
 export * from './ticket/CreateTicketForm';
 export * from './ticket/message/TicketMessageSendForm';
 export * from './ticket/message/UploadAttachedFile';
+export * from './notifications/Notification';
+export * from './notifications/NotificationUtilsButtons';

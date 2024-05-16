@@ -43,6 +43,7 @@ export class UsersService {
       .leftJoinAndSelect('user.customer', 'customer')
       .leftJoinAndSelect('user.agency', 'agency')
       .leftJoinAndSelect('user.messages', 'messages')
+      .leftJoinAndSelect('user.notifications', 'notifications')
       .leftJoinAndSelect('user.preferences', 'preferences');
 
     if (search) {
@@ -76,6 +77,7 @@ export class UsersService {
       .leftJoinAndSelect('user.agency', 'agency')
       .leftJoinAndSelect('user.messages', 'messages')
       .leftJoinAndSelect('user.preferences', 'preferences')
+      .leftJoinAndSelect('user.notifications', 'notifications')
       .where('user.email = :email', { email })
       .addSelect('user.password')
       .getOne();
@@ -93,7 +95,12 @@ export class UsersService {
       .leftJoinAndSelect('user.agency', 'agency')
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('user.agent', 'agent')
+      .leftJoinAndSelect('agent.agency_group', 'agency_group')
       .leftJoinAndSelect('user.customer', 'customer')
+      .leftJoinAndSelect('customer.project', 'project')
+      .leftJoinAndSelect('user.messages', 'messages')
+      .leftJoinAndSelect('user.preferences', 'preferences')
+      .leftJoinAndSelect('user.notifications', 'notifications')
       .where('user.id = :id', { id })
       .getOne();
 

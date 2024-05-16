@@ -6,7 +6,7 @@ import { UsersService } from 'src/models/users/users.service';
 import { Repository } from 'typeorm';
 import { AuthenticationSigninDto } from './dto/authentication-signin.dto';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
-import { JwtUtilsService } from './jwt/jwt-utils.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthenticationService {
@@ -16,7 +16,7 @@ export class AuthenticationService {
     private readonly userRepository: Repository<UserEntity>,
     // SERVICES
     private usersService: UsersService,
-    private readonly jwtUtilsService: JwtUtilsService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async signin({
@@ -57,11 +57,22 @@ export class AuthenticationService {
     const hashedPassword = await bcrypt.hash(body.password, 10);
     const newUser = {
       ...body,
+      first_name: body.first_name[0].toUpperCase() + body.first_name.slice(1),
+      last_name: body.last_name.toUpperCase(),
       password: hashedPassword,
     };
 
     const createdUser = this.userRepository.create(newUser);
-    return await this.userRepository.save(createdUser);
+
+    const persistedUser = await this.userRepository.save(createdUser);
+
+    this.eventEmitter.emit('new.user', {
+      firstName: persistedUser.first_name,
+      lastName: persistedUser.last_name,
+      userId: persistedUser.id,
+    });
+
+    return persistedUser;
   }
 
   async logout(response) {

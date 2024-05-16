@@ -10,6 +10,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UserPreferencesModule } from 'src/models/user-preferences/user-preferences.module';
 import { JwtUtilsModule } from './jwt/jwt-utils.module';
 import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
+import { NotificationsModule } from 'src/models/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
     PassportModule,
     UserPreferencesModule,
     JwtUtilsModule,
+    NotificationsModule,
   ],
   controllers: [AuthenticationController],
   providers: [

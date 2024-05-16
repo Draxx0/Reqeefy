@@ -102,7 +102,7 @@ export const TicketSideContent = ({ ticket }: Props) => {
                 <Lock className="size-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent hasLine={false} className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>
                   Etes vous bien sur de vouloir archiver cette discussion ?

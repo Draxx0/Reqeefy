@@ -1,5 +1,7 @@
 import { Agency } from '../agency';
 import { Timestamps } from '../common';
+import { Message } from '../message';
+import { Notification } from '../notifications';
 import { UploadFile } from '../upload-file';
 import { UserPreferences } from '../user-preferences';
 import { Agent } from './agent';
@@ -17,5 +19,7 @@ export interface User extends Timestamps {
   agent: Agent | null;
   agency: Agency | null;
   customer: Customer | null;
+  messages: Message[];
+  notifications: Notification[];
   preferences: UserPreferences;
 }

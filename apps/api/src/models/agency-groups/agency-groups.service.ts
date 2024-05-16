@@ -4,6 +4,7 @@ import { AgencyGroupEntity } from './entities/agency-group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaginationService } from '../common/models/pagination/pagination.service';
+import { UpdateAgencyGroupDto } from './dto/update-agency-group.dto';
 
 @Injectable()
 export class AgencyGroupsService {
@@ -38,5 +39,9 @@ export class AgencyGroupsService {
 
   async findByIds(ids: string[]) {
     return await Promise.all(ids.map((id) => this.findOneById(id)));
+  }
+
+  async update(id: string, body: UpdateAgencyGroupDto) {
+    return await this.agencyGroupRepository.update(id, body);
   }
 }

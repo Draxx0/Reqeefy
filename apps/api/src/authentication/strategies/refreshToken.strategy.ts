@@ -36,7 +36,6 @@ export class RefreshJwtStrategy extends PassportStrategy(
   }
 
   async validate(payload: UserRequest['user']) {
-    console.log('payload', payload);
     const user = await this.usersService.findOneById(payload.id);
 
     if (!user) {
