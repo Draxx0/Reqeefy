@@ -1,14 +1,8 @@
-import { ButtonLink, ForgotPasswordForm } from '@/components/client.index';
+import { ButtonLink, ResetPasswordForm } from '@/components/client.index';
 import { Separator } from '@/components/server.index';
 import { STATIC_PATHS } from '@/constants';
-import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'Reqeefy | Mot de passe oublié',
-  description: 'Réinitialisez votre mot de passe',
-};
-
-export default function AuthLoginPage() {
+export default function ResetPassword() {
   return (
     <div className="space-y-12">
       <ButtonLink href={STATIC_PATHS.LOGIN} className="flex w-fit m-auto mr-0">
@@ -25,7 +19,7 @@ export default function AuthLoginPage() {
           </p>
         </div>
         <Separator className="bg-primary-500" />
-        <ForgotPasswordForm />
+        <ResetPasswordForm />
       </div>
     </div>
   );

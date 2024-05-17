@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostgresModule } from './database/postgres.module';
+import { MailModule } from './mail/mail.module';
 import { CoreModule } from './models/core.module';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
-import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -15,8 +16,10 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
         limit: 10,
       },
     ]),
+
     PostgresModule,
     CoreModule,
+    MailModule,
     EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],

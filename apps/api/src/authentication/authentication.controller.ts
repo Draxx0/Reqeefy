@@ -1,15 +1,26 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { UserRequest } from 'src/common/types/api';
-import { JwtAuthGuard } from '../guards/jwt.guard';
-import { LocalGuard } from '../guards/local.guard';
-import { AuthenticationService } from './authentication.service';
-import { JwtUtilsService } from './jwt/jwt-utils.service';
-import { generateExpirationDate } from 'src/utils/generateExpirationDate';
 import {
   FIFTEEN_MINUTES,
   FOURTEEN_DAYS,
 } from 'src/constants/cookies.constants';
 import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
+import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+import { JwtAuthGuard } from '../guards/jwt.guard';
+import { LocalGuard } from '../guards/local.guard';
+import { AuthenticationService } from './authentication.service';
+import { AuthenticationForgotPasswordDto } from './dto/authentication-forgot-password.dto';
+import { AuthenticationResetPasswordDto } from './dto/authentication-reset-password.dto';
+import { JwtUtilsService } from './jwt/jwt-utils.service';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -92,6 +103,28 @@ export class AuthenticationController {
   @Get('signout')
   async signout(@Res({ passthrough: true }) response) {
     return await this.authenticationService.logout(response);
+  }
+
+  @Post('forgot-password')
+  async forgotPassword(
+    @Body() forgotPasswordDto: AuthenticationForgotPasswordDto,
+  ) {
+    return await this.authenticationService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Post('reset-password/:id/:token')
+  resetPassord(
+    @Param('id') id: string,
+    @Param('token') token: string,
+    @Body() resetPasswordDto: AuthenticationResetPasswordDto,
+    @Res({ passthrough: true }) response,
+  ) {
+    return this.authenticationService.resetPassword(
+      id,
+      token,
+      resetPasswordDto.password,
+      response,
+    );
   }
 
   @Get('status')
