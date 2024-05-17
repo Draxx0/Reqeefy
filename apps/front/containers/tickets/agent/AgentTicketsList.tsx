@@ -3,6 +3,7 @@ import { Button, PaginationComponent } from '@/components/client.index';
 import { Input, PageHeader, Ticket } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
 import { EmptyTickets } from '@/containers/empty-state';
+import { AgentTicketListLoader } from '@/containers/loading-state';
 import { useGetTicketsByAgency } from '@/hooks';
 import { useAuthStore } from '@/stores';
 import { ArrowDownUp } from 'lucide-react';
@@ -40,11 +41,11 @@ export const AgentTicketsList = () => {
 
   if (!user?.agent) return null;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || !tickets) {
+    return <AgentTicketListLoader />;
   }
 
-  if (isError || !tickets) {
+  if (isError) {
     return <div>Error...</div>;
   }
 
@@ -63,7 +64,7 @@ export const AgentTicketsList = () => {
         hasSeparator
       />
 
-      <div className="flex justify-between items-center">
+      <div className="flex gap-4 items-end sm:justify-between flex-col sm:flex-row  sm:items-center">
         <Input
           searchInput
           type="text"
@@ -86,7 +87,7 @@ export const AgentTicketsList = () => {
 
       {tickets.data && tickets.data.length > 0 ? (
         <>
-          <div className="grid grid-cols-3 2xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-8">
             {tickets.data.map((ticket) => (
               <Ticket key={ticket.id} ticket={ticket} />
             ))}

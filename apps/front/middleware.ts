@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const publicRoutes = ['/auth/register', '/auth/login'];
+const publicRoutes = ['/auth/register', '/auth/login', '/auth/forgot-password'];
 const privateRoutes = ['/tickets', '/user-settings', '/notifications'];
 
 const distributorRoutes = ['/distributions'];

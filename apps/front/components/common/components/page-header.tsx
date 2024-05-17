@@ -16,8 +16,8 @@ export const PageHeader = ({
 }: Props) => {
   const classes = cn(
     {
-      'text-3xl': size === 'large',
-      'text-2xl': size === 'small',
+      'md:text-3xl': size === 'large',
+      'md:text-2xl': size === 'small',
     },
     'font-bold'
   );
@@ -25,7 +25,9 @@ export const PageHeader = ({
     <div className="space-y-6">
       <div className="space-y-4">
         <h1 className={classes}>{title}</h1>
-        <small className="text-gray-900">{description}</small>
+        <small className="text-xs md:text-sm text-gray-900">
+          {description}
+        </small>
       </div>
       {hasSeparator && <Separator />}
     </div>

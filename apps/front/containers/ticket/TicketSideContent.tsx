@@ -1,23 +1,6 @@
 'use client';
 
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Badge,
-  Separator,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/server.index';
-import { Ticket } from '@reqeefy/types';
-import { Download, FileText, ImageIcon, Lock } from 'lucide-react';
-import { useMemo, useState } from 'react';
-import { saveAs } from 'file-saver';
-import { STATIC_PATHS, getTicketStatusState } from '@/constants';
-import { useAuthStore } from '@/stores';
-import {
   Button,
   Dialog,
   DialogContent,
@@ -26,12 +9,27 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  UserAvatar,
 } from '@/components/client.index';
-import { DialogClose } from '@radix-ui/react-dialog';
+import {
+  Badge,
+  Separator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/server.index';
+import { STATIC_PATHS, getTicketStatusState } from '@/constants';
 import { ticketsService } from '@/services';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores';
 import { renderErrorToast } from '@/utils';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { Ticket } from '@reqeefy/types';
+import { useQueryClient } from '@tanstack/react-query';
+import { saveAs } from 'file-saver';
+import { Download, FileText, ImageIcon, Lock } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
@@ -91,7 +89,7 @@ export const TicketSideContent = ({ ticket }: Props) => {
   };
 
   return (
-    <div className="space-y-12 flex-1 sticky top-6 h-fit">
+    <div className="space-y-12 flex-1 sticky top-6 h-fit hidden md:block">
       {user?.role === 'superadmin' &&
         ticket.status !== 'archived' &&
         ticket.distributed && (
@@ -162,17 +160,8 @@ export const TicketSideContent = ({ ticket }: Props) => {
           {ticketUsers.map((user) => (
             <TooltipProvider key={user.id} delayDuration={100}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                    <AvatarImage
-                      src={user.avatar?.file_url}
-                      alt={`Photo de l'user ${user.first_name} ${user.last_name}`}
-                      className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
-                    />
-                    <AvatarFallback className="w-full uppercase h-full text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
-                      {user.first_name[0] + user.last_name[0]}
-                    </AvatarFallback>
-                  </Avatar>
+                <TooltipTrigger>
+                  <UserAvatar user={user} />
                 </TooltipTrigger>
                 <TooltipContent align="center" side="top">
                   <p>

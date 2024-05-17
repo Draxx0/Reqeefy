@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { NotificationEntity } from './entities/notification.entity';
-import { NewUserEvent } from './events/new-user.event';
 import { OnEvent } from '@nestjs/event-emitter';
+import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationType } from '@reqeefy/types';
-import { NewMessageEvent } from './events/new-message.event';
-import { TicketEntity } from '../tickets/entities/ticket.entity';
+import { Repository } from 'typeorm';
 import { MessageEntity } from '../messages/entities/message.entity';
+import { TicketEntity } from '../tickets/entities/ticket.entity';
 import { UserEntity } from '../users/entities/user.entity';
+import { NotificationEntity } from './entities/notification.entity';
+import { NewMessageEvent } from './events/new-message.event';
 import { NewTicketEvent } from './events/new-ticket.event';
+import { NewUserEvent } from './events/new-user.event';
 
 @Injectable()
 export class NotificationsService {
@@ -153,14 +153,6 @@ export class NotificationsService {
     message: string;
     link?: string;
   }) {
-    console.log(
-      'create notification for user',
-      userId,
-      'Notification type: ',
-      type,
-      'Notification message :',
-      message,
-    );
     const notification = this.notificationRepository.create({
       type,
       message,

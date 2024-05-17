@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { userService } from '@/services';
-import { renderErrorToast } from '@/utils';
 import { useAuthStore } from '@/stores';
+import { renderErrorToast } from '@/utils';
 import { User } from '@reqeefy/types';
+import { useState } from 'react';
 
 export const useGetProfile = () => {
   const [user, setUser] = useState<User | null>(null);

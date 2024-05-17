@@ -23,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
       </div>
     ) : (
-      <div className="bg-white transition-all ease-in-out duration-300 flex items-center justify-center py-1 px-2  border-2 border-gray-700 rounded-md outline-none font-bold focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-700 focus-disabled:pointer-events-none focus-disabled:opacity-30 focus-disabled:select-none">
+      <div className="bg-white w-fit transition-all ease-in-out duration-300 flex items-center justify-center py-1 px-2  border-2 border-gray-700 rounded-md outline-none font-bold focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-700 focus-disabled:pointer-events-none focus-disabled:opacity-30 focus-disabled:select-none">
         <input
           type={type}
           className={cn(

@@ -1,13 +1,8 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginatedData, UserRole } from '@reqeefy/types';
+import * as bcrypt from 'bcrypt';
 import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
-import { UserRequest } from 'src/common/types/api';
 import { DeleteResult, Repository } from 'typeorm';
 import { PaginationService } from '../common/models/pagination/pagination.service';
 import { UploadFilesService } from '../upload-files/upload-files.service';
@@ -140,25 +135,14 @@ export class UsersService {
 
   async updateUserProfile({
     userId,
-    req,
     body,
     res,
   }: {
     userId: string;
-    req: UserRequest;
     body: UpdateUserDto;
     res;
   }): Promise<UserEntity> {
-    //! Should be replaced by a guard
     const user = await this.findOneById(userId);
-
-    if (user.id !== req.user.id) {
-      throw new UnauthorizedException(
-        HttpStatus.UNAUTHORIZED,
-        'You are not authorized to update this user',
-      );
-    }
-    //!
 
     if (body.avatar) {
       if (user.avatar) {
@@ -179,14 +163,25 @@ export class UsersService {
       };
     }
 
+    if (body.password) {
+      body.password = await bcrypt.hash(body.password, 10);
+    }
+
     const update = await this.userRepository.save({
       ...user,
       ...body,
     });
 
-    // get the user from findOneById to get the joined relations
     const updatedUser = await this.findOneByEmail(update.email);
 
     return await this.jwtUtilsService.reauthenticateUser(updatedUser, res);
+  }
+
+  async isOwner(
+    currentUserId: string,
+    resourceUserId: string,
+  ): Promise<boolean> {
+    const user = await this.findOneById(resourceUserId);
+    return user && user.id === currentUserId;
   }
 }

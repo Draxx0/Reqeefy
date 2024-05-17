@@ -1,31 +1,31 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
-  UseGuards,
+  HttpException,
   Param,
+  Post,
+  Put,
   Query,
   Req,
-  HttpException,
-  Put,
   Request,
+  UseGuards,
 } from '@nestjs/common';
-import { TicketsService } from './tickets.service';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
-import { TicketQueries } from './queries/queries';
-import { CreateMessageDto } from '../messages/dto/create-message.dto';
 import { UserRequest } from 'src/common/types/api';
-import { MessagesService } from '../messages/messages.service';
-import { UsersService } from '../users/users.service';
-import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
 import {
   CUSTOMERS_PERMISSIONS,
   DISTRIBUTORS_PERMISSIONS,
   Roles,
   SUPERADMINS_PERMISSIONS,
 } from 'src/decorator/roles.decorator';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
+import { CreateMessageDto } from '../messages/dto/create-message.dto';
+import { MessagesService } from '../messages/messages.service';
+import { UsersService } from '../users/users.service';
+import { CreateTicketDto } from './dto/create-ticket.dto';
+import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
+import { TicketQueries } from './queries/queries';
+import { TicketsService } from './tickets.service';
 
 @Controller('tickets')
 @UseGuards(JwtAuthGuard)

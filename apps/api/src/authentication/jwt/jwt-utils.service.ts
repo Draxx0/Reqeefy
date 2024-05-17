@@ -60,6 +60,8 @@ export class JwtUtilsService {
       expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
+    delete user.password;
+
     return user;
   }
 

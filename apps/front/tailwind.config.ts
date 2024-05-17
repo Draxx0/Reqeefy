@@ -20,6 +20,7 @@ const config = {
     extend: {
       maxWidth: {
         '8/10': '80%',
+        '9/10': '90%',
       },
       colors: {
         border: 'hsl(var(--border))',

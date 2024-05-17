@@ -12,7 +12,7 @@ export const EmptyNotifications = () => {
           loading="lazy"
         />
       </div>
-      <h2 className="text-lg font-bold">
+      <h2 className="text-lg font-bold text-center">
         Vous n&apos;avez aucunes notifications
       </h2>
     </div>

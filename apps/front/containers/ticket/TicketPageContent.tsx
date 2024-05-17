@@ -1,4 +1,5 @@
 'use client';
+import { ButtonLink, TicketMessageSendForm } from '@/components/client.index';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,21 +9,19 @@ import {
   BreadcrumbSeparator,
   Separator,
 } from '@/components/server.index';
+import { STATIC_PATHS } from '@/constants';
 import { useGetTicket } from '@/hooks';
 import { formatDate } from '@/utils';
-import { TicketMessageContainer } from './message/TicketMessageContainer';
 import { Lock, Pen } from 'lucide-react';
-import { ButtonLink, TicketMessageSendForm } from '@/components/client.index';
-import { STATIC_PATHS } from '@/constants';
+import { TicketLoader } from '../loading-state/ticket/TicketLoader';
 import { TicketSideContent } from './TicketSideContent';
+import { TicketMessageContainer } from './message/TicketMessageContainer';
 
 export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
   const { data: ticket, isLoading, isError } = useGetTicket({ ticketId });
 
-  console.log('ticket', ticket);
-
   if (isLoading || !ticket) {
-    return <div>Loading...</div>;
+    return <TicketLoader />;
   }
 
   if (isError) {
@@ -33,7 +32,7 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
 
   return (
     <div className="flex justify-between gap-12">
-      <div className="space-y-8 w-9/12">
+      <div className="space-y-8 w-full md:w-9/12">
         <Breadcrumb>
           <BreadcrumbList className="flex-nowrap">
             <BreadcrumbItem>

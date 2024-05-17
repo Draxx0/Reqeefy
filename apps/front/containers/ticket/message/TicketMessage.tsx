@@ -1,7 +1,5 @@
+import { UserAvatar } from '@/components/client.index';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Separator,
   Tooltip,
   TooltipContent,
@@ -17,17 +15,8 @@ export const TicketMessage = ({ message }: { message: Message }) => {
       <div className="flex items-center gap-4">
         <TooltipProvider delayDuration={100}>
           <Tooltip>
-            <TooltipTrigger asChild>
-              <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                <AvatarImage
-                  src={message.user.avatar?.file_url}
-                  alt={`Photo de l'utilisateur ${message.user.first_name} ${message.user.last_name}`}
-                  className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
-                />
-                <AvatarFallback className="w-full h-full uppercase text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
-                  {message.user.first_name[0] + message.user.last_name[0]}
-                </AvatarFallback>
-              </Avatar>
+            <TooltipTrigger>
+              <UserAvatar user={message.user} />
             </TooltipTrigger>
             <TooltipContent align="center" side="top">
               <p>

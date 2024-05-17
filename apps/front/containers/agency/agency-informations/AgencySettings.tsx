@@ -1,14 +1,14 @@
 'use client';
 import { useGetAgency } from '@/hooks';
-import { AgencySettingsLoader } from '../../loading-state/AgencySettingsLoader';
+import { AgencySettingsLoader } from '../../loading-state/agency/AgencySettingsLoader';
 import { AgencySettingsInformationsContent } from './AgencySettingsInformationsContent';
 
 export const AgencySettings = () => {
   const { data: agency, isLoading, isError } = useGetAgency();
 
-  if (isLoading) return <AgencySettingsLoader />;
+  if (isLoading || !agency) return <AgencySettingsLoader />;
 
-  if (isError || !agency)
+  if (isError)
     return (
       <div>
         Une erreur est survenue lors de la récupération des informations de
@@ -16,9 +16,5 @@ export const AgencySettings = () => {
       </div>
     );
 
-  return (
-    <section className="space-y-12">
-      <AgencySettingsInformationsContent agency={agency} />
-    </section>
-  );
+  return <AgencySettingsInformationsContent agency={agency} />;
 };

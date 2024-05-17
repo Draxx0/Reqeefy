@@ -1,15 +1,15 @@
 'use client';
 
-import { AgencySettingsLoader } from '@/containers/loading-state';
-import { AgencySettingsProjectsContent } from './AgencySettingsProjectsContent';
+import { AgencyProjectSettingsLoader } from '@/containers/loading-state';
 import { useGetAgency } from '@/hooks';
+import { AgencySettingsProjectsContent } from './AgencySettingsProjectsContent';
 
 export const AgencySettingsProjects = () => {
   const { data: agency, isLoading, isError } = useGetAgency();
 
-  if (isLoading) return <AgencySettingsLoader />;
+  if (isLoading || !agency) return <AgencyProjectSettingsLoader />;
 
-  if (isError || !agency) {
+  if (isError) {
     return <div>Error...</div>;
   }
   return (

@@ -1,18 +1,8 @@
+import { useAuthStore } from '@/stores';
+import { formatDate } from '@/utils';
 import { Ticket as TicketType } from '@reqeefy/types';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Badge,
-  Separator,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '../server.index';
 import { BadgePlus, MessageCircle, Paperclip } from 'lucide-react';
 import { useMemo } from 'react';
-import { formatDate } from '@/utils';
 import {
   Button,
   ButtonLink,
@@ -22,9 +12,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  UserAvatar,
 } from '../client.index';
+import {
+  Badge,
+  Separator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../server.index';
 import { DistributeTicketForm } from './DistributeTicketForm';
-import { useAuthStore } from '@/stores';
 
 type Props = {
   ticket: TicketType;
@@ -109,18 +107,8 @@ export const Ticket = ({ ticket }: Props) => {
           <div className="flex items-center gap-2">
             <TooltipProvider delayDuration={100}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                    <AvatarImage
-                      src={lastMessage.user.avatar?.file_url}
-                      alt={`Photo de l'utiliateur ${lastMessage.user.first_name} ${lastMessage.user.last_name}`}
-                      className="h-full w-full group-hover:opacity-50 transition duration-300 ease-in-out"
-                    />
-                    <AvatarFallback className="w-full h-full uppercase text-xs flex items-center justify-center group-hover:opacity-50 transition duration-300 ease-in-out">
-                      {lastMessage.user.first_name[0] +
-                        lastMessage.user.last_name[0]}
-                    </AvatarFallback>
-                  </Avatar>
+                <TooltipTrigger>
+                  <UserAvatar user={lastMessage.user} />
                 </TooltipTrigger>
                 <TooltipContent align="center" side="top">
                   <p>
@@ -153,17 +141,8 @@ export const Ticket = ({ ticket }: Props) => {
               {ticketUsers.map((user) => (
                 <TooltipProvider key={user.id} delayDuration={100}>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                        <AvatarImage
-                          src={user.avatar?.file_url}
-                          alt={`Photo de l'utilisateur ${user.first_name} ${user.last_name}`}
-                          className="h-full w-full group-hover:opacity-50 transition duration-300 ease-in-out"
-                        />
-                        <AvatarFallback className="w-full h-full text-xs group-hover:opacity-50 transition duration-300 ease-in-out flex items-center justify-center">
-                          {user.first_name[0] + user.last_name[0]}
-                        </AvatarFallback>
-                      </Avatar>
+                    <TooltipTrigger>
+                      <UserAvatar user={user} />
                     </TooltipTrigger>
                     <TooltipContent align="center" side="top">
                       <p>

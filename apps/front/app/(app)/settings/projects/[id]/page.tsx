@@ -1,9 +1,6 @@
 'use client';
-import { Button } from '@/components/client.index';
+import { Button, UserAvatar } from '@/components/client.index';
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -69,17 +66,8 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
             {project.agents_referents.map((agent) => (
               <TooltipProvider key={agent.id} delayDuration={100}>
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                      <AvatarImage
-                        src={agent.user.avatar?.file_url}
-                        alt={`Photo de l'agent ${agent.user.first_name} ${agent.user.last_name}`}
-                        className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
-                      />
-                      <AvatarFallback className="w-full uppercase h-full text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
-                        {agent.user.first_name[0] + agent.user.last_name[0]}
-                      </AvatarFallback>
-                    </Avatar>
+                  <TooltipTrigger>
+                    <UserAvatar user={agent.user} />
                   </TooltipTrigger>
                   <TooltipContent align="center" side="top">
                     <p>
@@ -98,18 +86,8 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
             {project.customers.map((customer) => (
               <TooltipProvider key={customer.id} delayDuration={100}>
                 <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                      <AvatarImage
-                        src={customer.user.avatar?.file_url}
-                        alt={`Photo de l'agent ${customer.user.first_name} ${customer.user.last_name}`}
-                        className="h-full w-full group-hover:opacity-80 transition-opacity ease-in-out duration-300"
-                      />
-                      <AvatarFallback className="w-full h-full text-xs flex items-center justify-center group-hover:opacity-80 transition-opacity ease-in-out duration-300">
-                        {customer.user.first_name[0] +
-                          customer.user.last_name[0]}
-                      </AvatarFallback>
-                    </Avatar>
+                  <TooltipTrigger>
+                    <UserAvatar user={customer.user} />
                   </TooltipTrigger>
                   <TooltipContent align="center" side="top">
                     <p>

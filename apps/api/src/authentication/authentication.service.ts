@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from 'src/models/users/entities/user.entity';
@@ -6,7 +7,6 @@ import { UsersService } from 'src/models/users/users.service';
 import { Repository } from 'typeorm';
 import { AuthenticationSigninDto } from './dto/authentication-signin.dto';
 import { AuthenticationSignupDto } from './dto/authentication-signup.dto';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class AuthenticationService {
@@ -32,7 +32,6 @@ export class AuthenticationService {
     const isPasswordMatching = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatching) {
-      console.error('Wrong password provided');
       throw new HttpException('Password is invalid', HttpStatus.UNAUTHORIZED);
     }
 

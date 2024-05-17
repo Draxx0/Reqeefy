@@ -2,12 +2,19 @@
 import {
   Button,
   Checkbox,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  UpdateAgencyGroupForm,
   buttonVariants,
 } from '@/components/client.index';
 import { AgencyGroupTableData } from '@/types';
@@ -70,11 +77,11 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
   {
     id: 'actions',
     cell: ({ row }) => {
-      const customer = row.original;
+      const agencyGroup = row.original;
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
             <div
               className={buttonVariants({
                 variant: 'ghost',
@@ -87,10 +94,28 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="capitalize flex items-center gap-3">
-              Modifier
-              <Pen className="h-4 w-4" />
-            </DropdownMenuItem>
+            <Dialog>
+              <DialogTrigger asChild>
+                <DropdownMenuItem
+                  className="capitalize flex items-center gap-3"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  Modifier
+                  <Pen className="h-4 w-4" />
+                </DropdownMenuItem>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Modifier un groupe</DialogTitle>
+                  <DialogDescription>
+                    Modifiez le nom du groupe
+                  </DialogDescription>
+                </DialogHeader>
+                <UpdateAgencyGroupForm agencyGroup={agencyGroup} />
+              </DialogContent>
+            </Dialog>
             <DropdownMenuItem className="capitalize flex items-center gap-3">
               Supprimer
               <Trash className="h-4 w-4" />

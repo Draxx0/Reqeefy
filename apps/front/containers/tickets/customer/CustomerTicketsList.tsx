@@ -13,6 +13,7 @@ import {
 import { Input, PageHeader, Ticket } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
 import { EmptyTickets } from '@/containers/empty-state';
+import { TicketListLoader } from '@/containers/loading-state';
 import { useGetTicketsByProject } from '@/hooks';
 import { useAuthStore } from '@/stores';
 import { ArrowDownUp, MessageCircle } from 'lucide-react';
@@ -46,11 +47,11 @@ export const CustomerTicketsList = () => {
 
   if (!user?.customer) return null;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || !tickets) {
+    return <TicketListLoader />;
   }
 
-  if (isError || !tickets) {
+  if (isError) {
     return <div>Error...</div>;
   }
 
