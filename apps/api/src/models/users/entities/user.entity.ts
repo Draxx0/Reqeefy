@@ -43,6 +43,12 @@ export class UserEntity extends TimestampEntity {
   })
   role: UserRole;
 
+  @Column({ nullable: true })
+  reset_password_token: string;
+
+  @Column({ nullable: true })
+  reset_password_token_expires: Date;
+
   // RELATIONS
 
   @OneToOne(() => UploadFileEntity, (uploadFile) => uploadFile.user, {

@@ -1,7 +1,11 @@
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  resetPasswordSchema,
+} from '@/schemas';
 import { api } from '@/services';
-import { z } from 'zod';
-import { loginSchema } from '@/schemas';
 import { User } from '@reqeefy/types';
+import { z } from 'zod';
 
 const login = async (
   credentials: z.infer<typeof loginSchema>
@@ -42,9 +46,37 @@ const getToken = () => {
   return access_token;
 };
 
+const forgotPassword = async (data: z.infer<typeof forgotPasswordSchema>) => {
+  try {
+    return await api.post('/auth/forgot-password', data);
+  } catch (error) {
+    console.error(error);
+    throw new Error('Impossible de réinitialiser le mot de passe');
+  }
+};
+
+const resetPassword = async (
+  userId: string,
+  token: string,
+  data: z.infer<typeof resetPasswordSchema>
+) => {
+  try {
+    return await api.post(`/auth/reset-password/${userId}/${token}`, data);
+  } catch (error) {
+    // @ts-ignore
+    if (error.response?.data.message === 'Token expired') {
+      throw new Error('Votre lien de réinitialisation a expiré');
+    }
+
+    throw new Error('Impossible de réinitialiser le mot de passe');
+  }
+};
+
 export const authService = {
   login,
   logout,
+  forgotPassword,
+  resetPassword,
   getToken,
   generateRefreshToken,
 };

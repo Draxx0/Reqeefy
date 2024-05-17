@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationType } from '@reqeefy/types';
+import { MailService } from 'src/mail/mail.service';
 import { Repository } from 'typeorm';
 import { MessageEntity } from '../messages/entities/message.entity';
 import { TicketEntity } from '../tickets/entities/ticket.entity';
@@ -22,14 +23,25 @@ export class NotificationsService {
     private readonly messageRepository: Repository<MessageEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly mailService: MailService,
   ) {}
 
   @OnEvent('new.user')
-  async newUser({ firstName, lastName, userId }: NewUserEvent) {
+  async newUser({
+    first_name,
+    last_name,
+    email,
+    accountActivationToken,
+    userId,
+  }: NewUserEvent) {
+    this.mailService.sendUserConfirmation({
+      user: { first_name, last_name, email },
+      token: accountActivationToken,
+    });
     return await this.create({
       userId,
       type: 'welcome',
-      message: `Bienvenue sur reqeefy ${firstName} ${lastName} !`,
+      message: `Bienvenue sur reqeefy ${first_name} ${last_name} !`,
     });
   }
 
