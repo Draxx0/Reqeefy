@@ -1,3 +1,4 @@
+import { AgencyGroup } from '..';
 import { Timestamps } from '../common';
 import { Message } from '../message/message';
 import { Project } from '../project/project';
@@ -18,5 +19,6 @@ export interface Ticket extends Timestamps {
   customers: Array<Customer>;
   project: Project;
   upload_files: Array<UploadFile>;
+  agency_groups: Array<AgencyGroup>;
   distributed: boolean;
 }

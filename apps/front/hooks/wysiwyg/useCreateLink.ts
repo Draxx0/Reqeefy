@@ -17,7 +17,6 @@ export const useCreateLink = ({ editor }: Props) => {
   const { from, to } = view.state.selection;
   const selectedText = state.doc.textBetween(from, to, '');
 
-  console.log('selected text', state.doc.textBetween(from, to, ''));
   const form = useForm<CreateLinkSchemaType>({
     resolver: zodResolver(createLinkSchema),
     defaultValues: {
@@ -35,7 +34,6 @@ export const useCreateLink = ({ editor }: Props) => {
     },
     onSuccess: (data, variables, context) => {
       const previousUrl = editor.getAttributes('link').href;
-      console.log('previous url', previousUrl);
       const { url } = variables;
 
       editor

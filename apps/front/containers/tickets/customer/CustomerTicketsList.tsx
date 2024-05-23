@@ -13,6 +13,7 @@ import {
 import { Input, PageHeader, Ticket } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
 import { EmptyTickets } from '@/containers/empty-state';
+import { GlobalError } from '@/containers/error-state';
 import { TicketListLoader } from '@/containers/loading-state';
 import { useGetTicketsByProject } from '@/hooks';
 import { useAuthStore } from '@/stores';
@@ -51,8 +52,8 @@ export const CustomerTicketsList = () => {
     return <TicketListLoader />;
   }
 
-  if (isError) {
-    return <div>Error...</div>;
+  if (isError && !tickets) {
+    return <GlobalError />;
   }
 
   const totalPages = Math.ceil(tickets.pagination.total / LARGE_PAGE_SIZE);

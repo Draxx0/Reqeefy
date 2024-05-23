@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { PaginatedData } from '@reqeefy/types';
 import { IsOwner } from 'src/decorator/isOwner.decorator';
+import { Public } from 'src/decorator/public.decorator';
 import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { DeleteResult } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -21,11 +21,12 @@ import { UserQueries } from './queries/queries';
 import { UsersService } from './users.service';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   //!DEV ENDPOINT
+  @Public()
   @Get()
   async findAll(
     @Query() queries: UserQueries,

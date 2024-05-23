@@ -13,9 +13,9 @@ import {
   FIFTEEN_MINUTES,
   FOURTEEN_DAYS,
 } from 'src/constants/cookies.constants';
+import { Public } from 'src/decorator/public.decorator';
 import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
 import { generateExpirationDate } from 'src/utils/generateExpirationDate';
-import { JwtAuthGuard } from '../guards/jwt.guard';
 import { LocalGuard } from '../guards/local.guard';
 import { AuthenticationService } from './authentication.service';
 import { AuthenticationForgotPasswordDto } from './dto/authentication-forgot-password.dto';
@@ -29,6 +29,7 @@ export class AuthenticationController {
     private readonly jwtUtilsService: JwtUtilsService,
   ) {}
 
+  @Public()
   @Post('signin')
   @UseGuards(LocalGuard)
   async signin(@Req() req: UserRequest, @Res({ passthrough: true }) response) {
@@ -105,6 +106,7 @@ export class AuthenticationController {
     return await this.authenticationService.logout(response);
   }
 
+  @Public()
   @Post('forgot-password')
   async forgotPassword(
     @Body() forgotPasswordDto: AuthenticationForgotPasswordDto,
@@ -112,6 +114,7 @@ export class AuthenticationController {
     return await this.authenticationService.forgotPassword(forgotPasswordDto);
   }
 
+  @Public()
   @Post('reset-password/:id/:token')
   resetPassord(
     @Param('id') id: string,
@@ -128,7 +131,6 @@ export class AuthenticationController {
   }
 
   @Get('status')
-  @UseGuards(JwtAuthGuard)
   async status(@Req() req: UserRequest) {
     return req.user;
   }

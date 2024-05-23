@@ -1,5 +1,5 @@
 'use client';
-import { Button, UserAvatar } from '@/components/client.index';
+import { UserAvatar } from '@/components/client.index';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,8 +15,8 @@ import {
   TooltipTrigger,
 } from '@/components/server.index';
 import { STATIC_PATHS } from '@/constants';
+import { GlobalError } from '@/containers';
 import { useGetProject } from '@/hooks/project/useGetProject';
-import { ArrowDownUp } from 'lucide-react';
 
 //! PAGE SHOULD BE SERVER COMPONENT
 
@@ -28,16 +28,15 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
   } = useGetProject({ projectId: params.id });
 
   //! add skeleton loader for project page
-  if (isLoading || !project) {
+  if (isLoading && !project) {
     return <div>Loading...</div>;
   }
 
-  //! add error visual for project page
-  if (isError) {
-    return (
-      <div>Une erreur est survenue lors de la récupération du projet.</div>
-    );
+  if (isError && !project) {
+    return <GlobalError />;
   }
+
+  if (!project) return null;
 
   return (
     <section className="space-y-12">
@@ -102,16 +101,6 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
       </div>
 
       <PageHeader title="Discussions" hasSeparator size="small" />
-
-      <div className="flex justify-end">
-        <Button
-          variant={'ghost'}
-          className="flex gap-2 items-center border border-gray-700"
-        >
-          <span>Plus récents</span>
-          <ArrowDownUp className="w-4 h-4" />
-        </Button>
-      </div>
 
       <ProjectTicketsList projectId={project.id} />
     </section>

@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
+import { agencyGroupService } from '@/services/agency/agency-group.service';
 import { useAuthStore } from '@/stores';
 import { Agency } from '@reqeefy/types';
-import { agencyGroupService } from '@/services/agency/agency-group.service';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetAgencyGroups = ({ agency }: { agency?: Agency | null }) => {
   const { user } = useAuthStore();
@@ -14,9 +13,7 @@ export const useGetAgencyGroups = ({ agency }: { agency?: Agency | null }) => {
       if (!agency) throw new Error('No agency provided');
       return await agencyGroupService.getAll(agency.id);
     },
-    staleTime: 1000 * 60 * 60,
     enabled: !!user && !!agency,
-    ...DEFAULT_USE_QUERY_PARAMS,
   });
 
   return {

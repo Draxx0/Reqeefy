@@ -38,6 +38,7 @@ type Props = {
 
 export const TicketSideContent = ({ ticket }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [isSeeMoreClicked, setIsSeeMoreClicked] = useState(false);
   const status = getTicketStatusState(ticket.status);
   const user = useAuthStore((state) => state.user);
   const queryClient = useQueryClient();
@@ -73,7 +74,7 @@ export const TicketSideContent = ({ ticket }: Props) => {
       await ticketsService.archive(ticket.id);
 
       await queryClient.invalidateQueries({
-        queryKey: ['ticket'],
+        queryKey: ['agency', 'tickets'],
       });
 
       toast.success('Discussion archivée avec succès');
@@ -154,6 +155,56 @@ export const TicketSideContent = ({ ticket }: Props) => {
 
       <div className="space-y-4">
         <h2 className="font-bold text-xl">Participants</h2>
+
+        {ticket.agency_groups.length > 0 && (
+          <>
+            <p className="text-xs">
+              Discussion distribué aux groupe(s) suivant(s)
+            </p>
+
+            {ticket.agency_groups.length > 4 ? (
+              <div className="flex items-center flex-wrap gap-2">
+                {!isSeeMoreClicked ? (
+                  <>
+                    {ticket.agency_groups.slice(0, 4).map((group) => (
+                      <Badge key={group.id} variant="outline">
+                        {group.name}
+                      </Badge>
+                    ))}
+                    <Badge
+                      className="cursor-pointer"
+                      onClick={() => setIsSeeMoreClicked(true)}
+                    >
+                      Voir plus
+                    </Badge>
+                  </>
+                ) : (
+                  <>
+                    {ticket.agency_groups.map((group) => (
+                      <Badge key={group.id} variant="outline">
+                        {group.name}
+                      </Badge>
+                    ))}
+                    <Badge
+                      className="cursor-pointer"
+                      onClick={() => setIsSeeMoreClicked(false)}
+                    >
+                      Voir moins
+                    </Badge>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center flex-wrap gap-2">
+                {ticket.agency_groups.map((group) => (
+                  <Badge key={group.id} variant="outline">
+                    {group.name}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </>
+        )}
         <Separator />
 
         <div className="flex items-center -space-x-4">

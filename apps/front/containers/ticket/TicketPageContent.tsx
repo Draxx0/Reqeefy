@@ -13,6 +13,7 @@ import { STATIC_PATHS } from '@/constants';
 import { useGetTicket } from '@/hooks';
 import { formatDate } from '@/utils';
 import { Lock, Pen } from 'lucide-react';
+import { GlobalError } from '../error-state';
 import { TicketLoader } from '../loading-state/ticket/TicketLoader';
 import { TicketSideContent } from './TicketSideContent';
 import { TicketMessageContainer } from './message/TicketMessageContainer';
@@ -20,15 +21,17 @@ import { TicketMessageContainer } from './message/TicketMessageContainer';
 export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
   const { data: ticket, isLoading, isError } = useGetTicket({ ticketId });
 
-  if (isLoading || !ticket) {
+  if (isLoading && !ticket) {
     return <TicketLoader />;
   }
 
-  if (isError) {
-    return (
-      <div>Une erreur est survenue lors de la récupération du ticket.</div>
-    );
+  if (isError && !ticket) {
+    return <GlobalError />;
   }
+
+  if (!ticket) return null;
+
+  console.log(ticket);
 
   return (
     <div className="flex justify-between gap-12">

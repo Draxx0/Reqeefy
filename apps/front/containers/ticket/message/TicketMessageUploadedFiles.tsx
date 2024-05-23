@@ -1,4 +1,5 @@
-'use client';import {
+'use client';
+import {
   Button,
   Dialog,
   DialogContent,
@@ -60,10 +61,9 @@ export const TicketMessageUploadedFiles = ({ file }: { file: UploadFile }) => {
               <Image
                 src={file.file_url}
                 alt="file"
-                layout="fill"
-                className="rounded-t-md overflow-hidden"
-                objectFit="cover"
-                objectPosition="center"
+                loading="lazy"
+                fill
+                className="rounded-t-md object-center object-cover overflow-hidden"
               />
             )}
           </div>
@@ -82,7 +82,7 @@ export const TicketMessageUploadedFiles = ({ file }: { file: UploadFile }) => {
                   width={'100%'}
                   height={'100%'}
                 >
-                  Unable to open the PDF file.
+                  Impossible d&apos;afficher le fichier
                 </object>
               ) : (
                 <div className="w-full h-full relative">
@@ -97,9 +97,8 @@ export const TicketMessageUploadedFiles = ({ file }: { file: UploadFile }) => {
                   <Image
                     src={file.file_url}
                     alt="file"
-                    layout="fill"
-                    className="cursor-zoom-in"
-                    objectFit="cover"
+                    fill
+                    className="cursor-zoom-in object-cover"
                     onClick={handleZoomIn}
                     onMouseMove={updateZoomOrigin}
                     style={{

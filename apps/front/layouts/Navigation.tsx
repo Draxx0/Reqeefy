@@ -20,14 +20,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/server.index';
-import { LARGE_PAGE_SIZE, STATIC_PATHS } from '@/constants';
+import { STATIC_PATHS } from '@/constants';
 import { useGetProfile, useLogOut } from '@/hooks';
 import { cn } from '@/lib';
-import { agencyService, ticketsService } from '@/services';
 import { useAuthStore } from '@/stores';
 import { hasDistributorPermissions, hasSuperAdminPermissions } from '@/utils';
 import { useQueryClient } from '@tanstack/react-query';
-import { Bell, Settings, Split, TicketSlash } from 'lucide-react';
+import { Bell, MessagesSquare, Settings, Split } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -62,6 +61,7 @@ export const Navigation = () => {
           <div className="flex flex-col items-center gap-4">
             <Image
               src="/assets/icons/reqeefy-logo.svg"
+              priority
               alt="Logo de l'application"
               width={38}
               height={38}
@@ -75,7 +75,7 @@ export const Navigation = () => {
                         href={STATIC_PATHS.TICKETS}
                         className={linkClasses(STATIC_PATHS.TICKETS)}
                       >
-                        <TicketSlash />
+                        <MessagesSquare />
                       </Link>
                     </TooltipTrigger>
                     <TooltipContent align="center" side="right">
@@ -87,30 +87,31 @@ export const Navigation = () => {
               {hasDistributorPermissions(user.role) && (
                 <li
                   className="active:translate-y-1 transition ease-in-out"
-                  onMouseEnter={async () => {
-                    if (!user || !user.agency) return;
+                  // onMouseEnter={async () => {
+                  //   if (!user || !user.agency) return;
 
-                    await queryClient.prefetchQuery({
-                      queryKey: [
-                        'distribution',
-                        user.agency.id,
-                        'tickets',
-                        1,
-                        'DESC',
-                      ],
-                      queryFn: async () => {
-                        return await ticketsService.getAllToDistributeByAgency(
-                          user.agency!.id,
-                          {
-                            page: 1,
-                            limit_per_page: LARGE_PAGE_SIZE,
-                            sort_by: 'created_at',
-                            sort_order: 'DESC',
-                          }
-                        );
-                      },
-                    });
-                  }}
+                  //   await queryClient.prefetchQuery({
+                  //     queryKey: [
+                  //       'agency',
+                  //       user.agency.id,
+                  //       'distribution',
+                  //       'tickets',
+                  //       1,
+                  //       'DESC',
+                  //     ],
+                  //     queryFn: async () => {
+                  //       return await ticketsService.getAllToDistributeByAgency(
+                  //         user.agency!.id,
+                  //         {
+                  //           page: 1,
+                  //           limit_per_page: LARGE_PAGE_SIZE,
+                  //           sort_by: 'created_at',
+                  //           sort_order: 'DESC',
+                  //         }
+                  //       );
+                  //     },
+                  //   });
+                  // }}
                 >
                   <TooltipProvider delayDuration={100}>
                     <Tooltip>
@@ -165,15 +166,15 @@ export const Navigation = () => {
             {hasSuperAdminPermissions(user.role) && (
               <li
                 className="active:translate-y-1 transition ease-in-out"
-                onMouseEnter={async () => {
-                  await queryClient.prefetchQuery({
-                    queryKey: ['agency'],
-                    queryFn: async () => {
-                      if (!user || !user.agency) return null;
-                      return await agencyService.get(user.agency.id);
-                    },
-                  });
-                }}
+                // onMouseEnter={async () => {
+                //   await queryClient.prefetchQuery({
+                //     queryKey: ['agency'],
+                //     queryFn: async () => {
+                //       if (!user || !user.agency) return null;
+                //       return await agencyService.get(user.agency.id);
+                //     },
+                //   });
+                // }}
               >
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
@@ -292,7 +293,7 @@ const ResponsiveNavigation = () => {
                 href={STATIC_PATHS.TICKETS}
                 className="active:translate-y-1 cursor-pointer p-2 inline-flex justify-center border-2 border-transparent rounded-md transition-all ease-in-out duration-300"
               >
-                <TicketSlash />
+                <MessagesSquare />
               </Link>
             </li>
             <li>

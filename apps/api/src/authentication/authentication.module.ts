@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { MailModule } from 'src/mail/mail.module';
 import { NotificationsModule } from 'src/models/notifications/notifications.module';
 import { UserPreferencesModule } from 'src/models/user-preferences/user-preferences.module';
@@ -26,6 +28,10 @@ import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
   controllers: [AuthenticationController],
   providers: [
     AuthenticationService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
     LocalStrategy,
     JwtStrategy,
     RefreshJwtStrategy,

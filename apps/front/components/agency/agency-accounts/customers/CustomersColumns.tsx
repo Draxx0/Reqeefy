@@ -64,6 +64,7 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
       return (
         <Button
           variant="ghost"
+          className="-mx-4"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Email

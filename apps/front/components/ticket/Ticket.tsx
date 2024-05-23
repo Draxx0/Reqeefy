@@ -1,5 +1,5 @@
 import { useAuthStore } from '@/stores';
-import { formatDate } from '@/utils';
+import { formatDate, hasDistributorPermissions } from '@/utils';
 import { Ticket as TicketType } from '@reqeefy/types';
 import { BadgePlus, MessageCircle, Paperclip } from 'lucide-react';
 import { useMemo } from 'react';
@@ -59,6 +59,8 @@ export const Ticket = ({ ticket }: Props) => {
   }, [ticket]);
 
   const lastMessage = ticket.messages[0];
+
+  if (!user) return null;
 
   return (
     <div className="bg-white p-6 rounded-lg hover:shadow-primary-500 transition ease-in-out duration-300 shadow-md relative border min-h-[300px]">
@@ -158,7 +160,7 @@ export const Ticket = ({ ticket }: Props) => {
           <Separator />
 
           <div className="flex gap-2 justify-end flex-wrap">
-            {!ticket.distributed && user?.role !== 'customer' && (
+            {!ticket.distributed && hasDistributorPermissions(user.role) && (
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size={'sm'} className="gap-3">

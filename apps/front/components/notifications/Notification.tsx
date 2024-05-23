@@ -1,16 +1,19 @@
 'use client';
 
+import { notificationsServices } from '@/services';
+import { formatDate, renderErrorToast } from '@/utils';
 import { Notification as NotificationInterface } from '@reqeefy/types';
-import { Alert, AlertDescription, AlertTitle } from '../server.index';
 import {
   FolderGit2,
   HeartHandshake,
   MessageCircle,
+  MessageSquare,
   ShieldQuestion,
   Split,
-  TicketSlash,
   User,
 } from 'lucide-react';
+import { useTransition } from 'react';
+import { toast } from 'sonner';
 import {
   Button,
   ButtonLink,
@@ -23,10 +26,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '../client.index';
-import { formatDate, renderErrorToast } from '@/utils';
-import { useTransition } from 'react';
-import { notificationsServices } from '@/services';
-import { toast } from 'sonner';
+import { Alert, AlertDescription, AlertTitle } from '../server.index';
 
 export const Notification = ({
   notification,
@@ -46,7 +46,7 @@ export const Notification = ({
       case 'new_ticket':
         return {
           text: 'Nouvelle discussion !',
-          icon: <TicketSlash className="text-primary-700 size-5" />,
+          icon: <MessageSquare className="text-primary-700 size-5" />,
           buttonLinkLabel: 'Consulter la discussion',
         };
       case 'new_message':

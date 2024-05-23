@@ -1,24 +1,24 @@
 'use client';
-import { Agency } from '@reqeefy/types';
-import { Input, PageHeader } from '../../../components/server.index';
-import { useGetProjects } from '@/hooks';
 import {
   Button,
   CreateProjectForm,
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   PaginationComponent,
 } from '@/components/client.index';
-import { AgencySettingsProjectsList } from './AgencySettingsProjectsList';
-import { ArrowDownUp, GitBranchPlus, TriangleAlert } from 'lucide-react';
-import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
 import { SMALL_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
-import { useEffect } from 'react';
+import { EmptyProjects } from '@/containers/empty-state';
+import { GlobalError } from '@/containers/error-state';
+import { useGetProjects } from '@/hooks';
+import { Agency } from '@reqeefy/types';
+import { ArrowDownUp, GitBranchPlus } from 'lucide-react';
+import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
+import { Input, PageHeader } from '../../../components/server.index';
+import { AgencySettingsProjectsList } from './AgencySettingsProjectsList';
 
 export const AgencySettingsProjectsContent = ({
   agency,
@@ -55,9 +55,12 @@ export const AgencySettingsProjectsContent = ({
     },
   });
 
-  //! Should be updated to a skeleton loader & error message
+  //! Should be updated to a skeleton loader
   if (isLoading || !projects) return <div>Loading...</div>;
-  if (isError) return <div>Error loading projects</div>;
+
+  if (isError && !projects) {
+    return <GlobalError />;
+  }
 
   const totalPages = Math.ceil(projects.pagination.total / SMALL_PAGE_SIZE);
 
@@ -121,23 +124,24 @@ export const AgencySettingsProjectsContent = ({
       </div>
 
       {projects.data && projects.data.length > 0 ? (
-        <div className="grid grid-cols-3 gap-12">
-          <AgencySettingsProjectsList projects={projects.data} />
-        </div>
+        <>
+          <div className="grid grid-cols-3 gap-12">
+            <AgencySettingsProjectsList projects={projects.data} />
+          </div>
+
+          {totalPages > 1 ? (
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          ) : null}
+        </>
       ) : (
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-gray-900">
-            Aucun projet ne correspond à votre recherche
-          </span>
-          <TriangleAlert className="text-yellow-500 w-5 h-5" />
+        <div className="flex items-center justify-center">
+          <EmptyProjects />
         </div>
       )}
-
-      <PaginationComponent
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
   );
 };

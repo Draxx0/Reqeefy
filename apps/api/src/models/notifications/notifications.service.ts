@@ -34,10 +34,10 @@ export class NotificationsService {
     accountActivationToken,
     userId,
   }: NewUserEvent) {
-    this.mailService.sendUserConfirmation({
-      user: { first_name, last_name, email },
-      token: accountActivationToken,
-    });
+    // this.mailService.sendUserConfirmation({
+    //   user: { first_name, last_name, email },
+    //   token: accountActivationToken,
+    // });
     return await this.create({
       userId,
       type: 'welcome',
@@ -107,14 +107,24 @@ export class NotificationsService {
     const ticketOwnerName = `${ticketOwner.last_name + ' ' + ticketOwner.first_name}`;
 
     return await Promise.all(
-      distributors.map((distributor) =>
-        this.create({
+      distributors.map(async (distributor) => {
+        // this.mailService.sendTicketToDistribute({
+        //   supportAgent: {
+        //     first_name: distributor.first_name,
+        //     email: distributor.email,
+        //   },
+        //   ticketOwnerName,
+        //   ticket,
+        //   link: `http://localhost:3000/tickets/${ticketId}`,
+        // });
+
+        await this.create({
           userId: distributor.id,
           type: 'new_ticket_to_distribute',
           link: `/distributions`,
           message: `Nouvelle discussion à distribuer ! ${ticketOwnerName} a créé une nouvelle discussion sur le projet ${ticket.project.name} !`,
-        }),
-      ),
+        });
+      }),
     );
   }
 
@@ -132,6 +142,8 @@ export class NotificationsService {
 
     const ticketUsers = ticket.support_agents.map((supportAgent) => ({
       id: supportAgent.user.id,
+      first_name: supportAgent.user.first_name,
+      email: supportAgent.user.email,
     }));
 
     const ticketOwner = await this.userRepository.findOne({
@@ -141,14 +153,24 @@ export class NotificationsService {
     const ticketOwnerName = `${ticketOwner.last_name + ' ' + ticketOwner.first_name}`;
 
     return await Promise.all(
-      ticketUsers.map((user) =>
-        this.create({
+      ticketUsers.map(async (user) => {
+        // this.mailService.sendTicketAssigned({
+        //   supportAgent: {
+        //     first_name: user.first_name,
+        //     email: user.email,
+        //   },
+        //   ticketOwnerName,
+        //   ticket,
+        //   link: `http://localhost:3000/tickets/${ticketId}`,
+        // });
+
+        await this.create({
           userId: user.id,
           type: 'new_ticket',
           link: `/tickets/${ticketId}`,
           message: `Vous avez était assigné ! Une nouvelle discussion a été crée par ${ticketOwnerName} sur le projet ${ticket.project.name} !`,
-        }),
-      ),
+        });
+      }),
     );
   }
 

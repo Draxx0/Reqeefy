@@ -30,6 +30,12 @@ export const UpdateAgencyGroupForm = ({
               <FormLabel className="text-lg font-bold">Nom du groupe</FormLabel>
               <FormControl>
                 <Input
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
                   placeholder="Nom du groupe"
                   type="text"
                   {...field}

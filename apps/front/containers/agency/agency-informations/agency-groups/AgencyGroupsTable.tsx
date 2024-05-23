@@ -1,11 +1,13 @@
 'use client';
 
+import { CreateAgencyGroupForm } from '@/components/agency';
 import { DataTable } from '@/components/common/components/data-table';
 import { PageHeader } from '@/components/server.index';
+import { GlobalError } from '@/containers/error-state';
+import { DataTableSkeleton } from '@/containers/loading-state/common/DataTableSkeleton';
 import { useGetAgencyGroups } from '@/hooks';
 import { Agency } from '@reqeefy/types';
 import { agencyGroupsColumns } from '../../../../components/agency/agency-groups/AgencyGroupsColumns';
-import { CreateAgencyGroupForm } from '@/components/agency';
 
 export const AgencyGroupsTable = ({ agency }: { agency: Agency }) => {
   const {
@@ -14,10 +16,11 @@ export const AgencyGroupsTable = ({ agency }: { agency: Agency }) => {
     isError,
   } = useGetAgencyGroups({ agency });
 
-  //! create data table skeleton
-  if (isLoading || !agencyGroups) return <div>Loading...</div>;
+  if (isLoading || !agencyGroups) return <DataTableSkeleton />;
 
-  if (isError) return <div>Error...</div>;
+  if (isError && !agencyGroups) {
+    return <GlobalError />;
+  }
 
   return (
     <div className="space-y-4">

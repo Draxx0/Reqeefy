@@ -1,18 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { TicketQueries } from './queries/queries';
-import { InjectRepository } from '@nestjs/typeorm';
-import { TicketEntity } from './entities/ticket.entity';
-import { Repository } from 'typeorm';
-import { PaginationService } from '../common/models/pagination/pagination.service';
-import { MessagesService } from '../messages/messages.service';
-import { CustomersService } from '../customers/customers.service';
-import { UserEntity } from '../users/entities/user.entity';
-import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
-import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
-import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
-import { AgentsService } from '../agents/agents.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
+import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
+import { AgentsService } from '../agents/agents.service';
+import { PaginationService } from '../common/models/pagination/pagination.service';
+import { CustomersService } from '../customers/customers.service';
+import { MessagesService } from '../messages/messages.service';
+import { UserEntity } from '../users/entities/user.entity';
+import { CreateTicketDto } from './dto/create-ticket.dto';
+import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
+import { TicketEntity } from './entities/ticket.entity';
+import { TicketQueries } from './queries/queries';
 
 @Injectable()
 export class TicketsService {
@@ -212,6 +212,7 @@ export class TicketsService {
       .leftJoinAndSelect('messages.user', 'user')
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('messages.upload_files', 'message_upload_files')
+      .leftJoinAndSelect('messages.ticket', 'messages_ticketea')
       .leftJoinAndSelect('ticket.customers', 'customers')
       .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('customer_user.avatar', 'customer_avatar')

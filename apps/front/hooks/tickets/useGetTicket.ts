@@ -1,7 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
-import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
-import { useAuthStore } from '@/stores';
 import { ticketsService } from '@/services';
+import { useAuthStore } from '@/stores';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetTicket = ({ ticketId }: { ticketId: string }) => {
   const { user } = useAuthStore();
@@ -12,7 +11,6 @@ export const useGetTicket = ({ ticketId }: { ticketId: string }) => {
       return await ticketsService.getOne(ticketId);
     },
     enabled: !!user && !!ticketId,
-    ...DEFAULT_USE_QUERY_PARAMS,
   });
 
   return {

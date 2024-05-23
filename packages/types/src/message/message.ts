@@ -8,5 +8,6 @@ export interface Message extends Timestamps {
   content: string;
   user: User;
   ticket: Ticket;
+  updated: boolean;
   upload_files: UploadFile[];
 }

@@ -16,8 +16,6 @@ import {
 export const ResetPasswordForm = () => {
   const params = useParams<{ userId: string; token: string }>();
 
-  console.log(params.token, params.userId);
-
   const { form, isPending, onSubmit } = useResetPassword({
     resetToken: params.token,
     userId: params.userId,

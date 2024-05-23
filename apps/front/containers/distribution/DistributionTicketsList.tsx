@@ -5,6 +5,7 @@ import { useGetDistributionTickets } from '@/hooks';
 import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
 import { Ticket } from '../../components/ticket/Ticket';
 import { EmptyTickets } from '../empty-state';
+import { GlobalError } from '../error-state';
 import { TicketListLoader } from '../loading-state';
 
 export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
@@ -32,13 +33,12 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
     },
   });
 
-  //! create a loading and error comp loading
   if (isLoading || !tickets) {
     return <TicketListLoader />;
   }
 
-  if (isError) {
-    return <div>Error...</div>;
+  if (isError && !tickets) {
+    return <GlobalError />;
   }
 
   const totalPages = Math.ceil(tickets.pagination.total / LARGE_PAGE_SIZE);

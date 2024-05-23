@@ -8,18 +8,17 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AgentsService } from './agents.service';
 import { PaginatedData } from '@reqeefy/types';
-import { AgentEntity } from './entities/agent.entity';
-import { AgentQueries } from './queries/queries';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
-import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
-import { AddToAgencyGroupDTO } from './dto/add-to-agency-group.dto';
 import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { AgentsService } from './agents.service';
+import { AddToAgencyGroupDTO } from './dto/add-to-agency-group.dto';
+import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
+import { AgentEntity } from './entities/agent.entity';
+import { AgentQueries } from './queries/queries';
 
 @Controller('agents')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 export class AgentsController {
   constructor(private readonly agentsService: AgentsService) {}
 

@@ -12,6 +12,7 @@ import {
 } from '@/components/client.index';
 import { Badge } from '@/components/server.index';
 import { AgencyAgentTableData } from '@/types';
+import { truncateOverTwentyCharacters } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import {
   ArrowUpDown,
@@ -50,17 +51,28 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
     id: 'Nom',
     accessorKey: 'last_name',
     header: 'Nom',
+    cell: ({ row }) => {
+      const agent = row.original;
+
+      return <p>{truncateOverTwentyCharacters(agent.last_name)}</p>;
+    },
   },
   {
     id: 'Prénom',
     accessorKey: 'first_name',
     header: 'Prénom',
+    cell: ({ row }) => {
+      const agent = row.original;
+
+      return <p>{truncateOverTwentyCharacters(agent.first_name)}</p>;
+    },
   },
   {
     accessorKey: 'email',
     header: ({ column }) => {
       return (
         <Button
+          className="-mx-4"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
@@ -97,7 +109,7 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
       const agent = row.original;
 
       return agent.group ? (
-        <Badge>{agent.group.name}</Badge>
+        <Badge>{truncateOverTwentyCharacters(agent.group.name)}</Badge>
       ) : (
         <Badge>Non assigné</Badge>
       );

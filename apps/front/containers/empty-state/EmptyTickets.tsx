@@ -3,11 +3,10 @@ import Image from 'next/image';
 export const EmptyTickets = () => {
   return (
     <div className="flex flex-col items-center justify-center">
-      <div className="w-48 h-48 relative">
+      <div className="w-64 h-64 relative">
         <Image
           src="/assets/images/common/empty-tickets.png"
-          objectFit="cover"
-          objectPosition="center"
+          className="object-contain object-center"
           fill
           alt="Empty tickets"
           loading="lazy"

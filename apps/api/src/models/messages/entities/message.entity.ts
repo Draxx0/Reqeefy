@@ -18,6 +18,9 @@ export class MessageEntity extends TimestampEntity {
   @Column()
   content: string;
 
+  @Column({ type: 'boolean', default: false })
+  updated: boolean;
+
   // RELATIONS
 
   @ManyToOne(() => UserEntity, (user) => user.messages, {

@@ -1,8 +1,8 @@
 import { WysiwygParams } from '@/types';
-import { useEditor } from '@tiptap/react';
+import { Link } from '@tiptap/extension-link';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Underline } from '@tiptap/extension-underline';
-import { Link } from '@tiptap/extension-link';
+import { useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import { useCallback, useEffect } from 'react';
 
@@ -67,7 +67,6 @@ export const useWysiwyg = ({
 
   useEffect(() => {
     if (wysiwygParams.isSubmit) {
-      console.log('clear editor');
       clearEditor();
     }
   }, [wysiwygParams.isSubmit, clearEditor]);

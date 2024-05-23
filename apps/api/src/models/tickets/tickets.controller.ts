@@ -9,7 +9,6 @@ import {
   Query,
   Req,
   Request,
-  UseGuards,
 } from '@nestjs/common';
 import { UserRequest } from 'src/common/types/api';
 import {
@@ -18,7 +17,6 @@ import {
   Roles,
   SUPERADMINS_PERMISSIONS,
 } from 'src/decorator/roles.decorator';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
 import { CreateMessageDto } from '../messages/dto/create-message.dto';
 import { MessagesService } from '../messages/messages.service';
 import { UsersService } from '../users/users.service';
@@ -28,7 +26,6 @@ import { TicketQueries } from './queries/queries';
 import { TicketsService } from './tickets.service';
 
 @Controller('tickets')
-@UseGuards(JwtAuthGuard)
 export class TicketsController {
   constructor(
     private readonly ticketsService: TicketsService,
