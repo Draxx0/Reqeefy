@@ -2,6 +2,12 @@
 import {
   Button,
   Checkbox,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -23,6 +29,8 @@ import {
   Users,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { UpdateAgentAgencyGroupForm } from './UpdateAgentAgencyGroupForm';
+import { UpdateAgentRoleForm } from './UpdateAgentRoleForm';
 
 export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
   {
@@ -124,7 +132,7 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
             <div
               className={buttonVariants({
                 variant: 'ghost',
@@ -147,13 +155,52 @@ export const agentsColumns: ColumnDef<AgencyAgentTableData>[] = [
               <Copy className="h-4 w-4" />
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-3">
-              Modifier le rôle
-              <Bolt className="h-4 w-4" />
+            <DropdownMenuItem
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-3"
+            >
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div
+                    className="flex items-center gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Modifier le rôle
+                    <Bolt className="h-4 w-4" />
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Modifier le rôle</DialogTitle>
+                    <DialogDescription>
+                      Modifier le rôle de l&apos;agent
+                    </DialogDescription>
+                  </DialogHeader>
+                  <UpdateAgentRoleForm agent={agent} />
+                </DialogContent>
+              </Dialog>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex items-center gap-3">
-              Modifier le groupe
-              <Users className="h-4 w-4" />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div
+                    className="flex items-center gap-3"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Modifier le groupe
+                    <Users className="h-4 w-4" />
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Modifier le groupe</DialogTitle>
+                    <DialogDescription>
+                      Modifier le groupe de l&apos;agent
+                    </DialogDescription>
+                  </DialogHeader>
+                  <UpdateAgentAgencyGroupForm agent={agent} />
+                </DialogContent>
+              </Dialog>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex items-center gap-3">
               Supprimer l&apos;agent

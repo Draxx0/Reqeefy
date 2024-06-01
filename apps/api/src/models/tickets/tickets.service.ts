@@ -303,6 +303,16 @@ export class TicketsService {
     const agentsFromAgencyGroupsSelected =
       await this.agentsService.findAllByAgencyGroups(agency_groups);
 
+    console.log(
+      'agentsFromAgencyGroupsSelected',
+      agentsFromAgencyGroupsSelected,
+    );
+
+    console.log(
+      'ticket.project.agents_referents',
+      ticket.project.agents_referents,
+    );
+
     const agents = [
       ...agentsFromAgencyGroupsSelected,
       ...ticket.project.agents_referents,
@@ -315,10 +325,10 @@ export class TicketsService {
       support_agents: agents,
     });
 
-    this.eventEmitter.emit('new.ticket', {
-      ticketId: persistedTicket.id,
-      ticketOwnerId: persistedTicket.customers[0].user.id,
-    });
+    // this.eventEmitter.emit('new.ticket', {
+    //   ticketId: persistedTicket.id,
+    //   ticketOwnerId: persistedTicket.customers[0].user.id,
+    // });
 
     return persistedTicket;
   }

@@ -177,6 +177,17 @@ export class UsersService {
     return await this.jwtUtilsService.reauthenticateUser(updatedUser, res);
   }
 
+  async updateRole(id: string, role: UserRole): Promise<UserEntity> {
+    const user = await this.findOneById(id);
+
+    await this.userRepository.save({
+      ...user,
+      role,
+    });
+
+    return await this.findOneById(id);
+  }
+
   async isOwner(
     currentUserId: string,
     resourceUserId: string,
