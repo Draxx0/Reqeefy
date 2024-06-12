@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
 import { AgentsService } from '../agents/agents.service';
+import { AgentEntity } from '../agents/entities/agent.entity';
 import { PaginationService } from '../common/models/pagination/pagination.service';
 import { CustomersService } from '../customers/customers.service';
 import { MessagesService } from '../messages/messages.service';
@@ -221,6 +222,7 @@ export class TicketsService {
       .leftJoinAndSelect('support_agent_user.avatar', 'support_agent_avatar')
       .leftJoinAndSelect('ticket.project', 'project')
       .leftJoinAndSelect('project.agents_referents', 'agents_referents')
+      .leftJoinAndSelect('agents_referents.user', 'agents_referents_user')
       .leftJoinAndSelect('ticket.agency_groups', 'agency_groups')
       .where('ticket.id = :id', { id })
       .getOne();
@@ -313,10 +315,18 @@ export class TicketsService {
       ticket.project.agents_referents,
     );
 
-    const agents = [
-      ...agentsFromAgencyGroupsSelected,
-      ...ticket.project.agents_referents,
-    ];
+    //? Utiliser un Map pour garantir l'unicité des agents par ID
+    const agentsMap = new Map<string, AgentEntity>();
+
+    agentsFromAgencyGroupsSelected.forEach((agent) => {
+      agentsMap.set(agent.id, agent);
+    });
+
+    ticket.project.agents_referents.forEach((agent) => {
+      agentsMap.set(agent.id, agent);
+    });
+
+    const agents = Array.from(agentsMap.values());
 
     const persistedTicket = await this.ticketRepository.save({
       ...ticket,
