@@ -64,6 +64,7 @@ export class AuthenticationController {
     return req.user;
   }
 
+  @Public()
   @Post('/refresh')
   @UseGuards(RefreshJwtAuthGuard)
   async refreshToken(
