@@ -373,7 +373,9 @@ const ImagePreview = ({
         title={file.name}
         src={previewUrl}
         alt="Image"
-        className="border border-primary-900 rounded-md object-center object-cover"
+        width={0}
+        height={0}
+        className="border border-primary-900 rounded-md w-full h-full object-center object-cover"
       />
     ) : (
       <div
