@@ -14,6 +14,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { AgentsService } from './agents.service';
 import { AddToAgencyGroupDTO } from './dto/add-to-agency-group.dto';
 import { CreateAgentDTO } from './dto/create-agent.dto';
+import { UpdateAgentAgencyGroupDTO } from './dto/update-agent-agency-group.dto';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
 
@@ -38,13 +39,14 @@ export class AgentsController {
     return await this.agentsService.createUserAgent(body, id);
   }
 
-  // @Post('/user/:id')
-  // async addExistingUserAgentToAgency(
-  //   @Body() body: AddAgentToAgencyDTO,
-  //   @Param('id') id: string,
-  // ) {
-  //   return this.agentsService.createExistingUserAgent(body, id);
-  // }
+  @Put(':id/agency-group')
+  @Roles(...SUPERADMINS_PERMISSIONS)
+  async updateAgentAgencyGroup(
+    @Param('id') id: string,
+    @Body() body: UpdateAgentAgencyGroupDTO,
+  ) {
+    return await this.agentsService.updateAgentAgencyGroup(id, body);
+  }
 
   @Put(':id/add-to-agency-group')
   async addAgentToAgencyGroup(

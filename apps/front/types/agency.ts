@@ -12,6 +12,9 @@ export interface AgencyAgentTableData {
   first_name: string;
   last_name: string;
   email: string;
+  agentSelfData: {
+    id: string;
+  };
   role: Omit<UserRole, 'customer'>;
   group?: AgencyGroup;
 }
