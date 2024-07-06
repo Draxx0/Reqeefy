@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateProjectDTO } from './dto/create-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProjectEntity } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import { AgentsService } from '../agents/agents.service';
 import { PaginationService } from '../common/models/pagination/pagination.service';
-import { ProjectQueries } from './queries/queries';
 import { CustomerEntity } from '../customers/entities/customer.entity';
+import { CreateProjectDTO } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ProjectEntity } from './entities/project.entity';
+import { ProjectQueries } from './queries/queries';
 
 @Injectable()
 export class ProjectsService {
@@ -41,7 +41,7 @@ export class ProjectsService {
       .where('project.agency.id = :agencyId', { agencyId });
 
     if (search) {
-      query.where('project.name LIKE :search', {
+      query.where('lower(project.name) LIKE lower(:search)', {
         search: `%${search}%`,
       });
     }

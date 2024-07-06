@@ -16,7 +16,14 @@ import { GlobalError } from '@/containers/error-state';
 import { useGetProjects } from '@/hooks';
 import { Agency } from '@reqeefy/types';
 import { ArrowDownUp, GitBranchPlus } from 'lucide-react';
-import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
+import {
+  parseAsInteger,
+  parseAsString,
+  parseAsStringLiteral,
+  useQueryState,
+} from 'nuqs';
+import { ChangeEvent, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 import { Input, PageHeader } from '../../../components/server.index';
 import { AgencySettingsProjectsList } from './AgencySettingsProjectsList';
 
@@ -35,10 +42,12 @@ export const AgencySettingsProjectsContent = ({
     parseAsStringLiteral(sortOrderValues).withDefault('DESC')
   );
 
-  const [searchTerm, setSearchTerm] = useQueryState('search', {
-    defaultValue: '',
-    throttleMs: 1000,
-  });
+  const [searchTerm, setSearchTerm] = useQueryState(
+    'search',
+    parseAsString.withDefault('')
+  );
+
+  const [isDebounceLoading, setIsDebounceLoading] = useState(false);
 
   const {
     data: projects,
@@ -49,11 +58,19 @@ export const AgencySettingsProjectsContent = ({
     queryParams: {
       page: currentPage,
       limit_per_page: SMALL_PAGE_SIZE,
-      search: searchTerm,
       sort_by: 'created_at',
       sort_order: sortOrder,
+      search: searchTerm.toLowerCase(),
     },
   });
+
+  const handleSearch = useDebouncedCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+      setIsDebounceLoading(false);
+    },
+    1500
+  );
 
   //! Should be updated to a skeleton loader
   if (isLoading || !projects) return <div>Loading...</div>;
@@ -82,11 +99,14 @@ export const AgencySettingsProjectsContent = ({
 
       <div className="flex justify-between items-center">
         <Input
-          searchInput
+          searchInput={{ isLoading: isDebounceLoading }}
           type="text"
           placeholder="Recherche..."
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
+          defaultValue={searchTerm}
+          onChange={(e) => {
+            setIsDebounceLoading(true);
+            handleSearch(e);
+          }}
         />
 
         <div className="flex gap-3">

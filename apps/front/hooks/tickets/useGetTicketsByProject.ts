@@ -19,9 +19,9 @@ export const useGetTicketsByProject = ({
       'tickets',
       queryParams.page,
       queryParams.sort_order,
+      queryParams.search,
     ],
     queryFn: async () => {
-      //! should be improved...
       if (!projectId) throw new Error('Project ID is required');
       return await ticketsService.getAllByProject(projectId, queryParams);
     },
