@@ -248,7 +248,7 @@ export const TicketSideContent = ({ ticket }: Props) => {
                         ) : (
                           <ImageIcon className="size-4" />
                         )}
-                        <span className="group-hover:text-primary-700 transition ease-in-out duration-300">
+                        <span className="group-hover:text-primary-700 truncate transition ease-in-out duration-300">
                           {file.file_name}
                         </span>
                       </div>

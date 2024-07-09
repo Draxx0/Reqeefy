@@ -305,16 +305,6 @@ export class TicketsService {
     const agentsFromAgencyGroupsSelected =
       await this.agentsService.findAllByAgencyGroups(agency_groups);
 
-    console.log(
-      'agentsFromAgencyGroupsSelected',
-      agentsFromAgencyGroupsSelected,
-    );
-
-    console.log(
-      'ticket.project.agents_referents',
-      ticket.project.agents_referents,
-    );
-
     //? Utiliser un Map pour garantir l'unicité des agents par ID
     const agentsMap = new Map<string, AgentEntity>();
 

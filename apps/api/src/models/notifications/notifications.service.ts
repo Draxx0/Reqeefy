@@ -154,15 +154,15 @@ export class NotificationsService {
 
     return await Promise.all(
       ticketUsers.map(async (user) => {
-        // this.mailService.sendTicketAssigned({
-        //   supportAgent: {
-        //     first_name: user.first_name,
-        //     email: user.email,
-        //   },
-        //   ticketOwnerName,
-        //   ticket,
-        //   link: `http://localhost:3000/tickets/${ticketId}`,
-        // });
+        this.mailService.sendTicketAssigned({
+          supportAgent: {
+            first_name: user.first_name,
+            email: user.email,
+          },
+          ticketOwnerName,
+          ticket,
+          link: `http://localhost:3000/tickets/${ticketId}`,
+        });
 
         await this.create({
           userId: user.id,
