@@ -68,7 +68,9 @@ export class TicketsService {
       .andWhere('ticket.distributed = :distributed', { distributed: true });
 
     if (search) {
-      query.andWhere('ticket.title LIKE :search', { search: `%${search}%` });
+      query.andWhere('lower(ticket.title) LIKE lower(:search)', {
+        search: `%${search}%`,
+      });
     }
 
     const projectIds = user.projects_referents.map((project) => project.id);
@@ -178,7 +180,9 @@ export class TicketsService {
       .andWhere('ticket.distributed = :distributed', { distributed: true });
 
     if (search) {
-      query.where('ticket.title LIKE :search', { search: `%${search}%` });
+      query.where('lower(ticket.title) LIKE lower(:search)', {
+        search: `%${search}%`,
+      });
     }
 
     if (status) {

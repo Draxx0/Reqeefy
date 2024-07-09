@@ -13,9 +13,14 @@ export const useGetTicketsByAgency = ({
   const { user } = useAuthStore();
 
   const query = useQuery({
-    queryKey: ['agency', 'tickets', queryParams.page, queryParams.sort_order],
+    queryKey: [
+      'agency',
+      'tickets',
+      queryParams.page,
+      queryParams.sort_order,
+      queryParams.search,
+    ],
     queryFn: async () => {
-      //! should be improved...
       if (!agencyId) throw new Error('Agency ID is required');
       return await ticketsService.getAllDistributedByAgency(
         agencyId,

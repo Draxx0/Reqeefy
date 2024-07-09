@@ -27,7 +27,7 @@ import { DialogClose } from '@radix-ui/react-dialog';
 import { Ticket } from '@reqeefy/types';
 import { useQueryClient } from '@tanstack/react-query';
 import { saveAs } from 'file-saver';
-import { Download, FileText, ImageIcon, Lock } from 'lucide-react';
+import { Download, FileText, FolderOpen, ImageIcon, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
@@ -231,39 +231,46 @@ export const TicketSideContent = ({ ticket }: Props) => {
         <Separator />
 
         <div className="flex flex-col gap-2">
-          {ticket.upload_files.map((file) => (
-            <div key={file.id} className="space-y-2">
-              <TooltipProvider delayDuration={100}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div
-                      className="group flex items-center justify-between cursor-pointer"
-                      onClick={() =>
-                        handleDownload(file.file_url, file.file_name)
-                      }
-                    >
-                      <div className="flex items-center gap-2">
-                        {file.file_name.includes('.pdf') ? (
-                          <FileText className="size-4" />
-                        ) : (
-                          <ImageIcon className="size-4" />
-                        )}
-                        <span className="group-hover:text-primary-700 truncate transition ease-in-out duration-300">
-                          {file.file_name}
-                        </span>
+          {ticket.upload_files.length > 0 ? (
+            ticket.upload_files.map((file) => (
+              <div key={file.id} className="space-y-2">
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div
+                        className="group flex items-center justify-between cursor-pointer"
+                        onClick={() =>
+                          handleDownload(file.file_url, file.file_name)
+                        }
+                      >
+                        <div className="flex items-center gap-2">
+                          {file.file_name.includes('.pdf') ? (
+                            <FileText className="size-4" />
+                          ) : (
+                            <ImageIcon className="size-4" />
+                          )}
+                          <span className="group-hover:text-primary-700 transition ease-in-out duration-300">
+                            {file.file_name}
+                          </span>
+                        </div>
+                        <Download className="size-4 opacity-0 transition ease-in-out duration-300 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 text-primary-700" />
                       </div>
-                      <Download className="size-4 opacity-0 transition ease-in-out duration-300 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 text-primary-700" />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent align="start" side="left">
-                    <p>Cliquez pour télécharger</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                    </TooltipTrigger>
+                    <TooltipContent align="start" side="left">
+                      <p>Cliquez pour télécharger</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
 
-              <Separator />
+                <Separator />
+              </div>
+            ))
+          ) : (
+            <div className="flex items-center gap-2">
+              <FolderOpen className="size-4" />
+              <p>Aucune pièce jointe</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>

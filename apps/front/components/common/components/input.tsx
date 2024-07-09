@@ -1,15 +1,18 @@
 import * as React from 'react';
 
+import { Spinner } from '@/containers/loading-state/common/Spinner';
 import { cn } from '@/lib';
 import { Search } from 'lucide-react';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  searchInput?: boolean;
+  searchInput?: {
+    isLoading?: boolean;
+  };
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, searchInput = false, ...props }, ref) => {
+  ({ className, type, searchInput, ...props }, ref) => {
     return !searchInput ? (
       <div>
         <input
@@ -33,7 +36,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        <Search className="w-4 h-4 text-primary-700" />
+        {searchInput.isLoading ? (
+          <Spinner className="size-4 border-primary-700 border-b-transparent" />
+        ) : (
+          <Search className="size-4 text-primary-700" />
+        )}
       </div>
     );
   }

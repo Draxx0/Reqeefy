@@ -7,8 +7,8 @@ export const configuration = () => ({
   POSTGRES_USERNAME: process.env.POSTGRES_USERNAME,
   POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
   POSTGRES_DB: process.env.POSTGRES_DB,
-  MAIL_HOST: process.env.MAIL_HOST,
-  MAIL_USER: process.env.MAIL_USER,
-  MAIL_PASSWORD: process.env.MAIL_PASSWORD,
-  MAIL_FROM: process.env.MAIL_FROM,
+  // MAIL_HOST: process.env.MAIL_HOST,
+  // MAIL_USER: process.env.MAIL_USER,
+  // MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+  // MAIL_FROM: process.env.MAIL_FROM,
 });

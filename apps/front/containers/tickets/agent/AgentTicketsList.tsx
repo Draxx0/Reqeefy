@@ -8,7 +8,14 @@ import { AgentTicketListLoader } from '@/containers/loading-state';
 import { useGetTicketsByAgency } from '@/hooks';
 import { useAuthStore } from '@/stores';
 import { ArrowDownUp } from 'lucide-react';
-import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
+import {
+  parseAsInteger,
+  parseAsString,
+  parseAsStringLiteral,
+  useQueryState,
+} from 'nuqs';
+import { ChangeEvent, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 export const AgentTicketsList = () => {
   const user = useAuthStore((state) => state.user);
@@ -22,6 +29,13 @@ export const AgentTicketsList = () => {
     'sort_order',
     parseAsStringLiteral(sortOrderValues).withDefault('DESC')
   );
+
+  const [searchTerm, setSearchTerm] = useQueryState(
+    'search',
+    parseAsString.withDefault('')
+  );
+
+  const [isDebounceLoading, setIsDebounceLoading] = useState(false);
 
   const {
     data: tickets,
@@ -37,8 +51,17 @@ export const AgentTicketsList = () => {
       agency_group_name: user?.agent?.agency_group
         ? user.agent.agency_group.name
         : undefined,
+      search: searchTerm.toLowerCase(),
     },
   });
+
+  const handleSearch = useDebouncedCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+      setIsDebounceLoading(false);
+    },
+    1500
+  );
 
   if (!user?.agent) return null;
 
@@ -71,11 +94,14 @@ export const AgentTicketsList = () => {
         <>
           <div className="flex gap-4 items-end sm:justify-between flex-col sm:flex-row  sm:items-center">
             <Input
-              searchInput
+              searchInput={{ isLoading: isDebounceLoading }}
               type="text"
               placeholder="Recherche..."
-              // value={searchTerm}
-              // onChange={(event) => setSearchTerm(event.target.value)}
+              defaultValue={searchTerm}
+              onChange={(e) => {
+                setIsDebounceLoading(true);
+                handleSearch(e);
+              }}
             />
 
             <div className="flex justify-end gap-3">

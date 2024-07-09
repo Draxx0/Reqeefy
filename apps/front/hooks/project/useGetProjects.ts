@@ -20,7 +20,7 @@ export const useGetProjects = ({
       'projects',
       queryParams.page,
       queryParams.sort_order,
-      // queryParams.search,
+      queryParams.search,
     ],
     queryFn: async () => {
       return await projectsService.getAll(agency.id, queryParams);
