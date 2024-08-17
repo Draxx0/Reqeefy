@@ -34,10 +34,10 @@ export class NotificationsService {
     accountActivationToken,
     userId,
   }: NewUserEvent) {
-    // this.mailService.sendUserConfirmation({
-    //   user: { first_name, last_name, email },
-    //   token: accountActivationToken,
-    // });
+    this.mailService.sendUserConfirmation({
+      user: { first_name, last_name, email },
+      token: accountActivationToken,
+    });
     return await this.create({
       userId,
       type: 'welcome',
@@ -108,15 +108,18 @@ export class NotificationsService {
 
     return await Promise.all(
       distributors.map(async (distributor) => {
-        // this.mailService.sendTicketToDistribute({
-        //   supportAgent: {
-        //     first_name: distributor.first_name,
-        //     email: distributor.email,
-        //   },
-        //   ticketOwnerName,
-        //   ticket,
-        //   link: `http://localhost:3000/tickets/${ticketId}`,
-        // });
+        this.mailService.sendTicketToDistribute({
+          supportAgent: {
+            first_name: distributor.first_name,
+            email: distributor.email,
+          },
+          ticketOwnerName,
+          ticket,
+          link:
+            process.env.NODE_ENV === 'development'
+              ? `http://localhost:3000/tickets/${ticketId}`
+              : `https://reqeefy.fr/tickets/${ticketId}`,
+        });
 
         await this.create({
           userId: distributor.id,
@@ -161,7 +164,10 @@ export class NotificationsService {
           },
           ticketOwnerName,
           ticket,
-          link: `http://localhost:3000/tickets/${ticketId}`,
+          link:
+            process.env.NODE_ENV === 'development'
+              ? `http://localhost:3000/tickets/${ticketId}`
+              : `https://reqeefy.fr/tickets/${ticketId}`,
         });
 
         await this.create({

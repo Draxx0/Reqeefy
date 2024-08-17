@@ -97,7 +97,7 @@ export const AgencySettingsProjectsContent = ({
         hasSeparator
       />
 
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-4 md:gap-0 md:items-center">
         <Input
           searchInput={{ isLoading: isDebounceLoading }}
           type="text"
@@ -109,7 +109,7 @@ export const AgencySettingsProjectsContent = ({
           }}
         />
 
-        <div className="flex gap-3">
+        <div className="flex flex-col md:flex-row gap-3">
           <Dialog>
             <DialogTrigger asChild>
               <Button className="gap-3">
@@ -145,7 +145,7 @@ export const AgencySettingsProjectsContent = ({
 
       {projects.data && projects.data.length > 0 ? (
         <>
-          <div className="grid grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-12">
             <AgencySettingsProjectsList projects={projects.data} />
           </div>
 

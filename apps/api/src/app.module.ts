@@ -5,6 +5,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PostgresModule } from './database/postgres.module';
+import { MailModule } from './mail/mail.module';
 import { CoreModule } from './models/core.module';
 
 @Module({
@@ -18,7 +19,7 @@ import { CoreModule } from './models/core.module';
 
     PostgresModule,
     CoreModule,
-    // MailModule,
+    MailModule,
     EventEmitterModule.forRoot(),
   ],
   controllers: [AppController],

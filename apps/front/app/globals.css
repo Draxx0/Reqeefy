@@ -80,6 +80,10 @@ h6 {
   font-family: var(--font-montserrat), sans-serif;
 }
 
+*:not(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-nunito), sans-serif;
+}
+
 /* TIPTAP CSS */
 
 .tiptap {

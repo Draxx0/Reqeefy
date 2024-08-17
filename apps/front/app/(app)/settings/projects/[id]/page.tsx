@@ -27,7 +27,6 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
     isError,
   } = useGetProject({ projectId: params.id });
 
-  //! add skeleton loader for project page
   if (isLoading && !project) {
     return <div>Loading...</div>;
   }
@@ -81,7 +80,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
 
         <div className="flex flex-col items-center gap-4">
           <p>Clients(s) du projet</p>
-          <div className="grid grid-cols-4 items-center">
+          <div className="flex -space-x-4 items-center">
             {project.customers.map((customer) => (
               <TooltipProvider key={customer.id} delayDuration={100}>
                 <Tooltip>

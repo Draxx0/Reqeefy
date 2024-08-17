@@ -116,7 +116,7 @@ export const Notification = ({
           </AlertDescription>
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-3 md:flex-row md:gap-0 justify-between">
         <div className="flex gap-2">
           <DeleteNotificationButton
             notification={notification}

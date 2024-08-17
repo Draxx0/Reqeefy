@@ -329,10 +329,10 @@ export class TicketsService {
       support_agents: agents,
     });
 
-    // this.eventEmitter.emit('new.ticket', {
-    //   ticketId: persistedTicket.id,
-    //   ticketOwnerId: persistedTicket.customers[0].user.id,
-    // });
+    this.eventEmitter.emit('new.ticket', {
+      ticketId: persistedTicket.id,
+      ticketOwnerId: persistedTicket.customers[0].user.id,
+    });
 
     return persistedTicket;
   }

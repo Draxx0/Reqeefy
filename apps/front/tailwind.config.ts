@@ -71,6 +71,7 @@ const config = {
       },
       fontFamily: {
         montserrat: 'var(--font-montserrat)',
+        nunito_Sans: 'var(--font-nunito)',
       },
       backgroundImage: {
         'gradient-main':

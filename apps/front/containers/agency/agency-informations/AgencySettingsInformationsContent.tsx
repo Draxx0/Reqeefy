@@ -1,6 +1,7 @@
 'use client';
+import { useGetAgencyDatasCount } from '@/hooks';
 import { Agency } from '@reqeefy/types';
-import { AgencySettingsInformationsForm } from './AgencySettingsInformationsForm';
+import { FolderGit2, Pickaxe, User } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -13,10 +14,9 @@ import {
   AlertTitle,
   PageHeader,
 } from '../../../components/server.index';
-import { FolderGit2, Pickaxe, User } from 'lucide-react';
 import { AgencyGroupsTable } from './agency-groups/AgencyGroupsTable';
+import { AgencySettingsInformationsForm } from './AgencySettingsInformationsForm';
 import { AgencyUploadPhoto } from './AgencyUploadPhoto';
-import { useGetAgencyDatasCount } from '@/hooks';
 
 export const AgencySettingsInformationsContent = ({
   agency,
@@ -36,7 +36,7 @@ export const AgencySettingsInformationsContent = ({
         size="small"
       />
 
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
         <Alert className="w-fit">
           <User className="h-4 w-4" />
           <AlertTitle>Clients</AlertTitle>

@@ -90,7 +90,7 @@ export const TicketSideContent = ({ ticket }: Props) => {
   };
 
   return (
-    <div className="space-y-12 flex-1 sticky top-6 h-fit hidden md:block">
+    <div className="space-y-12 flex-1 sticky top-6 h-fit">
       {user?.role === 'superadmin' &&
         ticket.status !== 'archived' &&
         ticket.distributed && (

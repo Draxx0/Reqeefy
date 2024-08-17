@@ -31,10 +31,8 @@ export const TicketPageContent = ({ ticketId }: { ticketId: string }) => {
 
   if (!ticket) return null;
 
-  console.log(ticket);
-
   return (
-    <div className="flex justify-between gap-12">
+    <div className="flex flex-col md:flex-row justify-between gap-12">
       <div className="space-y-8 w-full md:w-9/12">
         <Breadcrumb>
           <BreadcrumbList className="flex-nowrap">
