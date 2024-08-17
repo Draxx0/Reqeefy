@@ -11,9 +11,9 @@ const montserrat = Montserrat({
 const nunito_Sans = Nunito_Sans({
   weight: ['400', '700'],
   style: ['normal'],
-  display: 'auto',
+  display: 'swap',
   subsets: ['latin'],
-  variable: '--font-nunito',
+  variable: '--font-nunito-sans',
 });
 
 const fonts = {
