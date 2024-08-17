@@ -8,12 +8,17 @@ import { envSchema } from 'src/schemas/server-env.schema';
 @Module({
   imports: [
     ConfigModule.forRoot(
-      process.env.NODE_ENV === 'development' && {
-        envFilePath: `${process.cwd()}/config/env/.env.development`,
-        load: [configuration],
-        validate: prepareValidateEnv(envSchema),
-        isGlobal: true,
-      },
+      process.env.NODE_ENV === 'development'
+        ? {
+            envFilePath: `${process.cwd()}/config/env/.env.development`,
+            load: [configuration],
+            validate: prepareValidateEnv(envSchema),
+            isGlobal: true,
+          }
+        : {
+            ignoreEnvFile: true,
+            isGlobal: true,
+          },
     ),
     TypeOrmModule.forRoot({
       type: 'postgres',
