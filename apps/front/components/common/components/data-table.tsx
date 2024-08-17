@@ -1,17 +1,25 @@
 'use client';
 import {
   ColumnDef,
-  flexRender,
-  SortingState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  getSortedRowModel,
-  getFilteredRowModel,
   ColumnFiltersState,
+  SortingState,
   VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
 } from '@tanstack/react-table';
 
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  buttonVariants,
+} from '@/components/client.index';
 import {
   Input,
   Table,
@@ -21,16 +29,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/server.index';
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  buttonVariants,
-} from '@/components/client.index';
-import { useState } from 'react';
 import { EyeOff, Lock } from 'lucide-react';
+import { useState } from 'react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -105,7 +105,7 @@ export function DataTable<TData, TValue>({
             />
           )}
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end md:flex-row md:items-center gap-3">
             {children}
             <DropdownMenu>
               <DropdownMenuTrigger>

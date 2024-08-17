@@ -10,27 +10,17 @@ export const api = axios.create({
 });
 
 api.interceptors.response.use(
-  (response) => {
+  async function (response) {
     return response.data;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-api.interceptors.request.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
+  async function (error) {
     const originalRequest = error.config;
-
-    console.error(error);
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         return authService.generateRefreshToken().then(() => {
+          console.info('Token refreshed');
           return api(originalRequest);
         });
       } catch (error) {

@@ -1,4 +1,5 @@
-import { AgencyGroup, Agent, Project, UserRole } from '@reqeefy/types';export interface AgencyCustomerTableData {
+import { AgencyGroup, Agent, Project, UserRole } from '@reqeefy/types';
+export interface AgencyCustomerTableData {
   id: string;
   first_name: string;
   last_name: string;
@@ -11,6 +12,9 @@ export interface AgencyAgentTableData {
   first_name: string;
   last_name: string;
   email: string;
+  agentSelfData: {
+    id: string;
+  };
   role: Omit<UserRole, 'customer'>;
   group?: AgencyGroup;
 }

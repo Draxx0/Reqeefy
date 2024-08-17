@@ -20,6 +20,7 @@ export const AgentsDataTable = ({ agency }: { agency: Agency }) => {
       />
       <DataTable
         columns={agentsColumns}
+        // @ts-ignore
         data={agents}
         isAccessible={{
           value: agency.agency_groups.length > 0,

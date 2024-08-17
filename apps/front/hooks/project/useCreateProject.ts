@@ -32,6 +32,7 @@ export const useCreateProject = ({ agencyId }: { agencyId: string }) => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
+      form.reset();
       toast.success('Le projet a été créé avec succès');
       queryClient.invalidateQueries({
         queryKey: ['agency'],

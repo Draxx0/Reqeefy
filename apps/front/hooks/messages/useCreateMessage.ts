@@ -5,13 +5,10 @@ import { messagesService, uploadFiles } from '@/services';
 import { renderErrorToast } from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 export const useCreateMessage = ({ ticketId }: { ticketId: string }) => {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const form = useForm<CreateTicketMessage>({

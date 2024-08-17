@@ -13,10 +13,19 @@ import {
 import { Input, PageHeader, Ticket } from '@/components/server.index';
 import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
 import { EmptyTickets } from '@/containers/empty-state';
+import { GlobalError } from '@/containers/error-state';
+import { TicketListLoader } from '@/containers/loading-state';
 import { useGetTicketsByProject } from '@/hooks';
 import { useAuthStore } from '@/stores';
 import { ArrowDownUp, MessageCircle } from 'lucide-react';
-import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
+import {
+  parseAsInteger,
+  parseAsString,
+  parseAsStringLiteral,
+  useQueryState,
+} from 'nuqs';
+import { ChangeEvent, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
 
 export const CustomerTicketsList = () => {
   const user = useAuthStore((state) => state.user);
@@ -30,6 +39,13 @@ export const CustomerTicketsList = () => {
     parseAsStringLiteral(sortOrderValues).withDefault('DESC')
   );
 
+  const [searchTerm, setSearchTerm] = useQueryState(
+    'search',
+    parseAsString.withDefault('')
+  );
+
+  const [isDebounceLoading, setIsDebounceLoading] = useState(false);
+
   const {
     data: tickets,
     isLoading,
@@ -41,17 +57,26 @@ export const CustomerTicketsList = () => {
       limit_per_page: LARGE_PAGE_SIZE,
       sort_by: 'created_at',
       sort_order: sortOrder,
+      search: searchTerm.toLowerCase(),
     },
   });
 
+  const handleSearch = useDebouncedCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+      setIsDebounceLoading(false);
+    },
+    1500
+  );
+
   if (!user?.customer) return null;
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || !tickets) {
+    return <TicketListLoader />;
   }
 
-  if (isError || !tickets) {
-    return <div>Error...</div>;
+  if (isError && !tickets) {
+    return <GlobalError />;
   }
 
   const totalPages = Math.ceil(tickets.pagination.total / LARGE_PAGE_SIZE);
@@ -71,11 +96,14 @@ export const CustomerTicketsList = () => {
 
       <div className="flex justify-between items-center">
         <Input
-          searchInput
+          searchInput={{ isLoading: isDebounceLoading }}
           type="text"
           placeholder="Recherche..."
-          // value={searchTerm}
-          // onChange={(event) => setSearchTerm(event.target.value)}
+          defaultValue={searchTerm}
+          onChange={(e) => {
+            setIsDebounceLoading(true);
+            handleSearch(e);
+          }}
         />
 
         <div className="flex gap-3">

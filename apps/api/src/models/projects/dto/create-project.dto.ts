@@ -1,19 +1,16 @@
-import { IsArray, IsOptional, IsString } from 'class-validator';
-import { TicketSubjectCategoryEntity } from 'src/models/ticket-subject-categories/entities/ticket-subject-category.entity';
+import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateProjectDTO {
+  @IsNotEmpty()
   @IsString()
   name: string;
 
+  @IsNotEmpty()
   @IsString()
   description: string;
 
   // Optionnally PHOTO_URL
-
-  @IsOptional()
-  @IsArray()
-  ticket_subject_categories: TicketSubjectCategoryEntity[];
-
+  @IsNotEmpty()
   @IsArray()
   @IsString({
     each: true,

@@ -1,8 +1,7 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
-import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
-import { useAuthStore } from '@/stores';
 import { agencyService } from '@/services';
+import { useAuthStore } from '@/stores';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetAgency = () => {
   const { user } = useAuthStore();
@@ -14,9 +13,7 @@ export const useGetAgency = () => {
 
       return await agencyService.get(user.agency.id);
     },
-    staleTime: 1000 * 60 * 60,
     enabled: !!user,
-    ...DEFAULT_USE_QUERY_PARAMS,
   });
 
   return {

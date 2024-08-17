@@ -19,7 +19,7 @@ export class MessageEntity extends TimestampEntity {
   content: string;
 
   @Column({ type: 'boolean', default: false })
-  readed: boolean;
+  updated: boolean;
 
   // RELATIONS
 

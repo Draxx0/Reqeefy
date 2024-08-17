@@ -87,6 +87,14 @@ const getOne = async (ticketId: string): Promise<Ticket> => {
   }
 };
 
+const archive = async (ticketId: string) => {
+  try {
+    return await api.put(`/tickets/${ticketId}/archive`);
+  } catch (error) {
+    throw new Error("Une erreur est survenue lors de l'archivage du ticket.");
+  }
+};
+
 export const ticketsService = {
   getAllByProject,
   getAllDistributedByAgency,
@@ -94,4 +102,5 @@ export const ticketsService = {
   create,
   getOne,
   distribute,
+  archive,
 };

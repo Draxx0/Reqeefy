@@ -1,8 +1,8 @@
-import * as cookieParser from 'cookie-parser';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import * as cookieParser from 'cookie-parser';
+import helmet from 'helmet';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,9 +22,11 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    //! Should be changed to the production client URL
     credentials: true,
-    origin: 'http://localhost:3000',
+    origin:
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000'
+        : ['https://www.reqeefy.fr', 'https://reqeefy.fr'],
   });
 
   await app.listen(Number(process.env.PORT) || 8000);

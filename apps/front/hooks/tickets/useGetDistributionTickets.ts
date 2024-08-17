@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
-import { useAuthStore } from '@/stores';
 import { ticketsService } from '@/services';
+import { useAuthStore } from '@/stores';
 import { TicketsQueryParams } from '@/types';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetDistributionTickets = ({
   agencyId,
@@ -15,8 +14,9 @@ export const useGetDistributionTickets = ({
 
   const query = useQuery({
     queryKey: [
-      'distribution',
+      'agency',
       agencyId,
+      'distribution',
       'tickets',
       queryParams.page,
       queryParams.sort_order,
@@ -27,9 +27,7 @@ export const useGetDistributionTickets = ({
         queryParams
       );
     },
-    staleTime: 1000 * 60 * 60,
     enabled: !!user && !!agencyId,
-    ...DEFAULT_USE_QUERY_PARAMS,
   });
 
   return {

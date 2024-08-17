@@ -3,7 +3,6 @@ import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
 import { AgentEntity } from 'src/models/agents/entities/agent.entity';
 import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
 import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
-import { TicketSubjectCategoryEntity } from 'src/models/ticket-subject-categories/entities/ticket-subject-category.entity';
 import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
 import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
 import {
@@ -58,14 +57,4 @@ export class ProjectEntity extends TimestampEntity {
     onDelete: 'CASCADE',
   })
   agency: AgencyEntity;
-
-  @OneToMany(
-    () => TicketSubjectCategoryEntity,
-    (ticketSubjectCategory) => ticketSubjectCategory.project,
-    {
-      onDelete: 'CASCADE',
-      cascade: ['insert', 'update'],
-    },
-  )
-  ticket_subject_categories: TicketSubjectCategoryEntity[];
 }

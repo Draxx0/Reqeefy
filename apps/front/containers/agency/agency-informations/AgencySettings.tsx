@@ -1,24 +1,19 @@
 'use client';
+import { GlobalError } from '@/containers/error-state';
 import { useGetAgency } from '@/hooks';
-import { AgencySettingsLoader } from '../../loading-state/AgencySettingsLoader';
+import { AgencySettingsLoader } from '../../loading-state/agency/AgencySettingsLoader';
 import { AgencySettingsInformationsContent } from './AgencySettingsInformationsContent';
 
 export const AgencySettings = () => {
   const { data: agency, isLoading, isError } = useGetAgency();
 
-  if (isLoading) return <AgencySettingsLoader />;
+  if (isLoading && !agency) return <AgencySettingsLoader />;
 
-  if (isError || !agency)
-    return (
-      <div>
-        Une erreur est survenue lors de la récupération des informations de
-        l&apos;agence.
-      </div>
-    );
+  if (isError && !agency) {
+    return <GlobalError />;
+  }
 
-  return (
-    <section className="space-y-12">
-      <AgencySettingsInformationsContent agency={agency} />
-    </section>
-  );
+  if (!agency) return null;
+
+  return <AgencySettingsInformationsContent agency={agency} />;
 };

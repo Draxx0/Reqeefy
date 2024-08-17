@@ -30,7 +30,6 @@ export const useLogin = () => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
-      // @ts-ignore
       setUser(data);
       router.push(STATIC_PATHS.TICKETS);
     },

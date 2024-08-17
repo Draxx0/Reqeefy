@@ -4,13 +4,15 @@ import { PaginatedData } from '@reqeefy/types';
 import { AuthenticationService } from 'src/authentication/authentication.service';
 import { AuthenticationSignupDto } from 'src/authentication/dto/authentication-signup.dto';
 import { Repository } from 'typeorm';
+import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
+import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
 import { PaginationService } from '../common/models/pagination/pagination.service';
+import { TicketEntity } from '../tickets/entities/ticket.entity';
 import { UsersService } from '../users/users.service';
-import { AddAgentToAgencyDTO, CreateAgentDTO } from './dto/create-agent.dto';
+import { CreateAgentDTO } from './dto/create-agent.dto';
+import { UpdateAgentAgencyGroupDTO } from './dto/update-agent-agency-group.dto';
 import { AgentEntity } from './entities/agent.entity';
 import { AgentQueries } from './queries/queries';
-import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
-import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 
 @Injectable()
 export class AgentsService {
@@ -18,6 +20,8 @@ export class AgentsService {
     // REPOSITORIES
     @InjectRepository(AgentEntity)
     private readonly agentRepository: Repository<AgentEntity>,
+    @InjectRepository(TicketEntity)
+    private readonly ticketRepository: Repository<TicketEntity>,
     // SERVICES
     private readonly userService: UsersService,
     private readonly paginationService: PaginationService,
@@ -26,11 +30,12 @@ export class AgentsService {
   ) {}
   async create(id: string) {
     const user = await this.userService.findOneById(id);
+
     const agent = this.agentRepository.create({
       user,
     });
 
-    return this.agentRepository.save(agent);
+    return await this.agentRepository.save(agent);
   }
 
   async createUserAgent(body: CreateAgentDTO, id: string) {
@@ -56,22 +61,36 @@ export class AgentsService {
       agency_group: { id: body.agency_group_id },
     });
 
-    return this.agentRepository.save(agent);
+    const agencyGroupId = body.agency_group_id;
+
+    const persistedAgent = await this.agentRepository.save(agent);
+
+    const tickets = await this.ticketRepository
+      .createQueryBuilder('ticket')
+      .leftJoinAndSelect('ticket.support_agents', 'support_agents')
+      .leftJoinAndSelect('ticket.agency_groups', 'agency_group')
+      .andWhere('ticket.status != :status', { status: 'archived' })
+      .andWhere('agency_group.id = :agencyGroupId', { agencyGroupId })
+      .getMany();
+
+    persistedAgent.tickets_support = tickets;
+
+    return this.agentRepository.save(persistedAgent);
   }
 
-  async createExistingUserAgent(body: AddAgentToAgencyDTO, id: string) {
-    const user = await this.userService.findOneById(id);
+  // async createExistingUserAgent(body: AddAgentToAgencyDTO, id: string) {
+  //   const user = await this.userService.findOneById(id);
 
-    const updatedUser = await this.userService.updateSelectedOne(user, {
-      role: body.role,
-    });
+  //   const updatedUser = await this.userService.updateSelectedOne(user, {
+  //     role: body.role,
+  //   });
 
-    const agent = this.agentRepository.create({
-      user: updatedUser,
-    });
+  //   const agent = this.agentRepository.create({
+  //     user: updatedUser,
+  //   });
 
-    return this.agentRepository.save(agent);
-  }
+  //   return this.agentRepository.save(agent);
+  // }
 
   async findAll(queries: AgentQueries): Promise<PaginatedData<AgentEntity>> {
     const {
@@ -85,7 +104,9 @@ export class AgentsService {
     const query = this.agentRepository
       .createQueryBuilder('agent')
       .leftJoinAndSelect('agent.user', 'user')
-      .leftJoinAndSelect('agent.agency_group', 'agency_group');
+      .leftJoinAndSelect('agent.agency_group', 'agency_group')
+      .leftJoinAndSelect('agent.projects_referents', 'projects_referents')
+      .leftJoinAndSelect('agent.tickets_support', 'tickets_support');
 
     if (search) {
       query.where(
@@ -174,6 +195,21 @@ export class AgentsService {
 
     const agencyGroup =
       await this.agencyGroupsService.findOneById(agencyGroupId);
+
+    await this.agentRepository.save({
+      ...agent,
+      agency_group: agencyGroup,
+    });
+  }
+
+  async updateAgentAgencyGroup(
+    agentId: string,
+    { agency_group_id }: UpdateAgentAgencyGroupDTO,
+  ): Promise<void> {
+    const agent = await this.findOneById(agentId);
+
+    const agencyGroup =
+      await this.agencyGroupsService.findOneById(agency_group_id);
 
     await this.agentRepository.save({
       ...agent,

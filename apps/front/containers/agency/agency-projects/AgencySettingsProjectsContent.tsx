@@ -1,24 +1,31 @@
 'use client';
-import { Agency } from '@reqeefy/types';
-import { Input, PageHeader } from '../../../components/server.index';
-import { useGetProjects } from '@/hooks';
 import {
   Button,
   CreateProjectForm,
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
   PaginationComponent,
 } from '@/components/client.index';
-import { AgencySettingsProjectsList } from './AgencySettingsProjectsList';
-import { ArrowDownUp, GitBranchPlus, TriangleAlert } from 'lucide-react';
-import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
 import { SMALL_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
-import { useEffect } from 'react';
+import { EmptyProjects } from '@/containers/empty-state';
+import { GlobalError } from '@/containers/error-state';
+import { useGetProjects } from '@/hooks';
+import { Agency } from '@reqeefy/types';
+import { ArrowDownUp, GitBranchPlus } from 'lucide-react';
+import {
+  parseAsInteger,
+  parseAsString,
+  parseAsStringLiteral,
+  useQueryState,
+} from 'nuqs';
+import { ChangeEvent, useState } from 'react';
+import { useDebouncedCallback } from 'use-debounce';
+import { Input, PageHeader } from '../../../components/server.index';
+import { AgencySettingsProjectsList } from './AgencySettingsProjectsList';
 
 export const AgencySettingsProjectsContent = ({
   agency,
@@ -35,10 +42,12 @@ export const AgencySettingsProjectsContent = ({
     parseAsStringLiteral(sortOrderValues).withDefault('DESC')
   );
 
-  const [searchTerm, setSearchTerm] = useQueryState('search', {
-    defaultValue: '',
-    throttleMs: 1000,
-  });
+  const [searchTerm, setSearchTerm] = useQueryState(
+    'search',
+    parseAsString.withDefault('')
+  );
+
+  const [isDebounceLoading, setIsDebounceLoading] = useState(false);
 
   const {
     data: projects,
@@ -49,15 +58,26 @@ export const AgencySettingsProjectsContent = ({
     queryParams: {
       page: currentPage,
       limit_per_page: SMALL_PAGE_SIZE,
-      search: searchTerm,
       sort_by: 'created_at',
       sort_order: sortOrder,
+      search: searchTerm.toLowerCase(),
     },
   });
 
-  //! Should be updated to a skeleton loader & error message
+  const handleSearch = useDebouncedCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value);
+      setIsDebounceLoading(false);
+    },
+    1500
+  );
+
+  //! Should be updated to a skeleton loader
   if (isLoading || !projects) return <div>Loading...</div>;
-  if (isError) return <div>Error loading projects</div>;
+
+  if (isError && !projects) {
+    return <GlobalError />;
+  }
 
   const totalPages = Math.ceil(projects.pagination.total / SMALL_PAGE_SIZE);
 
@@ -77,16 +97,19 @@ export const AgencySettingsProjectsContent = ({
         hasSeparator
       />
 
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-end gap-4 md:gap-0 md:items-center">
         <Input
-          searchInput
+          searchInput={{ isLoading: isDebounceLoading }}
           type="text"
           placeholder="Recherche..."
-          value={searchTerm}
-          onChange={(event) => setSearchTerm(event.target.value)}
+          defaultValue={searchTerm}
+          onChange={(e) => {
+            setIsDebounceLoading(true);
+            handleSearch(e);
+          }}
         />
 
-        <div className="flex gap-3">
+        <div className="flex flex-col md:flex-row gap-3">
           <Dialog>
             <DialogTrigger asChild>
               <Button className="gap-3">
@@ -121,23 +144,24 @@ export const AgencySettingsProjectsContent = ({
       </div>
 
       {projects.data && projects.data.length > 0 ? (
-        <div className="grid grid-cols-3 gap-12">
-          <AgencySettingsProjectsList projects={projects.data} />
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 gap-12">
+            <AgencySettingsProjectsList projects={projects.data} />
+          </div>
+
+          {totalPages > 1 ? (
+            <PaginationComponent
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          ) : null}
+        </>
       ) : (
-        <div className="flex items-center justify-center gap-2">
-          <span className="text-gray-900">
-            Aucun projet ne correspond à votre recherche
-          </span>
-          <TriangleAlert className="text-yellow-500 w-5 h-5" />
+        <div className="flex items-center justify-center">
+          <EmptyProjects />
         </div>
       )}
-
-      <PaginationComponent
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
     </div>
   );
 };

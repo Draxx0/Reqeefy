@@ -31,6 +31,7 @@ export const useCreateTicket = ({ projectId }: { projectId: string }) => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
+      form.reset();
       toast.success(
         'La discussion a été créé avec succès, votre demande sera bientôt distribuée à notre équipe.'
       );

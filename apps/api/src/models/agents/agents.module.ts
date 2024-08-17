@@ -7,10 +7,11 @@ import { AgentEntity } from './entities/agent.entity';
 import { UsersModule } from '../users/users.module';
 import { AuthenticationModule } from 'src/authentication/authentication.module';
 import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
+import { TicketEntity } from '../tickets/entities/ticket.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AgentEntity]),
+    TypeOrmModule.forFeature([AgentEntity, TicketEntity]),
     PaginationModule,
     AuthenticationModule,
     UsersModule,

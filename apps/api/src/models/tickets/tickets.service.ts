@@ -1,17 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateTicketDto } from './dto/create-ticket.dto';
-import { TicketQueries } from './queries/queries';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TicketEntity } from './entities/ticket.entity';
 import { Repository } from 'typeorm';
-import { PaginationService } from '../common/models/pagination/pagination.service';
-import { MessagesService } from '../messages/messages.service';
-import { CustomersService } from '../customers/customers.service';
-import { UserEntity } from '../users/entities/user.entity';
-import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
-import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
+import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
 import { AgentsService } from '../agents/agents.service';
+import { AgentEntity } from '../agents/entities/agent.entity';
+import { PaginationService } from '../common/models/pagination/pagination.service';
+import { CustomersService } from '../customers/customers.service';
+import { MessagesService } from '../messages/messages.service';
+import { UserEntity } from '../users/entities/user.entity';
+import { CreateTicketDto } from './dto/create-ticket.dto';
+import { DistributeTicketDTO } from './dto/distribute-ticket.dto';
+import { TicketEntity } from './entities/ticket.entity';
+import { TicketQueries } from './queries/queries';
 
 @Injectable()
 export class TicketsService {
@@ -27,6 +29,7 @@ export class TicketsService {
     private readonly customerService: CustomersService,
     private readonly agencyGroupsService: AgencyGroupsService,
     private readonly agentsService: AgentsService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async findAllDistributedByAgency(
@@ -48,8 +51,11 @@ export class TicketsService {
     const query = this.ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.customers', 'customers')
+      .leftJoinAndSelect('customers.user', 'customer_user')
+      .leftJoinAndSelect('customer_user.avatar', 'customer_avatar')
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
-      .leftJoinAndSelect('ticket.subject', 'subject')
+      .leftJoinAndSelect('support_agents.user', 'support_agent_user')
+      .leftJoinAndSelect('support_agent_user.avatar', 'support_agent_avatar')
       .leftJoinAndSelect('ticket.messages', 'messages')
       .leftJoinAndSelect('ticket.agency_groups', 'agency_groups')
       .leftJoinAndSelect('messages.user', 'user')
@@ -58,10 +64,13 @@ export class TicketsService {
       .leftJoinAndSelect('ticket.project', 'project')
       .leftJoinAndSelect('project.agents_referents', 'agents_referents')
       .where('project.agency = :agencyId', { agencyId })
+      .andWhere('ticket.status != :archived', { archived: 'archived' })
       .andWhere('ticket.distributed = :distributed', { distributed: true });
 
     if (search) {
-      query.andWhere('ticket.title LIKE :search', { search: `%${search}%` });
+      query.andWhere('lower(ticket.title) LIKE lower(:search)', {
+        search: `%${search}%`,
+      });
     }
 
     const projectIds = user.projects_referents.map((project) => project.id);
@@ -116,14 +125,16 @@ export class TicketsService {
     const query = this.ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.customers', 'customers')
+      .leftJoinAndSelect('customers.user', 'customer_user')
+      .leftJoinAndSelect('customer_user.avatar', 'customer_avatar')
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
-      .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.messages', 'messages')
       .leftJoinAndSelect('messages.user', 'user')
       .leftJoinAndSelect('messages.upload_files', 'upload_files')
       .leftJoinAndSelect('user.avatar', 'avatar')
       .leftJoinAndSelect('ticket.project', 'project')
       .where('project.agency = :agencyId', { agencyId })
+      .andWhere('ticket.status != :archived', { archived: 'archived' })
       .andWhere('ticket.distributed = :distributed', { distributed: false });
 
     const [tickets, total] = await query
@@ -149,13 +160,17 @@ export class TicketsService {
       search,
       sort_by = 'created_at',
       sort_order = 'DESC',
+      status = 'not_archived',
     } = queries;
 
     const query = this.ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.customers', 'customers')
+      .leftJoinAndSelect('customers.user', 'customer_user')
+      .leftJoinAndSelect('customer_user.avatar', 'customer_avatar')
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
-      .leftJoinAndSelect('ticket.subject', 'subject')
+      .leftJoinAndSelect('support_agents.user', 'support_agent_user')
+      .leftJoinAndSelect('support_agent_user.avatar', 'support_agent_avatar')
       .leftJoinAndSelect('ticket.messages', 'messages')
       .leftJoinAndSelect('messages.user', 'user')
       .leftJoinAndSelect('messages.upload_files', 'upload_files')
@@ -165,7 +180,17 @@ export class TicketsService {
       .andWhere('ticket.distributed = :distributed', { distributed: true });
 
     if (search) {
-      query.where('ticket.title LIKE :search', { search: `%${search}%` });
+      query.where('lower(ticket.title) LIKE lower(:search)', {
+        search: `%${search}%`,
+      });
+    }
+
+    if (status) {
+      if (status === 'not_archived') {
+        query.andWhere('ticket.status != :archived', { archived: 'archived' });
+      } else {
+        query.andWhere('ticket.status = :status', { status });
+      }
     }
 
     const [tickets, total] = await query
@@ -188,18 +213,20 @@ export class TicketsService {
     const ticket = await this.ticketRepository
       .createQueryBuilder('ticket')
       .leftJoinAndSelect('ticket.messages', 'messages')
+      .leftJoinAndSelect('ticket.upload_files', 'upload_files')
       .leftJoinAndSelect('messages.user', 'user')
       .leftJoinAndSelect('user.avatar', 'avatar')
-      .leftJoinAndSelect('messages.upload_files', 'upload_files')
+      .leftJoinAndSelect('messages.upload_files', 'message_upload_files')
+      .leftJoinAndSelect('messages.ticket', 'messages_ticketea')
       .leftJoinAndSelect('ticket.customers', 'customers')
       .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('customer_user.avatar', 'customer_avatar')
       .leftJoinAndSelect('ticket.support_agents', 'support_agents')
       .leftJoinAndSelect('support_agents.user', 'support_agent_user')
       .leftJoinAndSelect('support_agent_user.avatar', 'support_agent_avatar')
-      .leftJoinAndSelect('ticket.subject', 'subject')
       .leftJoinAndSelect('ticket.project', 'project')
       .leftJoinAndSelect('project.agents_referents', 'agents_referents')
+      .leftJoinAndSelect('agents_referents.user', 'agents_referents_user')
       .leftJoinAndSelect('ticket.agency_groups', 'agency_groups')
       .where('ticket.id = :id', { id })
       .getOne();
@@ -218,7 +245,7 @@ export class TicketsService {
     projectId: string,
     userId: string,
   ) {
-    const { message, title } = createTicketDto;
+    const { content, title } = createTicketDto;
 
     const customer = await this.customerService.findOneByUserId(userId);
 
@@ -231,14 +258,21 @@ export class TicketsService {
     const ticket = await this.ticketRepository.save(newTicket);
 
     const newMessage = await this.messageService.createOnTicket(
-      message,
+      content,
       ticket,
       userId,
     );
 
     ticket.messages = [newMessage];
 
-    return this.ticketRepository.save(ticket);
+    const persistedTicket = await this.ticketRepository.save(ticket);
+
+    this.eventEmitter.emit('new.ticket_to_distribute', {
+      ticketId: persistedTicket.id,
+      ticketOwnerId: userId,
+    });
+
+    return persistedTicket;
   }
 
   async updateStatus(ticket: TicketEntity, user: UserEntity) {
@@ -249,6 +283,16 @@ export class TicketsService {
       ticket.status = 'pending';
       await this.ticketRepository.save(ticket);
     }
+  }
+
+  async archiveTicket(ticketId: string) {
+    const ticket = await this.findOneById(ticketId);
+
+    return this.ticketRepository.save({
+      ...ticket,
+      status: 'archived',
+      archiving_at: new Date(),
+    });
   }
 
   async distribute(id: string, body: DistributeTicketDTO) {
@@ -265,16 +309,31 @@ export class TicketsService {
     const agentsFromAgencyGroupsSelected =
       await this.agentsService.findAllByAgencyGroups(agency_groups);
 
-    const agents = [
-      ...agentsFromAgencyGroupsSelected,
-      ...ticket.project.agents_referents,
-    ];
+    //? Utiliser un Map pour garantir l'unicité des agents par ID
+    const agentsMap = new Map<string, AgentEntity>();
 
-    return await this.ticketRepository.save({
+    agentsFromAgencyGroupsSelected.forEach((agent) => {
+      agentsMap.set(agent.id, agent);
+    });
+
+    ticket.project.agents_referents.forEach((agent) => {
+      agentsMap.set(agent.id, agent);
+    });
+
+    const agents = Array.from(agentsMap.values());
+
+    const persistedTicket = await this.ticketRepository.save({
       ...ticket,
       distributed: true,
       agency_groups,
       support_agents: agents,
     });
+
+    this.eventEmitter.emit('new.ticket', {
+      ticketId: persistedTicket.id,
+      ticketOwnerId: persistedTicket.customers[0].user.id,
+    });
+
+    return persistedTicket;
   }
 }

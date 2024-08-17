@@ -1,7 +1,6 @@
 'use client';
 import {
   Button,
-  ButtonLink,
   Checkbox,
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +13,6 @@ import {
 import { Badge } from '@/components/server.index';
 import { STATIC_PATHS } from '@/constants';
 import { AgencyCustomerTableData } from '@/types';
-import { CheckedState } from '@radix-ui/react-checkbox';
 import { ColumnDef } from '@tanstack/react-table';
 import {
   ArrowUpDown,
@@ -50,11 +48,6 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
     enableHiding: false,
   },
   {
-    id: 'ID',
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
     id: 'Nom',
     accessorKey: 'last_name',
     header: 'Nom',
@@ -71,6 +64,7 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
       return (
         <Button
           variant="ghost"
+          className="-mx-4"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Email
@@ -99,6 +93,8 @@ export const customersColumns: ColumnDef<AgencyCustomerTableData>[] = [
   },
   {
     id: 'actions',
+    header: 'Actions',
+    accessorKey: 'actions',
     cell: ({ row }) => {
       const customer = row.original;
       return (

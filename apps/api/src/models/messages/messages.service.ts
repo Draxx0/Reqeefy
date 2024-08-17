@@ -6,6 +6,7 @@ import { TicketEntity } from '../tickets/entities/ticket.entity';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageEntity } from './entities/message.entity';
 import { UploadFilesService } from '../upload-files/upload-files.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class MessagesService {
@@ -13,6 +14,7 @@ export class MessagesService {
     @InjectRepository(MessageEntity)
     private readonly messageRepository: Repository<MessageEntity>,
     private readonly uploadFilesService: UploadFilesService,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(
@@ -40,16 +42,23 @@ export class MessagesService {
             publicUrl: file.publicUrl,
           },
           message.id,
+          ticketId,
         ),
       ),
     );
 
     message.upload_files = messageUploadedFiles;
 
-    return this.messageRepository.save(message);
+    const persistedMessage = await this.messageRepository.save(message);
+
+    this.eventEmitter.emit('new.message', {
+      messageOwnerId: userId,
+      ticketId,
+    });
+    return persistedMessage;
   }
 
-  createOnTicket(content: string, ticket: TicketEntity, userId: string) {
+  async createOnTicket(content: string, ticket: TicketEntity, userId: string) {
     const cleanedContent = sanitize(content);
 
     const message = this.messageRepository.create({
@@ -58,7 +67,9 @@ export class MessagesService {
       user: { id: userId },
     });
 
-    return this.messageRepository.save(message);
+    const newMessage = await this.messageRepository.save(message);
+
+    return newMessage;
   }
 
   async findOneById(id: string) {
@@ -73,13 +84,5 @@ export class MessagesService {
     }
 
     return message;
-  }
-
-  async updateReadStatus(id: string) {
-    const message = await this.findOneById(id);
-
-    message.readed = true;
-
-    return this.messageRepository.save(message);
   }
 }

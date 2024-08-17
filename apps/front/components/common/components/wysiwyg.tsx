@@ -1,30 +1,28 @@
 'use client';
+import { UploadAttachedFile } from '@/components/client.index';
+import { useCreateLink } from '@/hooks/wysiwyg';
 import { useWysiwyg } from '@/hooks/wysiwyg/useWysiwyg';
 import { WysiwygParams } from '@/types';
 import { Editor, EditorContent } from '@tiptap/react';
-import { ToggleGroup, ToggleGroupItem } from './toggle-group';
 import {
   BoldIcon,
   CircleX,
   Command,
   FileText,
-  Heading1,
-  Heading2,
   Italic,
   List,
-  StrikethroughIcon,
   UnderlineIcon,
 } from 'lucide-react';
+import Image from 'next/image';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { ToggleGroup, ToggleGroupItem } from './toggle-group';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from './tooltip';
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import { UploadAttachedFile } from '@/components/client.index';
-import Image from 'next/image';
-import { toast } from 'sonner';
 
 const Wysywig = ({
   autofocus,
@@ -138,6 +136,30 @@ const MenuBar = ({
   editor: Editor;
   handleFilesChange: (files: File[]) => void;
 }) => {
+  const { form, isPending, handleSubmit } = useCreateLink({
+    editor,
+  });
+
+  const setLink = useCallback(() => {
+    const previousUrl = editor.getAttributes('link').href;
+    const url = window.prompt('URL', previousUrl);
+
+    // cancelled
+    if (url === null) {
+      return;
+    }
+
+    // empty
+    if (url === '') {
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+
+      return;
+    }
+
+    // update link
+    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+  }, [editor]);
+
   return (
     <div className="flex items-center gap-2 justify-between">
       <ToggleGroup type="multiple" variant={'default'}>
@@ -214,64 +236,6 @@ const MenuBar = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <ToggleGroupItem
-                aria-pressed={editor.isActive('heading', { level: 1 })}
-                data-state={
-                  editor.isActive('heading', { level: 1 }) ? 'on' : 'off'
-                }
-                onClick={() =>
-                  editor.chain().focus().toggleHeading({ level: 1 }).run()
-                }
-                value="h1"
-                aria-label="Toggle h1"
-              >
-                <Heading1 size={13} />
-              </ToggleGroupItem>
-            </TooltipTrigger>
-            <TooltipContent align="center" side="top" className="text-gray-900">
-              <div className="flex items-center gap-2">
-                <Command className="w-4 h-4" />
-                <span>+</span>
-                <span>option</span>
-                <span>+</span>
-                <span>1</span>
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <ToggleGroupItem
-                aria-pressed={editor.isActive('heading', { level: 2 })}
-                data-state={
-                  editor.isActive('heading', { level: 2 }) ? 'on' : 'off'
-                }
-                onClick={() =>
-                  editor.chain().focus().toggleHeading({ level: 2 }).run()
-                }
-                value="h2"
-                aria-label="Toggle h2"
-              >
-                <Heading2 size={13} />
-              </ToggleGroupItem>
-            </TooltipTrigger>
-            <TooltipContent align="center" side="top" className="text-gray-900">
-              <div className="flex items-center gap-2">
-                <Command className="w-4 h-4" />
-                <span>+</span>
-                <span>option</span>
-                <span>+</span>
-                <span>2</span>
-              </div>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <TooltipProvider delayDuration={100}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <ToggleGroupItem
                 aria-pressed={editor.isActive('bulletList')}
                 data-state={editor.isActive('bulletList') ? 'on' : 'off'}
                 onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -293,18 +257,86 @@ const MenuBar = ({
           </Tooltip>
         </TooltipProvider>
 
-        <TooltipProvider delayDuration={100}>
+        {/* <TooltipProvider delayDuration={100}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <ToggleGroupItem
-                value="strike"
-                aria-label="Toggle strike"
-                aria-pressed={editor.isActive('strike')}
-                data-state={editor.isActive('strike') ? 'on' : 'off'}
-                onClick={() => editor.chain().focus().toggleStrike().run()}
-              >
-                <StrikethroughIcon size={13} />
-              </ToggleGroupItem>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <ToggleGroupItem
+                    aria-pressed={editor.isActive('link')}
+                    data-state={editor.isActive('link') ? 'on' : 'off'}
+                    value="link"
+                    aria-label="Activer le lien"
+                  >
+                    <Link size={13} />
+                  </ToggleGroupItem>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Créer un lien</DialogTitle>
+                    <DialogDescription>
+                      Ajoutez un lien vers une page web
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <Form {...form}>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="text"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-lg font-bold">
+                              Texte du lien
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="google.fr"
+                                type="text"
+                                {...field}
+                                className="w-full"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="url"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-lg font-bold">
+                              URL
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="https://google.fr"
+                                type="url"
+                                {...field}
+                                className="w-full"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <div className="flex justify-end gap-4">
+              
+                        <Button
+                          disabled={!form.formState.isValid || isPending}
+                          isLoading={isPending}
+                          type="submit"
+                        >
+                          Insérer
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
             </TooltipTrigger>
             <TooltipContent align="center" side="top" className="text-gray-900">
               <div className="flex items-center gap-2">
@@ -312,11 +344,11 @@ const MenuBar = ({
                 <span>+</span>
                 <span>shift</span>
                 <span>+</span>
-                <span>s</span>
+                <span>8</span>
               </div>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
+        </TooltipProvider> */}
       </ToggleGroup>
 
       <UploadAttachedFile onFilesChange={handleFilesChange} />
@@ -341,10 +373,9 @@ const ImagePreview = ({
         title={file.name}
         src={previewUrl}
         alt="Image"
-        layout="fill"
-        objectFit="cover"
-        className="border border-primary-900 rounded-md"
-        objectPosition="center"
+        width={0}
+        height={0}
+        className="border border-primary-900 rounded-md w-full h-full object-center object-cover"
       />
     ) : (
       <div

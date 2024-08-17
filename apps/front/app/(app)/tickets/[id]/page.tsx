@@ -1,4 +1,5 @@
-import { TicketPageContent } from '@/containers';import { Metadata } from 'next';
+import { TicketPageContent } from '@/containers';
+import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Reqeefy | Discussion',

@@ -28,9 +28,10 @@ export const useDistributeTicket = ({ ticketId }: { ticketId: string }) => {
       renderErrorToast(error.message);
     },
     onSuccess(data, variables, context) {
+      form.reset();
       toast.success('La discussion a été distribué avec succès');
       queryClient.invalidateQueries({
-        queryKey: ['distribution'],
+        queryKey: ['agency'],
       });
     },
   });

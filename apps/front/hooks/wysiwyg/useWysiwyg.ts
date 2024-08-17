@@ -1,10 +1,10 @@
 import { WysiwygParams } from '@/types';
-import { mergeAttributes, useEditor } from '@tiptap/react';
+import { Link } from '@tiptap/extension-link';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Underline } from '@tiptap/extension-underline';
+import { useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
-import { Heading } from '@tiptap/extension-heading';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 export const useWysiwyg = ({
   wysiwygParams,
@@ -20,25 +20,22 @@ export const useWysiwyg = ({
             class: 'font-bold',
           },
         },
+        bulletList: {
+          HTMLAttributes: {
+            class: 'message-bullet-list',
+          },
+        },
+        listItem: {
+          HTMLAttributes: {
+            class: 'mb-2',
+          },
+        },
       }),
-      Heading.configure({ levels: [1, 2] }).extend({
-        levels: [1, 2],
-        renderHTML({ node, HTMLAttributes }) {
-          const level = this.options.levels.includes(node.attrs.level)
-            ? node.attrs.level
-            : this.options.levels[0];
-          const classes = {
-            1: 'text-xl font-bold text-xl',
-            2: 'text-lg font-bold text-lg',
-          };
-          return [
-            `h${level}`,
-            mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
-              // @ts-ignore
-              class: `${classes[level]}`,
-            }),
-            0,
-          ];
+      Link.configure({
+        openOnClick: false,
+        autolink: true,
+        HTMLAttributes: {
+          class: 'underline text-primary-700',
         },
       }),
       Underline.configure({
@@ -63,16 +60,16 @@ export const useWysiwyg = ({
     autofocus: wysiwygParams.autofocus,
   });
 
-  const clearEditor = () => {
+  const clearEditor = useCallback(() => {
     editor?.commands.clearContent();
     wysiwygParams.setCharacterCount(0);
-  };
+  }, [editor, wysiwygParams]);
 
   useEffect(() => {
     if (wysiwygParams.isSubmit) {
       clearEditor();
     }
-  }, [wysiwygParams.isSubmit]);
+  }, [wysiwygParams.isSubmit, clearEditor]);
 
   return { editor };
 };

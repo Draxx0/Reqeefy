@@ -1,13 +1,15 @@
-// import { NextRequest, NextResponse } from 'next/server';
 import { NextRequest, NextResponse } from 'next/server';
 
-const publicRoutes = ['/auth/register', '/auth/login'];
-const privateRoutes = [
-  '/tickets',
-  '/distributions',
-  '/user-settings',
-  '/notifications',
+const publicRoutes = [
+  '/auth/register',
+  '/auth/login',
+  '/auth/forgot-password',
+  '/auth/forgot-password',
+  /^\/auth\/reset-password\/[^\/]+\/[^\/]+$/,
 ];
+const privateRoutes = ['/tickets', '/user-settings', '/notifications'];
+
+const distributorRoutes = ['/distributions'];
 
 const superadminRoutes = [
   '/settings',
@@ -18,9 +20,17 @@ const superadminRoutes = [
 export default function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  const isPublicRoute = publicRoutes.includes(path);
+  const isPublicRoute = publicRoutes.some((route) =>
+    typeof route === 'string' ? path === route : route.test(path)
+  );
+
   const isPrivateRoute =
     privateRoutes.some((route) => path.startsWith(route)) || path === '/';
+
+  const isDistributorRoute = distributorRoutes.some((route) =>
+    path.startsWith(route)
+  );
+
   const isSuperadminRoute = superadminRoutes.some((route) =>
     path.startsWith(route)
   );
@@ -42,10 +52,17 @@ export default function middleware(req: NextRequest) {
 
     const isUserSuperadmin = parsedUser.role === 'superadmin';
 
+    const isDistributor = parsedUser.role === 'distributor' || isUserSuperadmin;
+
     if (isValidUser) {
       if (isPrivateRoute) {
         return NextResponse.next();
       }
+
+      if (isDistributorRoute && isDistributor) {
+        return NextResponse.next();
+      }
+
       if (isSuperadminRoute && isUserSuperadmin) {
         return NextResponse.next();
       }
@@ -60,7 +77,3 @@ export default function middleware(req: NextRequest) {
 export const config = {
   matcher: ['/:path((?!api|_next/static|_next/image|favicon\\.ico|assets/).*)'],
 };
-
-// export default function middleware(req: NextRequest) {
-//   return NextResponse.next();
-// }

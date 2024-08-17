@@ -41,4 +41,29 @@ const registerSchema = z.object({
   }),
 });
 
-export { loginSchema, registerSchema };
+const forgotPasswordSchema = z.object({
+  email: z.string().email("Ce n'est pas une adresse email valide").min(1, {
+    message: 'Veuillez entrer une adresse email',
+  }),
+});
+
+const resetPasswordSchema = z
+  .object({
+    password: z.string().min(1, {
+      message: 'Veuillez entrer un mot de passe',
+    }),
+    password_confirmation: z.string().min(1, {
+      message: 'Veuillez confirmer votre mot de passe',
+    }),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    message: 'Les mots de passe ne correspondent pas',
+    path: ['confirm'],
+  });
+
+export {
+  forgotPasswordSchema,
+  loginSchema,
+  registerSchema,
+  resetPasswordSchema,
+};
