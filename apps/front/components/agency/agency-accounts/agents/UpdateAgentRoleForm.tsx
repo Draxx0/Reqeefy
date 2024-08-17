@@ -40,10 +40,11 @@ export const UpdateAgentRoleForm = ({
                 Rôle de l&apos;agent
               </FormLabel>
               <FormControl>
+                {/* @ts-ignore */}
                 <Select
                   {...field}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={field.value as string}
                 >
                   <SelectTrigger className="w-full z-10">
                     <SelectValue placeholder="Veuillez sélectionner un rôle" />
