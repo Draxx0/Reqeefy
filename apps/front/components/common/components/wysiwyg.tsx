@@ -1,46 +1,28 @@
 'use client';
+import { UploadAttachedFile } from '@/components/client.index';
+import { useCreateLink } from '@/hooks/wysiwyg';
 import { useWysiwyg } from '@/hooks/wysiwyg/useWysiwyg';
 import { WysiwygParams } from '@/types';
 import { Editor, EditorContent } from '@tiptap/react';
-import { ToggleGroup, ToggleGroupItem } from './toggle-group';
 import {
   BoldIcon,
   CircleX,
   Command,
   FileText,
   Italic,
-  Link,
   List,
   UnderlineIcon,
 } from 'lucide-react';
+import Image from 'next/image';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import { ToggleGroup, ToggleGroupItem } from './toggle-group';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from './tooltip';
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-  UploadAttachedFile,
-} from '@/components/client.index';
-import Image from 'next/image';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
-import { Input } from './input';
-import { useCreateLink } from '@/hooks/wysiwyg';
 
 const Wysywig = ({
   autofocus,
@@ -391,10 +373,9 @@ const ImagePreview = ({
         title={file.name}
         src={previewUrl}
         alt="Image"
-        layout="fill"
-        objectFit="cover"
-        className="border border-primary-900 rounded-md"
-        objectPosition="center"
+        width={0}
+        height={0}
+        className="border border-primary-900 rounded-md w-full h-full object-center object-cover"
       />
     ) : (
       <div

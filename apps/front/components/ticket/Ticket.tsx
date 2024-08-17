@@ -1,18 +1,8 @@
+import { useAuthStore } from '@/stores';
+import { formatDate, hasDistributorPermissions } from '@/utils';
 import { Ticket as TicketType } from '@reqeefy/types';
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Badge,
-  Separator,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '../server.index';
-import { MessageCircle, Paperclip } from 'lucide-react';
+import { BadgePlus, MessageCircle, Paperclip } from 'lucide-react';
 import { useMemo } from 'react';
-import { formatDate } from '@/utils';
 import {
   Button,
   ButtonLink,
@@ -22,10 +12,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  UserAvatar,
 } from '../client.index';
+import {
+  Badge,
+  Separator,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../server.index';
 import { DistributeTicketForm } from './DistributeTicketForm';
-import { useAuthStore } from '@/stores';
-import { STATIC_PATHS } from '@/constants';
 
 type Props = {
   ticket: TicketType;
@@ -41,7 +38,29 @@ export const Ticket = ({ ticket }: Props) => {
     );
   }, [ticket.messages]);
 
+  const ticketUsers = useMemo(() => {
+    if (!ticket) return [];
+    return [
+      ...ticket.customers.map((customer) => ({
+        id: customer.id,
+        avatar: customer.user.avatar,
+        first_name: customer.user.first_name,
+        last_name: customer.user.last_name,
+        role: 'Client',
+      })),
+      ...ticket.support_agents.map((supportAgent) => ({
+        id: supportAgent.id,
+        avatar: supportAgent.user.avatar,
+        first_name: supportAgent.user.first_name,
+        last_name: supportAgent.user.last_name,
+        role: 'Agent',
+      })),
+    ];
+  }, [ticket]);
+
   const lastMessage = ticket.messages[0];
+
+  if (!user) return null;
 
   return (
     <div className="bg-white p-6 rounded-lg hover:shadow-primary-500 transition ease-in-out duration-300 shadow-md relative border min-h-[300px]">
@@ -52,8 +71,26 @@ export const Ticket = ({ ticket }: Props) => {
         className={`absolute right-0 top-0 ${ticket.archived_at ? 'bg-gray-900' : 'bg-primary-900'} h-full w-[0.35rem] rounded-tr-lg rounded-br-lg`}
       ></div>
       <div className="flex flex-col gap-3 h-full justify-between">
+        {ticket.messages.length === 1 && (
+          <div className="flex items-center gap-1">
+            <BadgePlus className="size-4 text-primary-700" />
+            <span className="w-fit text-primary-700 text-xs font-semibold">
+              Nouvelle discussion
+            </span>
+          </div>
+        )}
         <div className="flex justify-between gap-4">
-          <p className="text-xl truncate">{ticket.title}</p>
+          <TooltipProvider delayDuration={100}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <p className="text-xl truncate cursor-alias">{ticket.title}</p>
+              </TooltipTrigger>
+              <TooltipContent align="center" side="top">
+                <p>{ticket.title}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
           <Badge className="w-fit uppercase" variant={'outline'}>
             {ticket.project.name}
           </Badge>
@@ -72,18 +109,8 @@ export const Ticket = ({ ticket }: Props) => {
           <div className="flex items-center gap-2">
             <TooltipProvider delayDuration={100}>
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                    <AvatarImage
-                      src={lastMessage.user.avatar?.file_url}
-                      alt={`Photo de l'utiliateur ${lastMessage.user.first_name} ${lastMessage.user.last_name}`}
-                      className="h-full w-full group-hover:opacity-50 transition duration-300 ease-in-out"
-                    />
-                    <AvatarFallback className="w-full h-full uppercase text-xs flex items-center justify-center group-hover:opacity-50 transition duration-300 ease-in-out">
-                      {lastMessage.user.first_name[0] +
-                        lastMessage.user.last_name[0]}
-                    </AvatarFallback>
-                  </Avatar>
+                <TooltipTrigger>
+                  <UserAvatar user={lastMessage.user} />
                 </TooltipTrigger>
                 <TooltipContent align="center" side="top">
                   <p>
@@ -113,38 +140,27 @@ export const Ticket = ({ ticket }: Props) => {
             </div>
 
             <div className="flex -space-x-4 items-center">
-              {/* Update here to concatene the users on the ticket customer & agents */}
-              {/* {ticket.messages.map((message) => (
-                <TooltipProvider key={message.id} delayDuration={100}>
+              {ticketUsers.map((user) => (
+                <TooltipProvider key={user.id} delayDuration={100}>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Avatar className="w-8 h-8 rounded-full cursor-pointer group">
-                        <AvatarImage
-                          src={message.user.avatar?.path}
-                          alt={`Photo de l'utilisateur ${message.user.first_name} ${message.user.last_name}`}
-                          className="h-full w-full group-hover:opacity-50 transition duration-300 ease-in-out"
-                        />
-                        <AvatarFallback className="w-full h-full text-xs group-hover:opacity-50 transition duration-300 ease-in-out flex items-center justify-center">
-                          {message.user.first_name[0] +
-                            message.user.last_name[0]}
-                        </AvatarFallback>
-                      </Avatar>
+                    <TooltipTrigger>
+                      <UserAvatar user={user} />
                     </TooltipTrigger>
                     <TooltipContent align="center" side="top">
                       <p>
-                        {message.user.first_name} {message.user.last_name}
+                        {user.first_name} {user.last_name}
                       </p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              ))} */}
+              ))}
             </div>
           </div>
 
           <Separator />
 
           <div className="flex gap-2 justify-end flex-wrap">
-            {!ticket.distributed && user?.role !== 'customer' && (
+            {!ticket.distributed && hasDistributorPermissions(user.role) && (
               <Dialog>
                 <DialogTrigger asChild>
                   <Button size={'sm'} className="gap-3">

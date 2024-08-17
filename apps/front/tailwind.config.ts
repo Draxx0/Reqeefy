@@ -7,7 +7,6 @@ const config = {
     './app/**/*.{ts,tsx}',
     './layouts/**/*.{ts,tsx}',
     './containers/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
   ],
   prefix: '',
   theme: {
@@ -21,6 +20,7 @@ const config = {
     extend: {
       maxWidth: {
         '8/10': '80%',
+        '9/10': '90%',
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -71,6 +71,7 @@ const config = {
       },
       fontFamily: {
         montserrat: 'var(--font-montserrat)',
+        nunito_Sans: 'var(--font-nunito-sans)',
       },
       backgroundImage: {
         'gradient-main':

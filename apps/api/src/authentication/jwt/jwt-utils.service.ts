@@ -60,6 +60,8 @@ export class JwtUtilsService {
       expires: generateExpirationDate(FOURTEEN_DAYS),
     });
 
+    delete user.password;
+
     return user;
   }
 
@@ -86,5 +88,14 @@ export class JwtUtilsService {
       }),
       expires,
     });
+  }
+
+  async checkIfRefreshTokenStillValid(refreshToken: string) {
+    try {
+      await this.jwtService.verifyAsync(refreshToken);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }

@@ -8,7 +8,7 @@ export const AGENTS_ROLE = [
     value: 'distributor',
   },
   {
-    key: 'Superadmin',
+    key: 'Administrateur',
     value: 'superadmin',
   },
 ];

@@ -4,13 +4,17 @@ import { Request as RequestType } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserRequest } from 'src/common/types/api';
 import { UsersService } from 'src/models/users/users.service';
+import { JwtUtilsService } from '../jwt/jwt-utils.service';
 
 @Injectable()
 export class RefreshJwtStrategy extends PassportStrategy(
   Strategy,
   'jwt-refresh',
 ) {
-  constructor(private usersService: UsersService) {
+  constructor(
+    private usersService: UsersService,
+    private jwtUtilsService: JwtUtilsService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         RefreshJwtStrategy.extractJWTRefreshTokenFromRequest,
@@ -18,6 +22,7 @@ export class RefreshJwtStrategy extends PassportStrategy(
       ]),
       ignoreExpiration: false,
       secretOrKey: process.env.JWT_SECRET,
+      passReqToCallback: true,
     });
   }
 
@@ -31,12 +36,20 @@ export class RefreshJwtStrategy extends PassportStrategy(
     ) {
       return request.cookies.REFRESH_TOKEN;
     }
-
     return null;
   }
 
-  async validate(payload: UserRequest['user']) {
-    console.log('payload', payload);
+  async validate(req: RequestType, payload: UserRequest['user']) {
+    const refreshToken =
+      RefreshJwtStrategy.extractJWTRefreshTokenFromRequest(req);
+
+    if (
+      !refreshToken ||
+      !(await this.jwtUtilsService.checkIfRefreshTokenStillValid(refreshToken))
+    ) {
+      throw new HttpException('Invalid refresh token', 403);
+    }
+
     const user = await this.usersService.findOneById(payload.id);
 
     if (!user) {

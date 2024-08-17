@@ -1,15 +1,18 @@
 import * as React from 'react';
 
+import { Spinner } from '@/containers/loading-state/common/Spinner';
 import { cn } from '@/lib';
 import { Search } from 'lucide-react';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  searchInput?: boolean;
+  searchInput?: {
+    isLoading?: boolean;
+  };
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, searchInput = false, ...props }, ref) => {
+  ({ className, type, searchInput, ...props }, ref) => {
     return !searchInput ? (
       <div>
         <input
@@ -23,7 +26,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
       </div>
     ) : (
-      <div className="bg-white transition-all ease-in-out duration-300 flex items-center justify-center py-1 px-2  border-2 border-gray-700 rounded-md outline-none font-bold focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-700 focus-disabled:pointer-events-none focus-disabled:opacity-30 focus-disabled:select-none">
+      <div className="bg-white w-fit transition-all ease-in-out duration-300 flex items-center justify-center py-1 px-2  border-2 border-gray-700 rounded-md outline-none font-bold focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-700 focus-disabled:pointer-events-none focus-disabled:opacity-30 focus-disabled:select-none">
         <input
           type={type}
           className={cn(
@@ -33,7 +36,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
-        <Search className="w-4 h-4 text-primary-700" />
+        {searchInput.isLoading ? (
+          <Spinner className="size-4 border-primary-700 border-b-transparent" />
+        ) : (
+          <Search className="size-4 text-primary-700" />
+        )}
       </div>
     );
   }

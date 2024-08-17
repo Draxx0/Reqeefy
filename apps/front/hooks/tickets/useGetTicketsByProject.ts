@@ -1,8 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
-import { useAuthStore } from '@/stores';
 import { ticketsService } from '@/services';
+import { useAuthStore } from '@/stores';
 import { TicketsQueryParams } from '@/types';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetTicketsByProject = ({
   projectId,
@@ -20,15 +19,13 @@ export const useGetTicketsByProject = ({
       'tickets',
       queryParams.page,
       queryParams.sort_order,
+      queryParams.search,
     ],
     queryFn: async () => {
-      //! should be improved...
       if (!projectId) throw new Error('Project ID is required');
       return await ticketsService.getAllByProject(projectId, queryParams);
     },
-    staleTime: 1000 * 60 * 60,
     enabled: !!user && !!projectId,
-    ...DEFAULT_USE_QUERY_PARAMS,
   });
 
   return {

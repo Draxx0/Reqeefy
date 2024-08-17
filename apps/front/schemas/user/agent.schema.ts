@@ -1,4 +1,4 @@
-import { AGENTS_ROLE, AGENTS_ROLES_VALUES } from '@/constants';
+import { AGENTS_ROLES_VALUES } from '@/constants';
 import { z } from 'zod';
 
 const createAgentSchema = z.object({
@@ -20,4 +20,10 @@ const createAgentSchema = z.object({
   }),
 });
 
-export { createAgentSchema };
+const updateAgentAgencyGroupSchema = z.object({
+  agency_group_id: z.string().min(1, {
+    message: "Veuillez sélectionner un groupe d'agence",
+  }),
+});
+
+export { createAgentSchema, updateAgentAgencyGroupSchema };

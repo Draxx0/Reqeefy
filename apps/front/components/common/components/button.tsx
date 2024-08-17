@@ -1,8 +1,8 @@
 'use client';
 
+import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import ClipLoader from 'react-spinners/ClipLoader';
-import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@/lib';
 import Link from 'next/link';
@@ -61,6 +61,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             'hover:translate-y-0 animate-fade-in select-none pointer-events-none',
         ])}
         onClick={props.onClick}
+        onKeyDown={(e) => {
+          e.stopPropagation();
+        }}
         ref={ref}
         disabled={disabled || isLoading}
       >
@@ -116,4 +119,4 @@ const ButtonLink = ({
   );
 };
 
-export { Button, buttonVariants, ButtonLink };
+export { Button, ButtonLink, buttonVariants };

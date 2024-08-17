@@ -1,24 +1,21 @@
-'use client';import { Agency } from '@reqeefy/types';
-import { useMemo } from 'react';
-import { AgencySettingsInformationsForm } from './AgencySettingsInformationsForm';
+'use client';
+import { useGetAgencyDatasCount } from '@/hooks';
+import { Agency } from '@reqeefy/types';
+import { FolderGit2, Pickaxe, User } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  Button,
 } from '../../../components/client.index';
 import {
   Alert,
   AlertDescription,
   AlertTitle,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   PageHeader,
 } from '../../../components/server.index';
-import { FolderGit2, Pickaxe, User } from 'lucide-react';
 import { AgencyGroupsTable } from './agency-groups/AgencyGroupsTable';
+import { AgencySettingsInformationsForm } from './AgencySettingsInformationsForm';
 import { AgencyUploadPhoto } from './AgencyUploadPhoto';
 
 export const AgencySettingsInformationsContent = ({
@@ -26,62 +23,9 @@ export const AgencySettingsInformationsContent = ({
 }: {
   agency: Agency;
 }) => {
-  // Move this logic to a hook ?
-  const customersCount = useMemo(() => {
-    if (!agency)
-      return `Une erreur est survenue lors de la récupération des clients.`;
-    const count = agency.users.reduce((acc, user) => {
-      if (user.role === 'customer') {
-        acc++;
-      }
-      return acc;
-    }, 0);
-
-    if (count === 0) {
-      return `${agency.name} n'a encore aucun client.`;
-    }
-
-    return `${agency.name} a ${count} client(s).`;
-  }, [agency]);
-
-  const projectsCount = useMemo(() => {
-    if (!agency) {
-      return `Une erreur est survenue lors de la récupération des projets actifs.`;
-    }
-
-    const count = agency.projects.filter(
-      (project) => project.status === 'active'
-    ).length;
-
-    if (count === 0) {
-      return `${agency.name} n'a pas de projets actifs.`;
-    }
-
-    return `${agency.name} a ${count} projet(s) actif.`;
-  }, [agency]);
-
-  const agentsCount = useMemo(() => {
-    if (!agency) {
-      return `Une erreur est survenue lors de la récupération des agents.`;
-    }
-
-    const count = agency.users.reduce((acc, user) => {
-      if (
-        user.role === 'agent' ||
-        user.role === 'distributor' ||
-        user.role === 'superadmin'
-      ) {
-        acc++;
-      }
-      return acc;
-    }, 0);
-
-    if (count === 0) {
-      return `${agency.name} n'a pas encore d'agents.`;
-    }
-
-    return `${agency.name} a ${count} agent(s).`;
-  }, [agency]);
+  const { agentsCount, customersCount, projectsCount } = useGetAgencyDatasCount(
+    { agency }
+  );
 
   return (
     <div className="space-y-12">
@@ -92,7 +36,7 @@ export const AgencySettingsInformationsContent = ({
         size="small"
       />
 
-      <div className="flex gap-6">
+      <div className="flex flex-col md:flex-row gap-6">
         <Alert className="w-fit">
           <User className="h-4 w-4" />
           <AlertTitle>Clients</AlertTitle>

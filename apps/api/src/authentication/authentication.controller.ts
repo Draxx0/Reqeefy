@@ -1,15 +1,26 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { UserRequest } from 'src/common/types/api';
-import { JwtAuthGuard } from '../guards/jwt.guard';
-import { LocalGuard } from '../guards/local.guard';
-import { AuthenticationService } from './authentication.service';
-import { JwtUtilsService } from './jwt/jwt-utils.service';
-import { generateExpirationDate } from 'src/utils/generateExpirationDate';
 import {
   FIFTEEN_MINUTES,
   FOURTEEN_DAYS,
 } from 'src/constants/cookies.constants';
+import { Public } from 'src/decorator/public.decorator';
 import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
+import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+import { LocalGuard } from '../guards/local.guard';
+import { AuthenticationService } from './authentication.service';
+import { AuthenticationForgotPasswordDto } from './dto/authentication-forgot-password.dto';
+import { AuthenticationResetPasswordDto } from './dto/authentication-reset-password.dto';
+import { JwtUtilsService } from './jwt/jwt-utils.service';
 
 @Controller('auth')
 export class AuthenticationController {
@@ -18,6 +29,7 @@ export class AuthenticationController {
     private readonly jwtUtilsService: JwtUtilsService,
   ) {}
 
+  @Public()
   @Post('signin')
   @UseGuards(LocalGuard)
   async signin(@Req() req: UserRequest, @Res({ passthrough: true }) response) {
@@ -52,6 +64,7 @@ export class AuthenticationController {
     return req.user;
   }
 
+  @Public()
   @Post('/refresh')
   @UseGuards(RefreshJwtAuthGuard)
   async refreshToken(
@@ -94,8 +107,31 @@ export class AuthenticationController {
     return await this.authenticationService.logout(response);
   }
 
+  @Public()
+  @Post('forgot-password')
+  async forgotPassword(
+    @Body() forgotPasswordDto: AuthenticationForgotPasswordDto,
+  ) {
+    return await this.authenticationService.forgotPassword(forgotPasswordDto);
+  }
+
+  @Public()
+  @Post('reset-password/:id/:token')
+  resetPassord(
+    @Param('id') id: string,
+    @Param('token') token: string,
+    @Body() resetPasswordDto: AuthenticationResetPasswordDto,
+    @Res({ passthrough: true }) response,
+  ) {
+    return this.authenticationService.resetPassword(
+      id,
+      token,
+      resetPasswordDto.password,
+      response,
+    );
+  }
+
   @Get('status')
-  @UseGuards(JwtAuthGuard)
   async status(@Req() req: UserRequest) {
     return req.user;
   }

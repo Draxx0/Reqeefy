@@ -2,6 +2,7 @@ export const STATIC_PATHS = {
   TICKETS: '/',
   LOGIN: '/auth/login',
   REGISTER: '/auth/register',
+  FORGOT_PASSWORD: '/auth/forgot-password',
   SETTINGS: '/settings',
   ACCOUNTS_SETTINGS: '/settings/accounts',
   PROJECTS_SETTINGS: '/settings/projects',

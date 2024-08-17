@@ -9,16 +9,11 @@ import {
   Wysywig,
 } from '@/components/client.index';
 import { useCreateMessage } from '@/hooks';
-import { useEffect } from 'react';
 
 export const TicketMessageSendForm = ({ ticketId }: { ticketId: string }) => {
   const { form, isPending, onSubmit } = useCreateMessage({
     ticketId: ticketId,
   });
-
-  useEffect(() => {
-    console.log(form.getValues('content'));
-  }, [form.watch('content')]);
 
   return (
     <div className="space-y-12" id="message">

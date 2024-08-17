@@ -12,6 +12,7 @@ import { envSchema } from 'src/schemas/server-env.schema';
         envFilePath: `${process.cwd()}/config/env/.env.development`,
         load: [configuration],
         validate: prepareValidateEnv(envSchema),
+        isGlobal: true,
       },
     ),
     TypeOrmModule.forRoot({

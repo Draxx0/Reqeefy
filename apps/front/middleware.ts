@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const publicRoutes = ['/auth/register', '/auth/login'];
+const publicRoutes = [
+  '/auth/register',
+  '/auth/login',
+  '/auth/forgot-password',
+  '/auth/forgot-password',
+  /^\/auth\/reset-password\/[^\/]+\/[^\/]+$/,
+];
 const privateRoutes = ['/tickets', '/user-settings', '/notifications'];
 
 const distributorRoutes = ['/distributions'];
@@ -14,7 +20,9 @@ const superadminRoutes = [
 export default function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
 
-  const isPublicRoute = publicRoutes.includes(path);
+  const isPublicRoute = publicRoutes.some((route) =>
+    typeof route === 'string' ? path === route : route.test(path)
+  );
 
   const isPrivateRoute =
     privateRoutes.some((route) => path.startsWith(route)) || path === '/';

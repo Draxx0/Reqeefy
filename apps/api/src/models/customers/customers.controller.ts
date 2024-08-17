@@ -1,23 +1,22 @@
 import {
+  Body,
   Controller,
   Get,
-  Post,
-  Body,
   Param,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { PaginatedData } from '@reqeefy/types';
+import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
+import { RolesGuard } from 'src/guards/roles.guard';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
-import { CustomerQueries } from './queries/queries';
-import { PaginatedData } from '@reqeefy/types';
 import { CustomerEntity } from './entities/customer.entity';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
+import { CustomerQueries } from './queries/queries';
 
 @Controller('customers')
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(RolesGuard)
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
 

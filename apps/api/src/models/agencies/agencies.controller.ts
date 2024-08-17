@@ -2,26 +2,30 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Put,
   Query,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { AgenciesService } from './agencies.service';
-import { AgencyQueries } from './queries/queries';
-import { JwtAuthGuard } from 'src/guards/jwt.guard';
-import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
 import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
-import { UpdateAgencyDTO } from './dto/update-agency.dto';
-import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+import { UserRequest } from 'src/common/types/api';
 import {
-  FOURTEEN_DAYS,
   FIFTEEN_MINUTES,
+  FOURTEEN_DAYS,
 } from 'src/constants/cookies.constants';
+import { Public } from 'src/decorator/public.decorator';
+import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+import { AgenciesService } from './agencies.service';
+import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
+import { UpdateAgencyDTO } from './dto/update-agency.dto';
+import { AgencyQueries } from './queries/queries';
 
 @Controller('agencies')
 export class AgenciesController {
@@ -30,20 +34,21 @@ export class AgenciesController {
     private readonly jwtUtilsService: JwtUtilsService,
   ) {}
 
-  // DEV ENDPOINT
   @Get()
-  @UseGuards(JwtAuthGuard)
   findAll(@Query() queries: AgencyQueries) {
     return this.agenciesService.findAll(queries);
   }
 
   @Get(':id')
-  @UseGuards(JwtAuthGuard)
-  findOne(@Param('id') id: string) {
-    //! NEED GUARD IF USER THAT REQUEST IS IN AGENCY
+  findOne(@Param('id') id: string, @Req() req: UserRequest) {
+    if (req.user.agency.id !== id) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
     return this.agenciesService.findOneById(id);
   }
 
+  @Public()
   @Post()
   async createWithNewUser(
     @Res({ passthrough: true }) response,
@@ -88,7 +93,7 @@ export class AgenciesController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(RolesGuard)
   @Roles(...SUPERADMINS_PERMISSIONS)
   update(@Param('id') id: string, @Body() updateAgencyDto: UpdateAgencyDTO) {
     return this.agenciesService.update(id, updateAgencyDto);

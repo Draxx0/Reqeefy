@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateProjectDTO } from './dto/create-project.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProjectEntity } from './entities/project.entity';
 import { Repository } from 'typeorm';
 import { AgentsService } from '../agents/agents.service';
 import { PaginationService } from '../common/models/pagination/pagination.service';
-import { ProjectQueries } from './queries/queries';
 import { CustomerEntity } from '../customers/entities/customer.entity';
+import { CreateProjectDTO } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { ProjectEntity } from './entities/project.entity';
+import { ProjectQueries } from './queries/queries';
 
 @Injectable()
 export class ProjectsService {
@@ -38,18 +38,10 @@ export class ProjectsService {
       .leftJoinAndSelect('project.customers', 'customers')
       .leftJoinAndSelect('customers.user', 'customer_user')
       .leftJoinAndSelect('project.photo_url', 'photo_url')
-      .leftJoinAndSelect(
-        'project.ticket_subject_categories',
-        'ticket_subject_categories',
-      )
-      .leftJoinAndSelect(
-        'ticket_subject_categories.ticket_subjects',
-        'ticket_subjects',
-      )
       .where('project.agency.id = :agencyId', { agencyId });
 
     if (search) {
-      query.where('project.name LIKE :search', {
+      query.where('lower(project.name) LIKE lower(:search)', {
         search: `%${search}%`,
       });
     }
@@ -88,12 +80,7 @@ export class ProjectsService {
   }
 
   async create(body: CreateProjectDTO, agencyId: string) {
-    const {
-      name,
-      agents_referents_ids,
-      ticket_subject_categories,
-      description,
-    } = body;
+    const { name, agents_referents_ids, description } = body;
 
     const agents_referents =
       await this.agentsService.findAllByIds(agents_referents_ids);
@@ -103,7 +90,6 @@ export class ProjectsService {
       description,
       agency: { id: agencyId },
       agents_referents,
-      ticket_subject_categories,
     });
 
     return await this.projectsRepository.save(project);

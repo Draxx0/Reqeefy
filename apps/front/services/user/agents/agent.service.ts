@@ -1,4 +1,4 @@
-import { createAgentSchema } from '@/schemas';
+import { createAgentSchema, updateAgentAgencyGroupSchema } from '@/schemas';
 import { api } from '@/services';
 import { z } from 'zod';
 
@@ -13,6 +13,23 @@ const create = async (
   }
 };
 
+const updateAgencyGroup = async ({
+  data,
+  agentId,
+}: {
+  data: z.infer<typeof updateAgentAgencyGroupSchema>;
+  agentId: string;
+}) => {
+  try {
+    return api.put(`/agents/${agentId}/agency-group`, data);
+  } catch (error) {
+    throw new Error(
+      "Une erreur est survenue lors de la mise à jour du groupe de l'agent."
+    );
+  }
+};
+
 export const agentsService = {
   create,
+  updateAgencyGroup,
 };

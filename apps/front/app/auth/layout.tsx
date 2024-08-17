@@ -16,6 +16,7 @@ export default function AppGroupLayout({
                 src={'/assets/icons/reqeefy-logo.svg'}
                 fill
                 alt="Logo Reqeefy"
+                priority
               />
             </div>
             <p className="uppercase text-xl text-white font-bold font-montserrat">

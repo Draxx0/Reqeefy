@@ -2,16 +2,28 @@
 import {
   Button,
   Checkbox,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+  UpdateAgencyGroupForm,
+  UserAvatar,
   buttonVariants,
 } from '@/components/client.index';
+import { Badge, Separator } from '@/components/server.index';
 import { AgencyGroupTableData } from '@/types';
-import { CheckedState } from '@radix-ui/react-checkbox';
+import { truncateOverTwentyCharacters } from '@/utils';
 import { ColumnDef } from '@tanstack/react-table';
 import { ArrowUpDown, MoreHorizontal, Pen, Trash, Users } from 'lucide-react';
 
@@ -39,17 +51,13 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
     enableHiding: false,
   },
   {
-    id: 'ID',
-    accessorKey: 'id',
-    header: 'ID',
-  },
-  {
     id: 'Nom du groupe',
     accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
+          className="-mx-4"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Nom du groupe
@@ -67,20 +75,64 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
 
       return (
         <div className="flex items-center gap-2">
-          <Users className="h-4 w-4" />
-          <span>{agents.length}</span>
+          {agents.length > 0 ? (
+            <HoverCard openDelay={100} closeDelay={100}>
+              <HoverCardTrigger>
+                <Badge className="cursor-pointer">
+                  <Users className="h-4 w-4" />
+                  <span>{agents.length}</span>
+                </Badge>
+              </HoverCardTrigger>
+              <HoverCardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-center">
+                    <Badge className="line-clamp-1">
+                      {truncateOverTwentyCharacters(row.original.name)}
+                    </Badge>
+                  </div>
+                  <Separator className="bg-gray-200" />
+                  <ul className="divide-y divide-gray-200">
+                    {agents.map((agent) => (
+                      <li
+                        key={agent.id}
+                        className="py-2 flex items-center gap-4"
+                      >
+                        <UserAvatar user={agent.user} />
+                        <div className="flex gap-2 ">
+                          <span>
+                            {truncateOverTwentyCharacters(
+                              agent.user.first_name
+                            )}
+                          </span>
+                          <span>
+                            {truncateOverTwentyCharacters(agent.user.last_name)}
+                          </span>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          ) : (
+            <Badge>
+              <Users className="h-4 w-4" />
+              <span>{agents.length}</span>
+            </Badge>
+          )}
         </div>
       );
     },
   },
   {
     id: 'actions',
+    header: 'Actions',
     cell: ({ row }) => {
-      const customer = row.original;
+      const agencyGroup = row.original;
 
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger onClick={(e) => e.stopPropagation()}>
             <div
               className={buttonVariants({
                 variant: 'ghost',
@@ -93,10 +145,37 @@ export const agencyGroupsColumns: ColumnDef<AgencyGroupTableData>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="capitalize flex items-center gap-3">
-              Modifier
-              <Pen className="h-4 w-4" />
+
+            <DropdownMenuItem
+              className="capitalize flex items-center gap-3"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div
+                    className="capitalize flex items-center gap-3"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                  >
+                    Modifier
+                    <Pen className="h-4 w-4" />
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Modifier un groupe</DialogTitle>
+                    <DialogDescription>
+                      Modifiez le nom du groupe
+                    </DialogDescription>
+                  </DialogHeader>
+                  <UpdateAgencyGroupForm agencyGroup={agencyGroup} />
+                </DialogContent>
+              </Dialog>
             </DropdownMenuItem>
+
             <DropdownMenuItem className="capitalize flex items-center gap-3">
               Supprimer
               <Trash className="h-4 w-4" />

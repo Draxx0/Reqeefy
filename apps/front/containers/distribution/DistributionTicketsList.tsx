@@ -1,10 +1,12 @@
 'use client';
-import { useGetDistributionTickets } from '@/hooks';
-import { Ticket } from '../../components/ticket/Ticket';
-import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
-import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
 import { PaginationComponent } from '@/components/client.index';
+import { LARGE_PAGE_SIZE, SortOrderType, sortOrderValues } from '@/constants';
+import { useGetDistributionTickets } from '@/hooks';
+import { parseAsInteger, parseAsStringLiteral, useQueryState } from 'nuqs';
+import { Ticket } from '../../components/ticket/Ticket';
 import { EmptyTickets } from '../empty-state';
+import { GlobalError } from '../error-state';
+import { TicketListLoader } from '../loading-state';
 
 export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
   const [currentPage, setCurrentPage] = useQueryState(
@@ -31,13 +33,12 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
     },
   });
 
-  //! create a loading and error comp loading
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || !tickets) {
+    return <TicketListLoader />;
   }
 
-  if (isError || !tickets) {
-    return <div>Error...</div>;
+  if (isError && !tickets) {
+    return <GlobalError />;
   }
 
   const totalPages = Math.ceil(tickets.pagination.total / LARGE_PAGE_SIZE);
@@ -55,14 +56,15 @@ export const DistributionTicketsList = ({ agencyId }: { agencyId: string }) => {
         ))}
       </div>
 
-      <PaginationComponent
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      {totalPages > 1 ? (
+        <PaginationComponent
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      ) : null}
     </div>
   ) : (
-    // Create visual for no ticket found
     <EmptyTickets />
   );
 };

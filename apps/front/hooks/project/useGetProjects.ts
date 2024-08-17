@@ -1,8 +1,8 @@
-import { useQuery } from '@tanstack/react-query';import { DEFAULT_USE_QUERY_PARAMS } from '@/constants';
-import { useAuthStore } from '@/stores';
-import { Agency } from '@reqeefy/types';
 import { projectsService } from '@/services';
+import { useAuthStore } from '@/stores';
 import { ProjectsQueryParams } from '@/types';
+import { Agency } from '@reqeefy/types';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetProjects = ({
   agency,
@@ -25,9 +25,7 @@ export const useGetProjects = ({
     queryFn: async () => {
       return await projectsService.getAll(agency.id, queryParams);
     },
-    staleTime: 1000 * 60 * 60,
     enabled: !!user && !!agency,
-    ...DEFAULT_USE_QUERY_PARAMS,
   });
 
   return {

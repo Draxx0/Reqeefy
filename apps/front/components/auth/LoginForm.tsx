@@ -1,9 +1,10 @@
 'use client';
 
+import { STATIC_PATHS } from '@/constants';
 import { useLogin } from '@/hooks';
+import Link from 'next/link';
 import {
   Button,
-  ButtonLink,
   Form,
   FormControl,
   FormField,
@@ -12,7 +13,6 @@ import {
   FormMessage,
 } from '../client.index';
 import { Input } from '../server.index';
-import Link from 'next/link';
 
 export const LoginForm = () => {
   const { form, isPending, onSubmit } = useLogin();
@@ -57,7 +57,10 @@ export const LoginForm = () => {
           )}
         />
         <div className="flex justify-end">
-          <Link href={''} className=" hover:underline text-primary-700 text-sm">
+          <Link
+            href={STATIC_PATHS.FORGOT_PASSWORD}
+            className=" hover:underline text-primary-700 text-sm"
+          >
             Mot de passe oublié ?
           </Link>
         </div>
