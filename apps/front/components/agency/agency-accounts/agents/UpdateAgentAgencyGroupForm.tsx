@@ -65,11 +65,7 @@ export const UpdateAgentAgencyGroupForm = ({
 
         <Button
           className="w-fit"
-          onClick={(e) => {
-            if (!e) return;
-
-            e.preventDefault();
-            e.stopPropagation();
+          onClick={() => {
             refetch();
           }}
           type="button"

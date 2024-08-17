@@ -1,6 +1,6 @@
 'use client';
 
-import { userAgentRoleSchema } from '@/schemas';
+import { userAgentRoleSchema } from '@/schemas/user/user.schemas';
 import { userService } from '@/services';
 import { AgencyAgentTableData } from '@/types';
 import { renderErrorToast } from '@/utils';
@@ -47,6 +47,7 @@ export const useUpdateUserAgentRole = ({
   });
 
   const onSubmit = form.handleSubmit((data) => {
+    // @ts-ignore
     mutate(data);
   });
 
