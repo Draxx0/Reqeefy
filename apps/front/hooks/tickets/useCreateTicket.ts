@@ -1,5 +1,4 @@
 'use client';
-import { STATIC_PATHS } from '@/constants';
 import { createTicketSchema } from '@/schemas';
 import { ticketsService } from '@/services';
 import { renderErrorToast } from '@/utils';
@@ -19,7 +18,6 @@ export const useCreateTicket = ({ projectId }: { projectId: string }) => {
     defaultValues: {
       title: '',
       content: '',
-      // upload_files
     },
   });
 

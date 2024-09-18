@@ -12,7 +12,17 @@ export const uploadImage = async (
   folderPath: string
 ): Promise<UploadResult | void> => {
   const fileExt = file.name.split('.').pop();
-  const fileName = `${file.name.split('.').shift()}.${fileExt}`;
+
+  // Normalisation du nom du fichier pour supprimer les accents et les caractères spéciaux
+  const sanitizedFileName = file?.name
+    ?.split('.')
+    .shift()
+    ?.normalize('NFD') // Normalisation des accents
+    ?.replace(/[\u0300-\u036f]/g, '') // Suppression des accents
+    ?.replace(/\s+/g, '_') // Remplacement des espaces par des underscores
+    ?.replace(/[^a-zA-Z0-9-_]/g, ''); // Suppression des caractères spéciaux
+
+  const fileName = `${sanitizedFileName}.${fileExt}`;
   const filePath = `${folderPath}/${fileName}`;
 
   const { data, error } = await supabase.storage
@@ -26,12 +36,19 @@ export const uploadImage = async (
     return;
   }
 
-  const { data: image } = supabase.storage
+  const { data: imageData } = supabase.storage
     .from('Reqeefy-storage')
     .getPublicUrl(filePath);
 
+  if (!imageData?.publicUrl) {
+    renderErrorToast(
+      "Une erreur est survenue lors de la récupération de l'URL du fichier"
+    );
+    return;
+  }
+
   return {
-    publicUrl: image.publicUrl,
+    publicUrl: imageData.publicUrl,
     fileName,
   };
 };
@@ -44,7 +61,17 @@ export const uploadFiles = async (
 
   for (const file of files) {
     const fileExt = file.name.split('.').pop();
-    const fileName = `${file.name.split('.')[0]}.${fileExt}`;
+
+    // Normalisation du nom du fichier pour supprimer les accents et les caractères spéciaux
+    const sanitizedFileName = file?.name
+      ?.split('.')
+      .shift()
+      ?.normalize('NFD') // Normalisation des accents
+      ?.replace(/[\u0300-\u036f]/g, '') // Suppression des accents
+      ?.replace(/\s+/g, '_') // Remplacement des espaces par des underscores
+      ?.replace(/[^a-zA-Z0-9-_]/g, ''); // Suppression des caractères spéciaux
+
+    const fileName = `${sanitizedFileName}.${fileExt}`;
     const filePath = `${folderPath}/${fileName}`;
 
     const { data, error } = await supabase.storage

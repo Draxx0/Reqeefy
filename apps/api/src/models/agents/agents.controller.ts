@@ -9,8 +9,11 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PaginatedData } from '@reqeefy/types';
-import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
+import {
+  Roles,
+  SUPERADMINS_PERMISSIONS,
+} from '../../decorator/roles.decorator';
+import { RolesGuard } from '../../guards/roles.guard';
 import { AgentsService } from './agents.service';
 import { AddToAgencyGroupDTO } from './dto/add-to-agency-group.dto';
 import { CreateAgentDTO } from './dto/create-agent.dto';

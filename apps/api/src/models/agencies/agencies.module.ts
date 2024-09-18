@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AgenciesService } from './agencies.service';
-import { AgenciesController } from './agencies.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AgencyEntity } from './entities/agency.entity';
-import { PaginationModule } from '../common/models/pagination/pagination.module';
-import { AuthenticationModule } from 'src/authentication/authentication.module';
-import { UsersModule } from '../users/users.module';
-import { AgentsModule } from '../agents/agents.module';
+import { AuthenticationModule } from '../../authentication/authentication.module';
+import { JwtUtilsModule } from '../../authentication/jwt/jwt-utils.module';
 import { AgencyGroupsModule } from '../agency-groups/agency-groups.module';
-import { UserEntity } from '../users/entities/user.entity';
-import { JwtUtilsModule } from 'src/authentication/jwt/jwt-utils.module';
+import { AgentsModule } from '../agents/agents.module';
+import { PaginationModule } from '../common/models/pagination/pagination.module';
 import { UploadFilesModule } from '../upload-files/upload-files.module';
+import { UserEntity } from '../users/entities/user.entity';
+import { UsersModule } from '../users/users.module';
+import { AgenciesController } from './agencies.controller';
+import { AgenciesService } from './agencies.service';
+import { AgencyEntity } from './entities/agency.entity';
 
 @Module({
   imports: [

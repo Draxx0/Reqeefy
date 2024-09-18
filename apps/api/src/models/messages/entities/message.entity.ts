@@ -1,7 +1,3 @@
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
-import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -9,6 +5,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { TicketEntity } from '../../../models/tickets/entities/ticket.entity';
+import { UploadFileEntity } from '../../../models/upload-files/entities/upload-file.entity';
+import { UserEntity } from '../../../models/users/entities/user.entity';
 
 @Entity('message')
 export class MessageEntity extends TimestampEntity {

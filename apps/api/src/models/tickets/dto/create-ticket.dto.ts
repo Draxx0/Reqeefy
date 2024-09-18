@@ -8,6 +8,4 @@ export class CreateTicketDto {
   @IsNotEmpty()
   @IsString()
   content: string;
-
-  // UPLOAD FILE
 }

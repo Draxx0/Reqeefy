@@ -1,11 +1,4 @@
 import { TicketPriority, TicketStatus } from '@reqeefy/types';
-import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
-import { AgentEntity } from 'src/models/agents/entities/agent.entity';
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
-import { MessageEntity } from 'src/models/messages/entities/message.entity';
-import { ProjectEntity } from 'src/models/projects/entities/project.entity';
-import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
 import {
   Column,
   Entity,
@@ -15,6 +8,13 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AgencyGroupEntity } from '../../../models/agency-groups/entities/agency-group.entity';
+import { AgentEntity } from '../../../models/agents/entities/agent.entity';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { CustomerEntity } from '../../../models/customers/entities/customer.entity';
+import { MessageEntity } from '../../../models/messages/entities/message.entity';
+import { ProjectEntity } from '../../../models/projects/entities/project.entity';
+import { UploadFileEntity } from '../../../models/upload-files/entities/upload-file.entity';
 
 @Entity('ticket')
 export class TicketEntity extends TimestampEntity {

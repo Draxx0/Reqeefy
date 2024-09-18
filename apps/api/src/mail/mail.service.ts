@@ -9,7 +9,10 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async sendUserConfirmation({ user, token }: WelcomeMail) {
-    const url = `localhost:3000/auth/confirm?token=${token}`;
+    const url =
+      process.env.NODE_ENV === 'development'
+        ? `http://localhost:3000/auth/confirm?token=${token}`
+        : `https://www.reqeefy.fr/auth/confirm?token=${token}`;
 
     await this.mailerService.sendMail({
       to: user.email,
@@ -25,7 +28,10 @@ export class MailService {
   }
 
   async sendForgotPassword({ user, token }: ForgotPasswordMail) {
-    const url = `http://localhost:3000/auth/reset-password/${user.id}/${token}`;
+    const url =
+      process.env.NODE_ENV === 'development'
+        ? `http://localhost:3000/auth/reset-password/${user.id}/${token}`
+        : `https://www.reqeefy.fr/auth/reset-password/${user.id}/${token}`;
 
     try {
       await this.mailerService.sendMail({

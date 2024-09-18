@@ -1,7 +1,7 @@
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { NotificationType } from '@reqeefy/types';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { UserEntity } from '../../../models/users/entities/user.entity';
 
 @Entity('notification')
 export class NotificationEntity extends TimestampEntity {

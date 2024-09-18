@@ -1,5 +1,5 @@
 import { IsIn, IsOptional, IsString } from 'class-validator';
-import { PaginateQueries } from 'src/models/common/queries/pagination.queries';
+import { PaginateQueries } from '../../../models/common/queries/pagination.queries';
 
 export class ProjectQueries extends PaginateQueries {
   @IsOptional()

@@ -1,6 +1,6 @@
 import { TicketStatus } from '@reqeefy/types';
 import { IsIn, IsOptional, IsString } from 'class-validator';
-import { PaginateQueries } from 'src/models/common/queries/pagination.queries';
+import { PaginateQueries } from '../../../models/common/queries/pagination.queries';
 
 export class TicketQueries extends PaginateQueries {
   @IsOptional()

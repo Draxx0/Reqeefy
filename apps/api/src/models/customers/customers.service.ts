@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateCustomerDto } from './dto/create-customer.dto';
-import { CustomerQueries } from './queries/queries';
-import { PaginatedData } from '@reqeefy/types';
-import { CustomerEntity } from './entities/customer.entity';
-import { PaginationService } from '../common/models/pagination/pagination.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginatedData } from '@reqeefy/types';
 import { Repository } from 'typeorm';
-import { AuthenticationService } from 'src/authentication/authentication.service';
+import { AuthenticationService } from '../../authentication/authentication.service';
+import { PaginationService } from '../common/models/pagination/pagination.service';
 import { UsersService } from '../users/users.service';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { CustomerEntity } from './entities/customer.entity';
+import { CustomerQueries } from './queries/queries';
 
 @Injectable()
 export class CustomersService {

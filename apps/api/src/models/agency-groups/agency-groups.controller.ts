@@ -11,8 +11,8 @@ import {
   DISTRIBUTORS_PERMISSIONS,
   Roles,
   SUPERADMINS_PERMISSIONS,
-} from 'src/decorator/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
+} from '../../decorator/roles.decorator';
+import { RolesGuard } from '../../guards/roles.guard';
 import { AgencyGroupsService } from './agency-groups.service';
 import { CreateAgencyGroupDTO } from './dto/create-agency-group.dto';
 import { UpdateAgencyGroupDto } from './dto/update-agency-group.dto';

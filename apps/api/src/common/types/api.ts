@@ -1,4 +1,4 @@
-import { UserEntity } from 'src/models/users/entities/user.entity';
+import { UserEntity } from '../../models/users/entities/user.entity';
 
 export interface TokenObject {
   access_token: string;

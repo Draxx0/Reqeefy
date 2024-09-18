@@ -8,15 +8,12 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { UserRequest } from 'src/common/types/api';
-import {
-  FIFTEEN_MINUTES,
-  FOURTEEN_DAYS,
-} from 'src/constants/cookies.constants';
-import { Public } from 'src/decorator/public.decorator';
-import { RefreshJwtAuthGuard } from 'src/guards/refresh-jwt.guard';
-import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+import { UserRequest } from '../.../../common/types/api';
+import { FIFTEEN_MINUTES, FOURTEEN_DAYS } from '../constants/cookies.constants';
+import { Public } from '../decorator/public.decorator';
 import { LocalGuard } from '../guards/local.guard';
+import { RefreshJwtAuthGuard } from '../guards/refresh-jwt.guard';
+import { generateExpirationDate } from '../utils/generateExpirationDate';
 import { AuthenticationService } from './authentication.service';
 import { AuthenticationForgotPasswordDto } from './dto/authentication-forgot-password.dto';
 import { AuthenticationResetPasswordDto } from './dto/authentication-reset-password.dto';

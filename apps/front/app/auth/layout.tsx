@@ -6,8 +6,8 @@ export default function AppGroupLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="flex min-h-screen max-h-screen">
-      <div className="w-2/5 left-0 fixed h-screen bg-[url('/assets/images/auth/auth-bg.jpg')]  bg-no-repeat bg-cover">
+    <main className="flex flex-col items-center lg:items-start lg:flex-row min-h-screen max-h-screen">
+      <div className="hidden lg:block lg:w-2/5 left-0 fixed h-screen bg-[url('/assets/images/auth/auth-bg.jpg')]  bg-no-repeat bg-cover">
         <div className="relative flex flex-col justify-between h-full p-12">
           <div className="absolute bg-black/30 inset-0 w-full h-full"></div>
           <div className="py-2 px-3 rounded-lg w-fit z-10 flex items-center gap-1 backdrop-blur-2xl bg-gradient-main shadow-sm">
@@ -30,7 +30,7 @@ export default function AppGroupLayout({
           </p>
         </div>
       </div>
-      <div className="w-3/5 p-12 ml-[40%]">{children}</div>
+      <div className="w-full lg:w-3/5 p-12 lg:ml-[40%]">{children}</div>
     </main>
   );
 }

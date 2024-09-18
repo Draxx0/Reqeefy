@@ -1,5 +1,5 @@
 import { IsIn, IsNotEmpty, IsOptional } from 'class-validator';
-import { PaginateQueries } from 'src/models/common/queries/pagination.queries';
+import { PaginateQueries } from '../../../models/common/queries/pagination.queries';
 
 export class AgencyQueries extends PaginateQueries {
   @IsOptional()

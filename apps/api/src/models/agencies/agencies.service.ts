@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthenticationService } from 'src/authentication/authentication.service';
 import { Repository } from 'typeorm';
+import { AuthenticationService } from '../../authentication/authentication.service';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 import { AgentsService } from '../agents/agents.service';
 import { PaginationService } from '../common/models/pagination/pagination.service';
+import { UploadFilesService } from '../upload-files/upload-files.service';
+import { UserEntity } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
+import { UpdateAgencyDTO } from './dto/update-agency.dto';
 import { AgencyEntity } from './entities/agency.entity';
 import { AgencyQueries } from './queries/queries';
-import { UserEntity } from '../users/entities/user.entity';
-import { UpdateAgencyDTO } from './dto/update-agency.dto';
-import { UploadFilesService } from '../upload-files/upload-files.service';
 
 @Injectable()
 export class AgenciesService {
