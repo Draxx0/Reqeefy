@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginatedData } from '@reqeefy/types';
-import { AuthenticationService } from 'src/authentication/authentication.service';
-import { AuthenticationSignupDto } from 'src/authentication/dto/authentication-signup.dto';
 import { Repository } from 'typeorm';
+import { AuthenticationService } from '../../authentication/authentication.service';
+import { AuthenticationSignupDto } from '../../authentication/dto/authentication-signup.dto';
 import { AgencyGroupsService } from '../agency-groups/agency-groups.service';
 import { AgencyGroupEntity } from '../agency-groups/entities/agency-group.entity';
 import { PaginationService } from '../common/models/pagination/pagination.service';

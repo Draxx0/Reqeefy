@@ -12,16 +12,19 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { JwtUtilsService } from 'src/authentication/jwt/jwt-utils.service';
-import { UserRequest } from 'src/common/types/api';
+import { JwtUtilsService } from '../../authentication/jwt/jwt-utils.service';
+import { UserRequest } from '../../common/types/api';
 import {
   FIFTEEN_MINUTES,
   FOURTEEN_DAYS,
-} from 'src/constants/cookies.constants';
-import { Public } from 'src/decorator/public.decorator';
-import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+} from '../../constants/cookies.constants';
+import { Public } from '../../decorator/public.decorator';
+import {
+  Roles,
+  SUPERADMINS_PERMISSIONS,
+} from '../../decorator/roles.decorator';
+import { RolesGuard } from '../../guards/roles.guard';
+import { generateExpirationDate } from '../../utils/generateExpirationDate';
 import { AgenciesService } from './agencies.service';
 import { CreateAgencyWithNewUserDto } from './dto/create-agency.dto';
 import { UpdateAgencyDTO } from './dto/update-agency.dto';

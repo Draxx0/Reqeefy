@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { User } from '@reqeefy/types';
 import { Request } from 'express';
-import { UsersService } from 'src/models/users/users.service';
+import { UsersService } from '../models/users/users.service';
 
 @Injectable()
 export class OwnerGuard implements CanActivate {

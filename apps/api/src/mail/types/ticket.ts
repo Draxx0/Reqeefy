@@ -1,4 +1,4 @@
-import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
+import { TicketEntity } from '../../models/tickets/entities/ticket.entity';
 
 export interface TicketEmail {
   ticket: TicketEntity;

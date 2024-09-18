@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { JwtUtilsService } from './jwt-utils.service';
 import { JwtModule } from '@nestjs/jwt';
-import { FIFTEEN_MINUTES } from 'src/constants/cookies.constants';
+import { FIFTEEN_MINUTES } from '../../constants/cookies.constants';
+import { JwtUtilsService } from './jwt-utils.service';
 
 @Module({
   imports: [

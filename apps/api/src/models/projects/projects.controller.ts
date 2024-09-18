@@ -8,8 +8,11 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
+import {
+  Roles,
+  SUPERADMINS_PERMISSIONS,
+} from '../../decorator/roles.decorator';
+import { RolesGuard } from '../../guards/roles.guard';
 import { CustomersService } from '../customers/customers.service';
 import { CreateProjectDTO } from './dto/create-project.dto';
 import { ProjectsService } from './projects.service';

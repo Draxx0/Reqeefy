@@ -10,11 +10,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PaginatedData } from '@reqeefy/types';
-import { IsOwner } from 'src/decorator/isOwner.decorator';
-import { Public } from 'src/decorator/public.decorator';
-import { Roles, SUPERADMINS_PERMISSIONS } from 'src/decorator/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
 import { DeleteResult } from 'typeorm';
+import { IsOwner } from '../../decorator/isOwner.decorator';
+import { Public } from '../../decorator/public.decorator';
+import {
+  Roles,
+  SUPERADMINS_PERMISSIONS,
+} from '../../decorator/roles.decorator';
+import { RolesGuard } from '../../guards/roles.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserQueries } from './queries/queries';

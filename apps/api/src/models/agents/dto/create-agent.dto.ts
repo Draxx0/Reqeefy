@@ -1,6 +1,6 @@
 import { UserRole } from '@reqeefy/types';
 import { IsIn, IsNotEmpty, IsUUID } from 'class-validator';
-import { AuthenticationSignupDto } from 'src/authentication/dto/authentication-signup.dto';
+import { AuthenticationSignupDto } from '../../../authentication/dto/authentication-signup.dto';
 
 export class CreateAgentDTO extends AuthenticationSignupDto {
   @IsNotEmpty()

@@ -1,12 +1,12 @@
 import { HttpException, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { sanitize } from 'src/utils/sanitizer';
 import { Repository } from 'typeorm';
+import { sanitize } from '../../utils/sanitizer';
 import { TicketEntity } from '../tickets/entities/ticket.entity';
+import { UploadFilesService } from '../upload-files/upload-files.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { MessageEntity } from './entities/message.entity';
-import { UploadFilesService } from '../upload-files/upload-files.service';
-import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class MessagesService {

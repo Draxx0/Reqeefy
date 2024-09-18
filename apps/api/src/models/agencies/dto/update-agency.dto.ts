@@ -1,7 +1,7 @@
 import { AgencyActivityArea } from '@reqeefy/types';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { CreateAgencyUploadFileDto } from '../../../models/upload-files/dto/create-upload-file.dto';
 import { AgencyActivityAreaValues } from '../data/data';
-import { CreateAgencyUploadFileDto } from 'src/models/upload-files/dto/create-upload-file.dto';
 
 export class UpdateAgencyDTO {
   @IsOptional()

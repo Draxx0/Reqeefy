@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './entities/user.entity';
+import { JwtUtilsModule } from '../../authentication/jwt/jwt-utils.module';
 import { PaginationModule } from '../common/models/pagination/pagination.module';
-import { JwtUtilsModule } from 'src/authentication/jwt/jwt-utils.module';
 import { UploadFilesModule } from '../upload-files/upload-files.module';
+import { UserEntity } from './entities/user.entity';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 
 @Module({
   imports: [

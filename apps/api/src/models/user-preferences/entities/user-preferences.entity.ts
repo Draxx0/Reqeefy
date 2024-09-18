@@ -1,5 +1,3 @@
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -7,6 +5,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { UserEntity } from '../../../models/users/entities/user.entity';
 
 @Entity('user_preferences')
 export class UserPreferencesEntity extends TimestampEntity {

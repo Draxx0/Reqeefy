@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { CustomersService } from './customers.service';
-import { CustomersController } from './customers.controller';
-import { PaginationModule } from '../common/models/pagination/pagination.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomerEntity } from './entities/customer.entity';
-import { AuthenticationModule } from 'src/authentication/authentication.module';
+import { AuthenticationModule } from '../../authentication/authentication.module';
+import { PaginationModule } from '../common/models/pagination/pagination.module';
 import { UsersModule } from '../users/users.module';
+import { CustomersController } from './customers.controller';
+import { CustomersService } from './customers.service';
+import { CustomerEntity } from './entities/customer.entity';
 
 @Module({
   imports: [

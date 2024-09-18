@@ -1,12 +1,4 @@
 import { UserRole } from '@reqeefy/types';
-import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
-import { AgentEntity } from 'src/models/agents/entities/agent.entity';
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { CustomerEntity } from 'src/models/customers/entities/customer.entity';
-import { MessageEntity } from 'src/models/messages/entities/message.entity';
-import { NotificationEntity } from 'src/models/notifications/entities/notification.entity';
-import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
-import { UserPreferencesEntity } from 'src/models/user-preferences/entities/user-preferences.entity';
 import {
   Column,
   Entity,
@@ -15,6 +7,14 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AgencyEntity } from '../../../models/agencies/entities/agency.entity';
+import { AgentEntity } from '../../../models/agents/entities/agent.entity';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { CustomerEntity } from '../../../models/customers/entities/customer.entity';
+import { MessageEntity } from '../../../models/messages/entities/message.entity';
+import { NotificationEntity } from '../../../models/notifications/entities/notification.entity';
+import { UploadFileEntity } from '../../../models/upload-files/entities/upload-file.entity';
+import { UserPreferencesEntity } from '../../../models/user-preferences/entities/user-preferences.entity';
 
 @Entity('user')
 export class UserEntity extends TimestampEntity {

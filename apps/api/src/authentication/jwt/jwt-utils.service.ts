@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@reqeefy/types';
-import { TokenObject } from 'src/common/types/api';
+import { TokenObject } from '../../common/types/api';
 import {
   FIFTEEN_MINUTES,
   FOURTEEN_DAYS,
-} from 'src/constants/cookies.constants';
-import { UserEntity } from 'src/models/users/entities/user.entity';
-import { generateExpirationDate } from 'src/utils/generateExpirationDate';
+} from '../../constants/cookies.constants';
+import { UserEntity } from '../../models/users/entities/user.entity';
+import { generateExpirationDate } from '../../utils/generateExpirationDate';
 
 @Injectable()
 export class JwtUtilsService {

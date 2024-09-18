@@ -1,9 +1,4 @@
 import { AgencyActivityArea } from '@reqeefy/types';
-import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { ProjectEntity } from 'src/models/projects/entities/project.entity';
-import { UploadFileEntity } from 'src/models/upload-files/entities/upload-file.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Column,
   Entity,
@@ -11,6 +6,11 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AgencyGroupEntity } from '../../../models/agency-groups/entities/agency-group.entity';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { ProjectEntity } from '../../../models/projects/entities/project.entity';
+import { UploadFileEntity } from '../../../models/upload-files/entities/upload-file.entity';
+import { UserEntity } from '../../../models/users/entities/user.entity';
 
 @Entity('agency')
 export class AgencyEntity extends TimestampEntity {

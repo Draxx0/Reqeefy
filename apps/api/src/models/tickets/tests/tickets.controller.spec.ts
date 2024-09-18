@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { MessageEntity } from 'src/models/messages/entities/message.entity';
+import { MessageEntity } from '../../../models/messages/entities/message.entity';
 import { CreateMessageDto } from '../../messages/dto/create-message.dto';
 import { MessagesService } from '../../messages/messages.service';
 import { UsersService } from '../../users/users.service';

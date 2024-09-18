@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configuration } from 'config/config';
 import { prepareValidateEnv } from 'libs/utils/src/validate-env';
-import { envSchema } from 'src/schemas/server-env.schema';
+import { envSchema } from '../schemas/server-env.schema';
 
 @Module({
   imports: [

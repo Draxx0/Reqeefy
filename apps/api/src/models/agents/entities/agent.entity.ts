@@ -1,8 +1,3 @@
-import { AgencyGroupEntity } from 'src/models/agency-groups/entities/agency-group.entity';
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { ProjectEntity } from 'src/models/projects/entities/project.entity';
-import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
-import { UserEntity } from 'src/models/users/entities/user.entity';
 import {
   Entity,
   JoinColumn,
@@ -12,6 +7,11 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AgencyGroupEntity } from '../../../models/agency-groups/entities/agency-group.entity';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { ProjectEntity } from '../../../models/projects/entities/project.entity';
+import { TicketEntity } from '../../../models/tickets/entities/ticket.entity';
+import { UserEntity } from '../../../models/users/entities/user.entity';
 
 @Entity('agent')
 export class AgentEntity extends TimestampEntity {

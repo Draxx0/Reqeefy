@@ -1,7 +1,3 @@
-import { AgencyEntity } from 'src/models/agencies/entities/agency.entity';
-import { AgentEntity } from 'src/models/agents/entities/agent.entity';
-import { TimestampEntity } from 'src/models/common/entities/timestamp.entity';
-import { TicketEntity } from 'src/models/tickets/entities/ticket.entity';
 import {
   Column,
   Entity,
@@ -10,6 +6,10 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AgencyEntity } from '../../../models/agencies/entities/agency.entity';
+import { AgentEntity } from '../../../models/agents/entities/agent.entity';
+import { TimestampEntity } from '../../../models/common/entities/timestamp.entity';
+import { TicketEntity } from '../../../models/tickets/entities/ticket.entity';
 
 @Entity('agency_group')
 export class AgencyGroupEntity extends TimestampEntity {
